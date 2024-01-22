@@ -5,7 +5,7 @@ import Layout from './global/Layout';
 function App() {
   return (
     <div  className="bg-bg">
-      ghjghjgjgj
+      
       <Layout className="bg-bg ">
       welcome bro
      
