@@ -1,17 +1,18 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
-   corePlugins: {
-      preflight: false,
-     },
+const withMT = require("@material-tailwind/react/utils/withMT");
+module.exports = withMT({
+  //  corePlugins: {
+  //     preflight: false,
+  //    },
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
-  important: '#root',
+  // important: '#root',
   theme: {
     
     extend: {colors: {
-      'primary': '#000',
-      "bg":"#D9D9D9",
+      'primary': '#21179F',
+      "bg":"#E5E5E5",
       "btn-success":"#1DC560" ,
       "btn-info":"#0F9AE8",
       "btn-danger":"#E80F0F",
@@ -22,5 +23,5 @@ module.exports = {
     },},
   },
   plugins: [],
-}
+})
 
