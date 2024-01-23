@@ -5,9 +5,9 @@ import { DefaultSidebar } from './newbar'
 
 function Layout({ children }) {
     return (
-        <div className="bg-bg ">
-            <div className="flex"  >
-                <div>
+        
+            <div className="flex bg-bg "  >
+                <div className=''>
                     {/* <SidebarNim>
                     </SidebarNim> */}
                     <DefaultSidebar/>
@@ -16,11 +16,12 @@ function Layout({ children }) {
                 <div   className=' w-full m-[60px]' >
                     <Topbar/>
                       {children}
+                      
+                      {/* <div className='h-[140vh]'></div> */}
                 </div>
 
             </div>
 
-        </div>
     )
 }
 
