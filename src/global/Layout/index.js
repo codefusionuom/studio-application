@@ -1,30 +1,27 @@
 import React from 'react'
 import SidebarNim from './sidebar'
-import TemporaryDrawer from './prosidebar'
-import MiniDrawer from './muibar'
-import { Box } from '@mui/material'
 import Topbar from './Topbar'
+import { DefaultSidebar } from './newbar'
 
 function Layout({ children }) {
     return (
-        <div className="bg-bg border-2 border-red-500">
-            {/* {children} */}
-            {/* <TemporaryDrawer/> */}
-            {/* <MiniDrawer/> */}
-            <Box display={"flex"} flexDirection={"row"}  className="bg-bg border-2 border-red-500">
-                <Box>
-                    <SidebarNim>
-                    </SidebarNim>
-                </Box>
+        
+            <div className="flex bg-bg "  >
+                <div className=''>
+                    {/* <SidebarNim>
+                    </SidebarNim> */}
+                    <DefaultSidebar/>
+                </div>
 
-                <Box  left={"80px"} className='w-full m-[60px]' >
+                <div   className=' w-full m-[60px]' >
                     <Topbar/>
                       {children}
-                </Box>
+                      
+                      {/* <div className='h-[140vh]'></div> */}
+                </div>
 
-            </Box>
+            </div>
 
-        </div>
     )
 }
 

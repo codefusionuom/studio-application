@@ -299,7 +299,7 @@ Smoe Joe
                     fontSize:"20px" 
                   }}
                 >
-                  Login
+                  Log out
                 </Typography>
           </Button>
         </Box>
