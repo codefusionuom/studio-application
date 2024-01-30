@@ -1,5 +1,5 @@
 import { Card, Typography, List, ListItem, ListItemPrefix, Drawer, Avatar, } from "@material-tailwind/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { customerList } from "./data";
 
 
@@ -9,10 +9,11 @@ export function DefaultSidebar() {
     const [roleList, setRoleList] = useState(false);
     const roles = ["Customer Manager", "Event Manager", "Super Admin"]
     const [role, setRole] = useState(roles[0])
-
     const list = customerList
 
-    return (<div >
+
+
+return (<div >
         {!open ? <>
         <Card className="h-[calc(100vh-2rem)] w-[100px] bg-primary rounded-none   p-4 shadow-xl shadow-blue-gray-900/5">
             <List className=" w-[50px]">
@@ -27,7 +28,9 @@ export function DefaultSidebar() {
                     <Avatar src="https://docs.material-tailwind.com/img/face-2.jpg" alt="avatar" className="w-8 h-8 my-20" />
                 </div>
                 {list.map((item, index) => {
-                    return (<ListItem className=" w-[56px] focus:text-white   text-white focus:bg-white focus:bg-opacity-15 mt-8" >
+                    return (<ListItem className={`w-[56px] focus:text-white   text-white focus:bg-white focus:bg-opacity-15 mt-8 ${index == selectedIndex && "bg-white bg-opacity-15" }`} 
+                    //style={{ backgroundColor: selectedIndex === index && "rgba(255, 255, 255, 0.15)"}}
+                    >
                         <ListItemPrefix onClick={() => setSelectedIndex(index)}>
                             {item.icon}
                         </ListItemPrefix>
@@ -92,7 +95,8 @@ export function DefaultSidebar() {
 
                     <div className="w-[full ">
                         {list.map((item, index) => {
-                            return (<ListItem className=" w-[full] focus:text-white  text-white focus:bg-white focus:bg-opacity-15 mt-8 " >
+                           
+                            return (<ListItem  key={index} className={` w-[full] focus:text-white  text-white focus:bg-white focus:bg-opacity-15 mt-8 ${index == selectedIndex && "bg-white bg-opacity-15" }`}>
                                 <ListItemPrefix onClick={() => setSelectedIndex(index)} className="w-[full] flex-1 flex justify-start ">
                                     <div className="mr-10">{item.icon}</div>  <div className="text-xl">{item.name}</div>
                                 </ListItemPrefix>
