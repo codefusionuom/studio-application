@@ -6,18 +6,26 @@ import Customers from './Customers'
 import CreateCustomerRequest from './CreateCustomerRequest'
 import Dashboard from './Dashboard'
 import EventCalandar from './EventCalandar'
+import { Outlet, Route, Routes } from 'react-router-dom'
+import Layout from '../../global/Layout'
+import { customerList } from '../../global/Layout/data'
 
 function CustomerManager() {
   return (
-    <>
+
+ <>
+        
+  <Layout sections={customerList}>
+    <Outlet />
+  </Layout >
     {/* <PaymentList/> */}
-    <CustomerRequests/>
+    {/* <CustomerRequests/> */}
     {/* <Customers></Customers> */}
     {/* <CreateCustomerRequest /> */}
     {/* <EventCalandar /> */}
     {/* <Dashboard/> */}
+</>
 
-    </>
   )
 }
 

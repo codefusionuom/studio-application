@@ -28,8 +28,9 @@ const theme = createTheme({
 
 
 root.render(
-  <React.StrictMode>
-    <Provider store={store}> 
+
+   <React.StrictMode>
+    {/* <Provider store={store}>  */}
       <BrowserRouter> 
       <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
@@ -38,7 +39,8 @@ root.render(
       </ThemeProvider>
     </StyledEngineProvider>
       </BrowserRouter>
-    </Provider>
+      
+    {/* </Provider> */}
   </React.StrictMode>
 );
 
