@@ -9,15 +9,12 @@ export function DefaultSidebar({sections}) {
     const [open, setOpen] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [displayroleList, setDisplayroleList] = useState(false);
-    //const roles = ["Customer Manager", "Event Manager", "Super Admin"]
     const roles =userRoles
-    // console.log(roles)
     const [role, setRole] = useState(roles[0].name)
-
     const navigate=useNavigate()
 
 
-return (<div >
+     return (<div >
     
         {!open ? <>
         <Card className="h-[calc(100vh-2rem)] w-[100px] bg-primary rounded-none   p-4 shadow-xl shadow-blue-gray-900/5">
