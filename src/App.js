@@ -12,23 +12,46 @@ import CustomerManagerDashboard from './pages/customerManager/Dashboard';
 import CreateCustomerRequest from './pages/customerManager/CreateCustomerRequest';
 import EventCalandar from './pages/customerManager/EventCalandar';
 import Customers from './pages/customerManager/Customers';
+import EventManager from './pages/eventManager';
+import StockManager from './pages/stockManager';
+import EmployeeManager from './pages/employeeManager';
+import SuperAdmin from './pages/superAdmin';
 
 function App() {
   return (
-
+<>
     <Routes>
+    <Route path="/" element={<div>login</div>}>
+        
+        </Route>
       <Route path="/customerManager" element={<CustomerManager />}>
-        <Route index={true} path="/customerManager/" element={<CustomerManagerDashboard />} />
-        <Route index={false}  path="/customerManager/customers" element={<Customers />} />
-        <Route index={false}  path="/customerManager/paymentDetails" element={<PaymentDetails />} />
-        <Route index={false}  path="/customerManager/eventCalandar" element={<EventCalandar />} />
-        <Route index={false}  path="/customerManager/createCustomerRequest" element={<CreateCustomerRequest />} />
-        <Route index={false}  path="/customerManager/paymentList" element={<PaymentList />} />
-        <Route index={false}  path="/customerManager/customerRequest" element={<CustomerRequests />} />
+        <Route  path="/customerManager/" element={<CustomerManagerDashboard />} />
+        <Route  path="/customerManager/customers" element={<Customers />} />
+        <Route   path="/customerManager/paymentDetails" element={<PaymentDetails />} />
+        <Route  path="/customerManager/eventCalandar" element={<EventCalandar />} />
+        <Route   path="/customerManager/createCustomerRequest" element={<CreateCustomerRequest />} />
+        <Route   path="/customerManager/paymentList" element={<PaymentList />} />
+        <Route  path="/customerManager/customerRequest" element={<CustomerRequests />} />
+      </Route>
+      <Route path="/eventManager" element={<EventManager />}>
+        
+      </Route>
+      <Route path="/stockManager" element={<StockManager />}>
+        
+      </Route>
+      <Route path="/employeeManager" element={<EmployeeManager />}>
+        
+      </Route>
+      <Route path="/superAdmin" element={<SuperAdmin />}>
+        
       </Route>
     </Routes>
-
-
+    
+      
+ 
+  
+  
+    </>
     // another way
     // <Routes>
     //   <Route exact path="cm" >
@@ -36,7 +59,7 @@ function App() {
     //     <Route  path="/cm/ch" element={<CustomerRequests/>} />
     //   </Route>
     // </Routes>
-
+    
   );
 }
 {/* <Layout sections={customerList}/>  */ }
