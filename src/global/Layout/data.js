@@ -1,5 +1,5 @@
-export const roleList=[{
-    id:2,name:"Customer Manager",path:"customerManager"}, {id:3,name:"Event Manager",path:"eventManager"}, {id:1,name:"Super Admin",path:"superAdmin"}, {id:5,name:"Stock Manager",path:"stockManager"}, {id:4,name:"Super Admin",path:"employee"}]
+export const userRoles=[{
+    id:2,name:"Customer Manager",path:"/customerManager"}, {id:3,name:"Event Manager",path:"/eventManager"}, {id:1,name:"Super Admin",path:"/superAdmin"}, {id:5,name:"Stock Manager",path:"/stockManager"}, {id:4,name:"Super Admin",path:"/employeeManager"}]
 
 export const customerList = [{
     name: "Dashboard",path:"/customerManager", icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">

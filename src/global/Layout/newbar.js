@@ -1,6 +1,6 @@
 import { Card, Typography, List, ListItem, ListItemPrefix, Drawer, Avatar, } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
-import { customerList } from "./data";
+import { customerList, userRoles } from "./data";
 import { Outlet, useNavigate } from "react-router-dom";
 
 
@@ -8,10 +8,12 @@ export function DefaultSidebar({sections}) {
     const list = sections
     const [open, setOpen] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(0);
-    const [roleList, setRoleList] = useState(false);
-    const roles = ["Customer Manager", "Event Manager", "Super Admin"]
-    const [role, setRole] = useState(roles[0])
-   
+    const [displayroleList, setDisplayroleList] = useState(false);
+    //const roles = ["Customer Manager", "Event Manager", "Super Admin"]
+    const roles =userRoles
+    // console.log(roles)
+    const [role, setRole] = useState(roles[0].name)
+
     const navigate=useNavigate()
 
 
@@ -45,7 +47,7 @@ return (<div >
         <>
             <Drawer
                 open={open}
-                onClose={() => { setOpen(false); setRoleList(false) }}
+                onClose={() => { setOpen(false); setDisplayroleList(false) }}
             >
                 <Card
                     color="transparent"
@@ -77,14 +79,14 @@ return (<div >
                                 }}>
                                     {role}
                                 </Typography>
-                                <svg onClick={() => setRoleList(!roleList)} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-cl-4">
+                                <svg onClick={() => setDisplayroleList(!displayroleList)} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-cl-4">
                                     <path fillRule="evenodd" d="M12.53 16.28a.75.75 0 0 1-1.06 0l-7.5-7.5a.75.75 0 0 1 1.06-1.06L12 14.69l6.97-6.97a.75.75 0 1 1 1.06 1.06l-7.5 7.5Z" clipRule="evenodd" />
                                 </svg>
-                                {roleList == true && <div className="absolute top-10">
+                                {displayroleList == true && <div className="absolute top-10">
                                     <Card className="">
                                         <List className="bg-opacity-15 z-10">
-                                            {roles.map((role, index) => (
-                                                <ListItem className="bg-opacity-15" onClick={() => { setRole(role); setRoleList(!roleList) }}>{role}</ListItem>
+                                            {roles.map((userrole, index) => (
+                                                <ListItem key={userrole.id} className="bg-opacity-15" onClick={() => { setRole(role); setDisplayroleList(!displayroleList);navigate(userrole.path) }}>{userrole.name}</ListItem>
 
                                             ))}
 
