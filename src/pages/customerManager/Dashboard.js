@@ -3,7 +3,7 @@ import Card from '../../components/cards/card.js'
 import NotificationCard from '../../components/cards/notificationCard.js'
 import Payment from '../../components/pos.js/index.js'
 
-function Dashboard() {
+function CustomerManagerDashboard() {
   return (
     <div className='flex flex-col gap-12'>
       <div className='flex gap-10'>
@@ -18,4 +18,4 @@ function Dashboard() {
   )
 }
 
-export default Dashboard
+export default CustomerManagerDashboard

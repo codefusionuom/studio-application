@@ -1,19 +1,22 @@
 import { Card, Typography, List, ListItem, ListItemPrefix, Drawer, Avatar, } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
 import { customerList } from "./data";
+import { Outlet, useNavigate } from "react-router-dom";
 
 
-export function DefaultSidebar() {
+export function DefaultSidebar({sections}) {
+    const list = sections
     const [open, setOpen] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [roleList, setRoleList] = useState(false);
     const roles = ["Customer Manager", "Event Manager", "Super Admin"]
     const [role, setRole] = useState(roles[0])
-    const list = customerList
-
+   
+    const navigate=useNavigate()
 
 
 return (<div >
+    
         {!open ? <>
         <Card className="h-[calc(100vh-2rem)] w-[100px] bg-primary rounded-none   p-4 shadow-xl shadow-blue-gray-900/5">
             <List className=" w-[50px]">
@@ -28,10 +31,10 @@ return (<div >
                     <Avatar src="https://docs.material-tailwind.com/img/face-2.jpg" alt="avatar" className="w-8 h-8 my-20" />
                 </div>
                 {list.map((item, index) => {
-                    return (<ListItem className={`w-[56px] focus:text-white   text-white focus:bg-white focus:bg-opacity-15 mt-8 ${index == selectedIndex && "bg-white bg-opacity-15" }`} 
+                    return (<ListItem key={index} className={`w-[56px] focus:text-white   text-white focus:bg-white focus:bg-opacity-15 mt-8 ${index == selectedIndex && "bg-white bg-opacity-15" }`} 
                     //style={{ backgroundColor: selectedIndex === index && "rgba(255, 255, 255, 0.15)"}}
                     >
-                        <ListItemPrefix onClick={() => setSelectedIndex(index)}>
+                        <ListItemPrefix onClick={() => {setSelectedIndex(index);navigate(item.path)}}>
                             {item.icon}
                         </ListItemPrefix>
                     </ListItem>)
