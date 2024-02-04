@@ -9,7 +9,7 @@ import React from 'react'
 
 
 
-function SampleForm({text,topic}) {
+function SampleForm({text,topic,type,placeholder}) {
   return (
 
 
@@ -21,8 +21,9 @@ function SampleForm({text,topic}) {
                 </Typography>
         <Typography>{text}</Typography>
         <Input
+              type={type}
               size="lg"
-              placeholder="000-000-000"
+              placeholder={placeholder}
               className=" !border-t-blue-gray-200 focus:!border-t-gray-900 p-2"
               labelProps={{
                 className: "before:content-none after:content-none",

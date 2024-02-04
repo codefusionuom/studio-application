@@ -25,6 +25,7 @@ import StockItem from './pages/stockManager/Stk_StockItem';
 import Suppliers from './pages/stockManager/Stk_supplier';
 import ReturnedStock from './pages/stockManager/Stk_returnedStock';
 import AddCategoryForm from './pages/stockManager/AddCategoryForm';
+import AddSupplierForm from './pages/stockManager/AddSupplierForm';
 
 
 
@@ -57,7 +58,7 @@ function App() {
         <Route index={false}  path="/stockManager/returnedStock" element={<ReturnedStock />} />
         <Route index={false}  path="/stockManager/stockItem" element={<StockItem />} />
         <Route index={false}  path="/stockManager/supplier" element={<Suppliers />} />
-        <Route index={false}  path="/stockManager/form" element={<AddCategoryForm />} />
+        <Route index={false}  path="/stockManager/form" element={<AddSupplierForm />} />
       </Route>
     
       <Route path="/employeeManager" element={<EmployeeManager />}>
