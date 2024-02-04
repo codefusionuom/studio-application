@@ -1,13 +1,23 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 import Layout from '../../global/Layout'
-import { customerList } from '../../global/Layout/data'
+import { customerList, eventManagerList } from '../../global/Layout/data'
+import Dashboard from './dashboard'
+import EventManagerEventCalendar from './eventManagerEventCalendar'
+import EventRequests from './eventRequests'
+import CreateEvent from './createEvent'
+import CreateEvent2 from './createEvent2'
 
 function EventManager() {
   return ( 
     // section prop should be your topic list of side bar in /global/data.js
-  <Layout sections={customerList}>
-    EventManager 123
+  <Layout sections={eventManagerList}>
+    
+    {/* <Dashboard/> */}
+    {/* <EventManagerEventCalendar/> */}
+    {/* <EventRequests/> */}
+    {/* <CreateEvent/> */}
+    <CreateEvent2/>
     <Outlet />
   </Layout >
 
