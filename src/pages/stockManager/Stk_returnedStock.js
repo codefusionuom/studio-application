@@ -5,6 +5,7 @@ import { Card, CardHeader, Input, Typography, Button, CardBody, Chip, CardFooter
 import Datepicker from "../../components/datePicker/Datepicker";
 import { Pagination } from "../../components/pagination/pagination";
 import SmallCard from '../../components/cards/card';
+import Table from './Stk_components/Table';
 
 function ReturnedStock() {
     return (
@@ -29,7 +30,9 @@ function ReturnedStock() {
                 </Card>
             </div>
             <div>
-                <Card className=" w-full border-2 rounded">
+
+                <Table title="Returned Stock" headerList={TABLE_HEAD} rowList={TABLE_ROWS}/>
+                {/* <Card className=" w-full border-2 rounded">
                     <CardHeader floated={false} shadow={false} className="rounded-none">
                         <div className="flex flex-col items-center justify-between gap-4  md:flex-row ">
                             <Typography className='text-2xl'>Returned Stock Items</Typography>
@@ -145,7 +148,8 @@ function ReturnedStock() {
                         </div>
                     </CardFooter>
                 </Card>
-            </div>
+            */}
+            </div> 
         </div>
     )
 }
