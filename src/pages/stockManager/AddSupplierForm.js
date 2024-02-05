@@ -9,7 +9,15 @@ import React from 'react'
 import ButtonComp from "./Stk_components/ButtonComp";
 import SampleForm from "./Stk_components/Form";
 
-function AddSupplierForm() {
+function AddSupplierForm({onClose}) {
+  const handleSubmit = () => {
+    // Your form submission logic here
+    // ...
+
+    // After successful form submission, close the form
+    onClose();
+  };
+
   return (
       
       <Card color="white " shadow={true}  className=" w-fit p-10">
@@ -28,7 +36,7 @@ function AddSupplierForm() {
 
           <div className="flex justify-between p-5">
          <ButtonComp color="yellow" text="Clear"></ButtonComp>
-         <ButtonComp color="green" text="Create"></ButtonComp>
+         <ButtonComp color="green" text="Create" onClick={handleSubmit}></ButtonComp>
          </div>
 
       </form>

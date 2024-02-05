@@ -6,6 +6,7 @@ import Datepicker from "../../components/datePicker/Datepicker";
 import { Pagination } from "../../components/pagination/pagination";
 import SmallCard from '../../components/cards/card';
 import Table from './Stk_components/Table';
+import { returnedDetailList, returnedTHead } from './Stk_components/data';
 
 function ReturnedStock() {
     return (
@@ -31,7 +32,7 @@ function ReturnedStock() {
             </div>
             <div>
 
-                <Table title="Returned Stock" headerList={TABLE_HEAD} rowList={TABLE_ROWS}/>
+                <Table title="Returned Stock" headerList={returnedTHead} rowList={returnedDetailList}/>
                 {/* <Card className=" w-full border-2 rounded">
                     <CardHeader floated={false} shadow={false} className="rounded-none">
                         <div className="flex flex-col items-center justify-between gap-4  md:flex-row ">
