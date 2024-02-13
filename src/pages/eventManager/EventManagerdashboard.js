@@ -4,7 +4,7 @@ import NotificationCard from '../../components/cards/notificationCard'
 import CardEvent from './cardEvent'
 import { ChevronUpDownIcon } from '@heroicons/react/24/outline';
 
-function Dashboard() {
+function EventManagerDashboard() {
    
        
       const TABLE_HEAD = ["Custermer Name", "Service Type", "Phone Number", "Status"];
@@ -172,4 +172,4 @@ function Dashboard() {
   )
 }
 
-export default Dashboard
+export default EventManagerDashboard
