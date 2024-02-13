@@ -21,7 +21,7 @@ function EventManager() {
     {/* <CreateEvent/> */}
     {/* <CreateEvent2/> */}
     {/* <EventManagerEvents/> */}
-    <EventManagerEvents2/>
+    {/* <EventManagerEvents2/> */}
     <Outlet />
   </Layout >
 

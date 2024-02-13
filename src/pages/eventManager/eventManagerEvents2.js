@@ -109,28 +109,28 @@ const EventManagerEvents2 = () => {
       </div>
       <div className="h-8"></div>
       <div className="flex space-x-4 justify-between">
-        <div className="flex justify-center items-center w-[314px] h-[140px] bg-cl-4 rounded font-lato text-xl text-cl-1 flex space-x-4 justify-evenly">
-          <table>
-          <tr>
-              <td>
-                
-                  Customer 
-              </td>
-             
-            </tr>
-          <tr>
-              <td>
-                
-                  Customer 
-              </td>
-              <td>
-              Customer  
-              </td>
-            </tr>
-          </table>
-            
-          
-        </div>
+      <div className="flex justify-center items-center w-[314px] h-[140px] bg-cl-4 rounded font-lato text-xl text-cl-1 flex flex-col space-y-2 p-4">
+  <div className="flex items-center">
+    <span className="font-bold">Service Type:</span>
+    <span className="ml-2">Wedding Photography</span>
+  </div>
+
+  <div className="flex items-center">
+    <span className="font-bold">Status:</span>
+    <span className="ml-2">Upcoming</span>
+  </div>
+
+  <div className="flex items-center">
+    <span className="font-bold">Date:</span>
+    <span className="ml-2">03-06-2024</span>
+  </div>
+
+  <div className="flex items-center">
+    <span className="font-bold">Location:</span>
+    <span className="ml-2">Silver ray, Rathnapura</span>
+  </div>
+</div>
+
 
         {/* <div className="flex justify-center items-center w-[314px] h-[140px] bg-cl-4 rounded font-lato text-xl text-cl-1">
          <Typography variant="h5" color="blue-gray" className="text-3xl">
