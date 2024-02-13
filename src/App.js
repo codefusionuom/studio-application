@@ -18,7 +18,7 @@ import EmployeeManager from './pages/employeeManager';
 import SuperAdmin from './pages/superAdmin';
 import EmployeeManagerDashboard from './pages/employeeManager/dashboard';
 import EmployeePayment from './pages/employeeManager/payment';
-import Attencance from './pages/employeeManager/attendance';
+import Attendance from './pages/employeeManager/attendance';
 
 function App() {
   return (
@@ -45,7 +45,7 @@ function App() {
       <Route path="/employeeManager" element={<EmployeeManager />}>
         <Route  path="/employeeManager/" element={<EmployeeManagerDashboard />} />
         <Route  path="/employeeManager/payment" element={<EmployeePayment />} />
-        <Route  path="/employeeManager/attendance" element={<Attencance />} />
+        <Route  path='/employeeManager/attendance' element={<Attendance />} />
         
         
       </Route>

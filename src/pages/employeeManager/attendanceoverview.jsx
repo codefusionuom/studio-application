@@ -3,29 +3,25 @@ import { PencilIcon, UserPlusIcon } from "@heroicons/react/24/solid";
 import { Card, CardHeader, Input, Typography, Button, CardBody, Chip, CardFooter, Tabs, TabsHeader, Tab, Avatar, IconButton, Tooltip, Select, Option, } from "@material-tailwind/react";
 import Datepicker from "../../components/datePicker/Datepicker";
 import { Pagination } from "../../components/pagination/pagination";
+import { RadioHorizontalList } from "./attendanceradio";
 
-function EmployeeList() {
+function AttendanceOverviewList() {
     return (
         <Card className=" w-full border-2 ">
             <CardHeader floated={false} shadow={false} className="rounded-none">
                 <div className="flex flex-col items-center justify-between gap-4  md:flex-row ">
-                    <div className="text-2xl pt-6 pl-10 font-semibold">
-                    <p>Employee List</p>
+                    <div>
+                    <p>Attendance Overview</p>
                     </div>
-
+                    <div>
+                        <RadioHorizontalList></RadioHorizontalList>
+                    </div>
                     <div className=" flex p-4 gap-6">
-                        <Select size="lg" label="Sort By: Newest" className="z-10">
-                            <Option>Material Tailwind HTML</Option>
-                            <Option>Material Tailwind React</Option>
-                            <Option>Material Tailwind Vue</Option>
-                            <Option>Material Tailwind Angular</Option>
-                            <Option>Material Tailwind Svelte</Option>
-                        </Select>
+                        <div className="w-72">
+                            <Input label="Date" disabled />
+                        </div>
 
-                        <Input size="lg"
-                            label="Search"
-                            icon={<MagnifyingGlassIcon className="h-5 w-5" />}
-                        />
+                        <Button>View Attendance</Button>
                     </div>
                 </div>
             </CardHeader>
@@ -36,7 +32,7 @@ function EmployeeList() {
                             {TABLE_HEAD.map((head, index) => (
                                 <th
                                     key={head}
-                                    className="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50 "
+                                    className="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50"
                                 >
                                     <Typography
                                         variant="small"
@@ -51,7 +47,7 @@ function EmployeeList() {
                     </thead>
                     <tbody>
                         {TABLE_ROWS.map(
-                            ({ img, name, email, job, org, phoneNumber, employeeId, online, date }, index) => {
+                            ({ day, name, chin, chout, interval, whours, employeeId, status, date }, index) => {
                                 const isLast = index === TABLE_ROWS.length - 1;
                                 const classes = isLast
                                     ? "p-4"
@@ -61,15 +57,14 @@ function EmployeeList() {
                                     <tr key={name}>
                                         <td className={classes}>
                                             <div className="flex items-center gap-3">
-                                                <div className="flex flex-col pl-8">
+                                                <div className="flex flex-col">
                                                     <Typography
                                                         variant="small"
                                                         color="blue-gray"
                                                         className="font-normal"
                                                     >
-                                                        {name}
+                                                        {date}
                                                     </Typography>
-                                                    
                                                 </div>
                                             </div>
                                         </td>
@@ -80,19 +75,9 @@ function EmployeeList() {
                                                     color="blue-gray"
                                                     className="font-normal"
                                                 >
-                                                    {job}
+                                                    {day}
                                                 </Typography>
-                                                
                                             </div>
-                                        </td>
-                                        <td className={classes}>
-                                            <Typography
-                                                variant="small"
-                                                color="blue-gray"
-                                                className="font-normal"
-                                            >
-                                                {phoneNumber}
-                                            </Typography>
                                         </td>
                                         <td className={classes}>
                                             <Typography
@@ -104,14 +89,22 @@ function EmployeeList() {
                                             </Typography>
                                         </td>
                                         <td className={classes}>
-                                            <div className="w-max">
-                                                <Chip
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    value={online ? "online" : "offline"}
-                                                    color={online ? "green" : "blue-gray"}
-                                                />
-                                            </div>
+                                            <Typography
+                                                variant="small"
+                                                color="blue-gray"
+                                                className="font-normal"
+                                            >
+                                                {chin}
+                                            </Typography>
+                                        </td>
+                                        <td className={classes}>
+                                        <Typography
+                                                variant="small"
+                                                color="blue-gray"
+                                                className="font-normal"
+                                            >
+                                                {chout}
+                                            </Typography>
                                         </td>
                                         <td className={classes}>
                                             <Typography
@@ -119,15 +112,18 @@ function EmployeeList() {
                                                 color="blue-gray"
                                                 className="font-normal"
                                             >
-                                                {date}
+                                                {whours}
                                             </Typography>
                                         </td>
                                         <td className={classes}>
-                                            <Tooltip content="Edit User">
-                                                <IconButton variant="text">
-                                                    <PencilIcon className="h-4 w-4" />
-                                                </IconButton>
-                                            </Tooltip>
+                                        {(() => {
+                                            switch(status) {
+                                                    case "wfh": return <div><Chip color="gray" value="Work from home" /></div>;
+                                                    case "wfo": return <Chip color="blue" value="Work from office" />;
+                                                    case "la": return <Chip color="yellow" value="Late arrival" />;
+                                                    default: return <Chip color="red" value="Absent" />
+                                                }
+                                                })()}
                                         </td>
                                     </tr>
                                 );
@@ -147,7 +143,7 @@ function EmployeeList() {
         </Card>
     );
 }
-export default EmployeeList
+export default AttendanceOverviewList
 
 
 // const TABS = [
@@ -165,44 +161,44 @@ export default EmployeeList
 //     },
 // ];
 
-const TABLE_HEAD = ["Employee Name", "Department", "Phone Number", "Employee ID", "Status", "Employed", "Edit"];
+const TABLE_HEAD = ["Date", "Day", "Employee ID", "Check-In", "Check-out", "Work hours", "Status"];
 
 const TABLE_ROWS = [
     {
-        img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg",
+        day: "Monday",
         name: "John Michael",
         email: "john@creative-tim.com",
         job: "Manager",
         org: "Organization",
         phoneNumber: "0714567890",
         employeeId: "#12345",
-        online: true,
+        status: "wfh",
         date: "23/04/18",
     },
     {
-        img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-2.jpg",
+        day: "Tuesday",
         name: "Alexa Liras",
         email: "alexa@creative-tim.com",
         job: "Programator",
         org: "Developer",
         phoneNumber: "0714567890",
         employeeId: "#12345",
-        online: false,
+        status: "wfo",
         date: "23/04/18",
     },
     {
-        img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-1.jpg",
+        day: "Wensday",
         name: "Laurent Perrier",
         email: "laurent@creative-tim.com",
         job: "Executive",
         org: "Projects",
         phoneNumber: "0714567890",
         employeeId: "#12345",
-        online: false,
+        status: "la",
         date: "19/09/17",
     },
     {
-        img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-4.jpg",
+        day: "Thursday",
         name: "Michael Levi",
         email: "michael@creative-tim.com",
         job: "Programator",
@@ -213,7 +209,7 @@ const TABLE_ROWS = [
         date: "24/12/08",
     },
     {
-        img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-5.jpg",
+        day: "Friday",
         name: "Richard Gran",
         email: "richard@creative-tim.com",
         job: "Manager",

@@ -17,7 +17,7 @@ function EmployeeManagerDashboard() {
             </div>
 
             <div className='flex justify-evenly pb-5'>
-                <DashCard title2={"Add Employee"} title3={"Add Personal Here"}/>
+                <DashCard title2={"Register Employee"} title3={"Add Personal Here"}/>
                 <DashCard title2={"Advance Request"} title3={"Salary Advance"}/>
             </div>
 

@@ -25,12 +25,12 @@ function EmployeePayment() {
                 <div className=''>
                     <div className='bg-gray-400 ml-20 mr-20 flex justify-evenly rounded'>
                     <div className='w-80 pt-5 pb-5'>
-                    <p className='text-lg'>Personal Information</p>
+                    <p className='text-2xl'>Personal Information</p>
                     
                     </div>
-                    <div className='w-80 pt-5 pb-5'>
-                    
-                    </div>
+                    <div className='w-80 pt-5 pb-5'></div>
+                    <div className='w-80 pt-5 pb-5'></div>
+                    <div className='w-80 pt-5 pb-5'></div>
                     </div>
                 </div>
                 <div className='flex justify-evenly'>
@@ -96,12 +96,16 @@ function EmployeePayment() {
                 <div className=''>
                     <div className='bg-gray-400 ml-20 mr-20 flex justify-evenly rounded'>
                     <div className='w-80 pt-5 pb-5'>
-                    <p className='text-lg'>Earning Information</p>
+                    <p className='text-2xl'>Earning Information</p>
                     
                     </div>
                     <div className='w-80 pt-5 pb-5'>
                     
                     </div>
+                    <div className='w-80 pt-5 pb-5'></div>
+                    <div className='w-80 pt-5 pb-5'></div>
+
+                    
                     </div>
                 </div>
                 <div className='flex justify-evenly'>
@@ -180,12 +184,14 @@ function EmployeePayment() {
                 <div className=''>
                     <div className='bg-gray-400 ml-20 mr-20 flex justify-evenly rounded'>
                     <div className='w-80 pt-5 pb-5'>
-                    <p className='text-lg'>Allowance</p>
+                    <p className='text-2xl'>Allowance</p>
                     
                     </div>
                     <div className='w-80 pt-5 pb-5'>
                     
                     </div>
+                    <div className='w-80 pt-5 pb-5'></div>
+                    <div className='w-80 pt-5 pb-5'></div>
                     </div>
                 </div>
                 <div className='flex justify-evenly'>
@@ -213,7 +219,7 @@ function EmployeePayment() {
                 <div className='flex justify-evenly'>
                     <div>
                         <p>Medical</p>
-                        <div className="w-80  pt-1 pb-10">
+                        <div className="w-40  pt-1 pb-10">
                         </div>
                     </div>
                     <div>
@@ -222,7 +228,7 @@ function EmployeePayment() {
                         </div>
                     </div>
                     <div>
-                        <div className="w-20 pt-1 pb-10">
+                        <div className="w-21 pt-1 pb-10">
                             <Input label="" />
                         </div>
                     </div>
@@ -236,7 +242,7 @@ function EmployeePayment() {
                 <div className='flex justify-evenly'>
                     <div>
                         <p>Transport</p>
-                        <div className="w-80  pt-1 pb-10">
+                        <div className="w-40  pt-1 pb-10">
                         </div>
                     </div>
                     <div>
@@ -245,7 +251,7 @@ function EmployeePayment() {
                         </div>
                     </div>
                     <div>
-                        <div className="w-80 pt-1 pb-10">
+                        <div className="w-21 pt-1 pb-10">
                             <Input label="" />
                         </div>
                     </div>
@@ -259,7 +265,7 @@ function EmployeePayment() {
                 <div className='flex justify-evenly'>
                     <div>
                         <p>Meals Pay</p>
-                        <div className="w-80  pt-1 pb-10">
+                        <div className="w-40  pt-1 pb-10">
                         </div>
                     </div>
                     <div>
@@ -268,7 +274,7 @@ function EmployeePayment() {
                         </div>
                     </div>
                     <div>
-                        <div className="w-80 pt-1 pb-10">
+                        <div className="w-21 pt-1 pb-10">
                             <Input label="" />
                         </div>
                     </div>
@@ -282,7 +288,7 @@ function EmployeePayment() {
                 <div className='flex justify-evenly'>
                     <div>
                         <p>Uniform</p>
-                        <div className="w-80  pt-1 pb-10">
+                        <div className="w-40  pt-1 pb-10">
                         </div>
                     </div>
                     <div>
@@ -291,7 +297,7 @@ function EmployeePayment() {
                         </div>
                     </div>
                     <div>
-                        <div className="w-80 pt-1 pb-10">
+                        <div className="w-21 pt-1 pb-10">
                             <Input label="" />
                         </div>
                     </div>
@@ -305,7 +311,7 @@ function EmployeePayment() {
                 <div className='flex justify-evenly'>
                     <div>
                         <p>Communication</p>
-                        <div className="w-80  pt-1 pb-10">
+                        <div className="w-40  pt-1 pb-10">
                         </div>
                     </div>
                     <div>
@@ -314,7 +320,7 @@ function EmployeePayment() {
                         </div>
                     </div>
                     <div>
-                        <div className="w-80 pt-1 pb-10">
+                        <div className="w-21 pt-1 pb-10">
                             <Input label="" />
                         </div>
                     </div>
@@ -328,7 +334,7 @@ function EmployeePayment() {
                 <div className='flex justify-evenly'>
                     <div>
                         <p>Education</p>
-                        <div className="w-80  pt-1 pb-10">
+                        <div className="w-40  pt-1 pb-10">
                         </div>
                     </div>
                     <div>
@@ -337,7 +343,7 @@ function EmployeePayment() {
                         </div>
                     </div>
                     <div>
-                        <div className="w-80 pt-1 pb-10">
+                        <div className="w-21 pt-1 pb-10">
                             <Input label="" />
                         </div>
                     </div>
@@ -351,7 +357,7 @@ function EmployeePayment() {
                 <div className='flex justify-evenly'>
                     <div>
                         <p>Child Care</p>
-                        <div className="w-80  pt-1 pb-10">
+                        <div className="w-40  pt-1 pb-10">
                         </div>
                     </div>
                     <div>
@@ -360,7 +366,7 @@ function EmployeePayment() {
                         </div>
                     </div>
                     <div>
-                        <div className="w-80 pt-1 pb-10">
+                        <div className="w-21 pt-1 pb-10">
                             <Input label="" />
                         </div>
                     </div>
@@ -374,7 +380,7 @@ function EmployeePayment() {
                 <div className='flex justify-evenly'>
                     <div>
                         <p>Other</p>
-                        <div className="w-80  pt-1 pb-10">
+                        <div className="w-40  pt-1 pb-10">
                         </div>
                     </div>
                     <div>
@@ -383,7 +389,7 @@ function EmployeePayment() {
                         </div>
                     </div>
                     <div>
-                        <div className="w-80 pt-1 pb-10">
+                        <div className="w-21 pt-1 pb-10">
                             <Input label="" />
                         </div>
                     </div>
@@ -406,19 +412,21 @@ function EmployeePayment() {
                 <div className=''>
                     <div className='bg-gray-400 ml-20 mr-20 flex justify-evenly rounded'>
                     <div className='w-80 pt-5 pb-5'>
-                    <p className='text-lg'>Deductions</p>
+                    <p className='text-2xl'>Deductions</p>
                     
                     </div>
                     <div className='w-80 pt-5 pb-5'>
                     
                     </div>
+                    <div className='w-80 pt-5 pb-5'></div>
+                    <div className='w-80 pt-5 pb-5'></div>
                     </div>
                 </div>
                 
                 <div className='flex justify-evenly pt-10'>
                     <div>
                         <p>Medical</p>
-                        <div className="w-80  pt-1 pb-10">
+                        <div className="w-60  pt-1 pb-10">
                         </div>
                     </div>
                     <div>
@@ -436,7 +444,7 @@ function EmployeePayment() {
                 <div className='flex justify-evenly'>
                     <div>
                         <p>Health Insuarance</p>
-                        <div className="w-80  pt-1 pb-10">
+                        <div className="w-60  pt-1 pb-10">
                         </div>
                     </div>
                     
@@ -455,7 +463,7 @@ function EmployeePayment() {
                 <div className='flex justify-evenly'>
                     <div>
                         <p>Uniform Cost</p>
-                        <div className="w-80  pt-1 pb-10">
+                        <div className="w-60  pt-1 pb-10">
                         </div>
                     </div>
                     
@@ -474,7 +482,7 @@ function EmployeePayment() {
                 <div className='flex justify-evenly'>
                     <div>
                         <p>Training Cost</p>
-                        <div className="w-80  pt-1 pb-10">
+                        <div className="w-60  pt-1 pb-10">
                         </div>
                     </div>
                     <div>
@@ -493,7 +501,7 @@ function EmployeePayment() {
                 <div className='flex justify-evenly'>
                     <div>
                         <p>Other</p>
-                        <div className="w-80  pt-1 pb-10">
+                        <div className="w-60  pt-1 pb-10">
                         </div>
                     </div>
                     
@@ -516,24 +524,26 @@ function EmployeePayment() {
                 <div className=''>
                     <div className='bg-gray-400 ml-20 mr-20 flex justify-evenly rounded'>
                     <div className='w-80 pt-5 pb-5'>
-                    <p className='text-lg'>Payment Details</p>
+                    <p className='text-2xl'>Payment Details</p>
                     
                     </div>
                     <div className='w-80 pt-5 pb-5'>
                     
                     </div>
+                    <div className='w-80 pt-5 pb-5'></div>
+                    <div className='w-80 pt-5 pb-5'></div>
                     </div>
                 </div>
                 <div className='flex justify-evenly'>
-                    <div>
+                    <div className='pt-10'>
                         <p>Payment Period (From)</p>
                         <Datepicker></Datepicker>
                     </div>
-                    <div>
+                    <div className='pt-10'>
                     <p>Payment Period (From)</p>
                         <Datepicker></Datepicker>
                     </div>
-                    <div>
+                    <div className='pt-10'>
                     <p>Payment Period (From)</p>
                         <Datepicker></Datepicker>
                     </div>

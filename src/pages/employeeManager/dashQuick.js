@@ -12,10 +12,10 @@ export function QuickView(){
                 </div>
                 <div>
                     <div>
-                        <p>Events</p>
+                        <p className="font-sans text-gray-600">Events</p>
                     </div>
                     <div>
-                        <p>18</p>
+                        <p className="text-3xl">18</p>
                     </div>
                 </div>
 
@@ -26,10 +26,10 @@ export function QuickView(){
                 </div>
                 <div>
                     <div>
-                        <p>Photographers</p>
+                        <p className="font-sans text-gray-600">Photographers</p>
                     </div>
                     <div>
-                        <p>21</p>
+                        <p className="text-3xl">21</p>
                     </div>
                 </div>
             </div>
@@ -39,10 +39,10 @@ export function QuickView(){
                 </div>
                 <div>
                     <div>
-                        <p>Total Employees</p>
+                        <p className="font-sans text-gray-600">Total Employees</p>
                     </div>
                     <div>
-                        <p>53</p>
+                        <p className="text-3xl">53</p>
                     </div>
                 </div>
             </div>
