@@ -39,10 +39,10 @@ function App() {
       </Route>
 
       <Route path="/eventManager" element={<EventManager/>}>
-        {/* <Route path="/eventManager/" element={<EventManagerDashboard/>}/>
+        <Route path="/eventManager/" element={<EventManagerDashboard/>}/>
         <Route path="/eventManager/eventRequests" element={<EventRequests />}/>
         <Route path="/eventManager/eventCalandar" element={<EventManagerEventCalendar/>} />
-        <Route path="/eventManager/Events" element={<EventManagerEvents/>} /> */}
+        <Route path="/eventManager/Events" element={<EventManagerEvents/>} />
       </Route>
       
       <Route path="/stockManager" element={<StockManager />}>
