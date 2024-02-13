@@ -41,7 +41,7 @@ function Table({title,rowList,headerList}) {
 
                             <tbody>
                                 {rowList.map(
-                                    ({ idx,item, name, email, online, date,amount }, index) => {
+                                    ({ idx,idx2,item, name, email, online, date,amount }, index) => {
                                         const isLast = index === TABLE_ROWS.length - 1;
                                         const classes = isLast
                                             ? "p-4"
@@ -60,6 +60,18 @@ function Table({title,rowList,headerList}) {
                                                                 className="font-normal"
                                                             >
                                                                 {idx}
+                                                            </Typography>
+                                                           
+                                                            </div>
+                                                    </td>
+                                                    <td className={classes}>
+                                                        <div className="flex flex-col">
+                                                            <Typography
+                                                                variant="small"
+                                                                color="blue-gray"
+                                                                className="font-normal"
+                                                            >
+                                                                {idx2}
                                                             </Typography>
                                                            
                                                             </div>
