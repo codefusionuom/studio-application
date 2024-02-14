@@ -4,8 +4,7 @@ import { format } from "date-fns";
 import { DayPicker } from "react-day-picker";
 import { ChevronRightIcon, ChevronLeftIcon } from "@heroicons/react/24/outline";
  
-export default function Datepicker() {
-  const [date, setDate] = React.useState();
+export default function Datepicker({date,setDate}) {
  
   return (
     <div className="p-4">

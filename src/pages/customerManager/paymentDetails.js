@@ -1,7 +1,21 @@
 import { Typography } from '@material-tailwind/react'
-import React from 'react'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom';
 
 function PaymentDetails() {
+    const { id } = useParams();
+    const [payment,setPayment]=useState({amount:""})
+
+    useEffect(()=>{
+        const fetchPayment=async()=>{
+            const {data}= await axios.get(`http://localhost:5000/customerManager/payment/${id}`)
+            setPayment(data)
+            console.log(id,data)
+        }
+        fetchPayment()
+    },[])
+
     return (
         <div className='flex flex-col gap-10'>
             <div className=' bg-cl-4 text-2xl rounded-md flex justify-between items-center py-10 px-20'>
@@ -11,13 +25,13 @@ function PaymentDetails() {
                 <div className='bg-cl-4 rounded-md flex flex-col gap-2 py-4 px-10 h-[150px]'>
                     <Typography className=' text-2xl pb-2'>Customer</Typography>
                     <div className='flex  gap-4'>
-                        <Typography className=' text-sm text-cl-2 w-[180px]'>John Kushn</Typography>
-                        <Typography className=' text-sm text-cl-2 w-[180px]'>0704585963</Typography>
+                        <Typography className=' text-sm text-cl-2 w-[180px]'>{payment?.customer?.firstname +" "+ payment?.customer?.lastname}</Typography>
+                        <Typography className=' text-sm text-cl-2 w-[180px]'>{payment?.customer?.mobilePhone}</Typography>
 
                     </div>
                     <div className='flex gap-4'>
-                        <Typography className=' text-sm text-cl-2 w-[180px] '>John@gmail.com</Typography>
-                        <Typography className=' text-sm text-cl-2 w-[180px] '>1H,galewela road,palmadulla,rathnapura</Typography>
+                        <Typography className=' text-sm text-cl-2 w-[180px] '>{payment?.customer?.email}</Typography>
+                        <Typography className=' text-sm text-cl-2 w-[180px] '>{payment?.customer?.address}</Typography>
                     </div>
                 </div>
                 <div className='w-full bg-cl-4 grid grid-rows-3 grid-flow-col   gap-y-2 gap-x-32 rounded-md py-4 px-10 h-[150px]'>
@@ -57,17 +71,17 @@ function PaymentDetails() {
                 <div className='w-full bg-cl-4 grid grid-rows-3 grid-flow-col   gap-y-2 gap-x-32 rounded-md py-4 px-10 h-[150px]'>
                     <div className='flex gap-4 '>
                         <Typography className=' text-lg  font-bold text-cl-1 '>Amout :</Typography>
-                        <Typography className=' text-lg text-cl-2 min-w-[120px]'>68</Typography>
+                        <Typography className=' text-lg text-cl-2 min-w-[120px]'>{payment?.amount}</Typography>
 
                     </div>
                     <div className='flex gap-4'>
                         <Typography className=' text-lg  font-bold text-cl-1 '>Offers :</Typography>
-                        <Typography className=' text-lg text-cl-2 min-w-[120px]'>3,000.00</Typography>
+                        <Typography className=' text-lg text-cl-2 min-w-[120px]'>{payment?.offers}</Typography>
 
                     </div>
                     <div className='flex gap-4'>
                         <Typography className=' text-lg  font-bold text-cl-1 '>Payment :</Typography>
-                        <Typography className=' text-lg text-cl-2 '>65,000.00</Typography>
+                        <Typography className=' text-lg text-cl-2 '>{payment?.payment}</Typography>
 
                     </div>
                     <div className='flex gap-4'>
