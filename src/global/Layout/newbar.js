@@ -6,7 +6,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 
 export function DefaultSidebar({sections}) {
     const list = sections
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(true);
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [displayroleList, setDisplayroleList] = useState(false);
     const roles =userRoles
@@ -14,9 +14,9 @@ export function DefaultSidebar({sections}) {
     const navigate=useNavigate()
 
 
-     return (<div >
+     return (<div className=" h-full" >
     
-        {!open ? <>
+        {/* {!open ? <>
         <Card className="h-[calc(100vh-2rem)] w-[100px] bg-primary rounded-none   p-4 shadow-xl shadow-blue-gray-900/5">
             <List className=" w-[50px]">
                 <ListItem className=" w-[56px] hover:text-white text-white focus:text-white  focus:bg-white focus:bg-opacity-15" >
@@ -40,16 +40,16 @@ export function DefaultSidebar({sections}) {
                 })}
             </List>
         </Card>
-        </> : 
-        <>
-            <Drawer
+        </> :  */}
+        {/* <> */}
+            {/* <Drawer
                 open={open}
                 onClose={() => { setOpen(false); setDisplayroleList(false) }}
-            >
+            > */}
                 <Card
                     color="transparent"
                     shadow={false}
-                    className="h-[100vh] w-[375px] bg-primary rounded-none   p-4 shadow-xl "
+                    className=" h-full  w-[375px]  rounded-none   p-4  "
                 >
                     <div className="mb-2 flex items-center justify-between gap-4 p-4">
                         <Typography fontSize={"24px"} color={"white"} align="center">
@@ -98,8 +98,9 @@ export function DefaultSidebar({sections}) {
                     <div className="w-[full ">
                         {list.map((item, index) => {
                            
-                            return (<ListItem  key={index} className={` w-[full] focus:text-white  text-white focus:bg-white focus:bg-opacity-15 mt-8 ${index == selectedIndex && "bg-white bg-opacity-15" }`}>
-                                <ListItemPrefix onClick={() => setSelectedIndex(index)} className="w-[full] flex-1 flex justify-start ">
+                            return (<ListItem  key={index} className={` w-[full] focus:text-white  text-white focus:bg-white focus:bg-opacity-15 mt-8 ${index == selectedIndex && "bg-white bg-opacity-15" }`}
+                            onClick={() => {setSelectedIndex(index);navigate(item.path)}}>
+                                <ListItemPrefix  className="w-[full] flex-1 flex justify-start " >
                                     <div className="mr-10">{item.icon}</div>  <div className="text-xl">{item.name}</div>
                                 </ListItemPrefix>
                             </ListItem>)
@@ -116,8 +117,8 @@ export function DefaultSidebar({sections}) {
                         </button>
                     </div>
                 </Card>
-            </Drawer>
-        </>}
+            {/* </Drawer> */}
+        {/* </>} */}
 
     </div>
 

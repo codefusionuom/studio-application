@@ -6,14 +6,14 @@ import { DefaultSidebar } from './newbar'
 function Layout({ children,sections }) {
     return (
         
-            <div className="flex bg-bg "  >
-                <div className=''>
+            <div className="flex bg-bg  "  >
+                <div className='bg-primary'>
                     {/* <SidebarNim>
                     </SidebarNim> */}
                     <DefaultSidebar sections={sections}/>
                 </div>
 
-                <div   className=' w-full m-[60px]' >
+                <div   className=' w-full m-[60px] ' >
                     <Topbar/>
                       {children}
                       
