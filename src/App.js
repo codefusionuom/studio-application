@@ -31,7 +31,7 @@ function App() {
        <Route path="/customerManager" element={<CustomerManager />}>
         <Route  path="/customerManager" element={<CustomerManagerDashboard />} />
         <Route  path="/customerManager/customers" element={<Customers />} />
-        <Route   path="/customerManager/paymentDetails" element={<PaymentDetails />} />
+        <Route   path="/customerManager/paymentDetails/:id" element={<PaymentDetails />} />
         <Route  path="/customerManager/eventCalandar" element={<EventCalandar />} />
         <Route   path="/customerManager/createCustomerRequest" element={<CreateCustomerRequest />} />
         <Route   path="/customerManager/paymentList" element={<PaymentList />} />
