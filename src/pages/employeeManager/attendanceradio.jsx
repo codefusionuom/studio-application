@@ -53,7 +53,7 @@ import {
               </ListItemPrefix>
               <Typography
                 color="blue-gray"
-                className="font-medium text-blue-gray-400"
+                className="font-medium text-blue-gray-400 w-max"
               >
                 Present
               </Typography>
@@ -77,7 +77,7 @@ import {
               </ListItemPrefix>
               <Typography
                 color="blue-gray"
-                className="font-medium text-blue-gray-400"
+                className="font-medium text-blue-gray-400 w-max"
               >
                 Half - Day
               </Typography>

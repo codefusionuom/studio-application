@@ -10,7 +10,7 @@ function AttendanceOverviewList() {
         <Card className=" w-full border-2 ">
             <CardHeader floated={false} shadow={false} className="rounded-none">
                 <div className="flex flex-col items-center justify-between gap-4  md:flex-row ">
-                    <div>
+                    <div className="text-2xl pt-6 pl-10 font-semibold">
                     <p>Attendance Overview</p>
                     </div>
                     <div>
@@ -115,13 +115,17 @@ function AttendanceOverviewList() {
                                                 {whours}
                                             </Typography>
                                         </td>
-                                        <td className={classes}>
+                                        <td className="p-4 border-b border-blue-gray-50 w-2/12">
                                         {(() => {
                                             switch(status) {
-                                                    case "wfh": return <div><Chip color="gray" value="Work from home" /></div>;
-                                                    case "wfo": return <Chip color="blue" value="Work from office" />;
-                                                    case "la": return <Chip color="yellow" value="Late arrival" />;
-                                                    default: return <Chip color="red" value="Absent" />
+                                                    // case "wfh": return <div className="flex"><Chip color="gray" value="Work from home" /></div>;
+                                                    // case "wfo": return <div className="flex"><Chip color="blue" value="Work from office" /></div>;
+                                                    // case "la": return <div className="flex"><Chip color="yellow" value="Late arrival" /></div>;
+                                                    // default: return <div className="flex"><Chip color="red" value="Absent" /></div>
+                                                    case "wfh": return <div className="flex"><Typography className="flex bg-gray-600 rounded pl-3 pr-3 text-sm font-semibold pt-1 pb-1 text-white w-3/4 justify-center">Work from home</Typography></div>;
+                                                    case "wfo": return <div className="flex"><Typography className="flex justify-center bg-light-blue-400 rounded pl-3 pr-3 text-sm font-semibold pt-1 pb-1 text-white w-3/4">Work from office</Typography></div>;
+                                                    case "la": return <div className="flex"><Typography className="flex justify-center bg-yellow-500 rounded pl-3 pr-3 text-sm font-semibold pt-1 pb-1 text-black w-3/4">Late Arrival</Typography></div>;
+                                                    default: return <div className="flex"><Typography className="flex justify-center bg-red-500 rounded pl-3 pr-3 text-sm font-semibold pt-1 pb-1 text-white w-3/4">Absent</Typography></div>;
                                                 }
                                                 })()}
                                         </td>
