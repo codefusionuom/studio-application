@@ -20,7 +20,7 @@ function AddSupplierForm({onClose}) {
 
   return (
       
-      <Card color="white " shadow={true}  className=" w-fit p-10">
+    <Card color="white " shadow={true}  className=" w-fit p-10">
      
       <form className="mt-8 mb-2 w-fit max-w-screen-lg sm:w-96 justify-center">
 
@@ -41,7 +41,9 @@ function AddSupplierForm({onClose}) {
 
       </form>
 
-      </Card>
+      
+</Card>
+     
   
   )
 }

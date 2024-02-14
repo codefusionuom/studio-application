@@ -1,16 +1,40 @@
-import React from 'react'
+import React,{useState} from 'react'
 import { MagnifyingGlassIcon, ChevronUpDownIcon, } from "@heroicons/react/24/outline";
 import { PencilIcon, UserPlusIcon } from "@heroicons/react/24/solid";
 import { Card, CardHeader, Input, Typography, Button, CardBody, Chip, CardFooter, Tabs, TabsHeader, Tab, Avatar, IconButton, Tooltip, Select, Option, } from "@material-tailwind/react";
 import Datepicker from "../../components/datePicker/Datepicker";
 import { Pagination } from "../../components/pagination/pagination";
 import SmallCard from '../../components/cards/card';
+import AddCategoryForm from './AddCategoryForm';
+import Modal from './Stk_components/Modal';
 
 function Category() {
+    const [isFormVisible, setFormVisible] = useState(false);
+
+    const openForm = () => {
+      setFormVisible(true);
+
+    };
+  
+    const closeForm = () => {
+      setFormVisible(false);
+    };
     return (
         <div className='flex flex-col gap-10'>
             <div className='flex gap-10'>
-                <SmallCard className=" w-full" title="+ Add Category" />
+                
+            <div>
+            <SmallCard
+              className=" w-full cursor-pointer"
+              title="+ Create Category"
+              onClick={openForm}
+            />
+            {isFormVisible && (
+              <Modal onClose={closeForm}>
+                <AddCategoryForm onClose={closeForm} />
+              </Modal>
+            )}
+          </div>
                 <Card className='w-full rounded'>
                     <div className=" flex p-4 gap-6 items-center">
                         <Select size="lg" label="Select By: Item Id" className="z-10">

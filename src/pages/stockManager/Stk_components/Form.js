@@ -6,16 +6,15 @@ import {
     Typography,
   } from "@material-tailwind/react";
 import React from 'react'
+import EmployeeForm from "./FormComp";
 
 
 
 function SampleForm({text,topic,type,placeholder}) {
+  
   return (
-
-
-      
    
-      <div className="mb-1 flex flex-col gap-6">
+   <div className="mb-1 flex flex-col gap-6">
               <Typography variant="h4" color="blue-gray" className=" text-center text-sm pb-5">
               {topic}
                 </Typography>
@@ -30,6 +29,7 @@ function SampleForm({text,topic,type,placeholder}) {
               }}
          />
          </div>
+     
   )
 }
 
