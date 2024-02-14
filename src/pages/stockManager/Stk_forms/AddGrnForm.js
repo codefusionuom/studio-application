@@ -12,16 +12,16 @@ import {
 } from "@material-tailwind/react";
 import SmallCard from "../../../components/cards/card";
  
-function FormComp({title}) {
+function AddGrnForm({title}) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen((cur) => !cur); 
  
   return (
     <>
-      <SmallCard className=" w-full" title={title} onClick={handleOpen} />
+      <SmallCard className=" w-full cursor-pointer" title={title} onClick={handleOpen} />
 
       <Dialog
-        // size=""
+       
         open={open}
         handler={handleOpen}
         className="bg-transparent shadow-none w-fit"
@@ -29,31 +29,31 @@ function FormComp({title}) {
         <Card className="mx-auto w-full ">
           <CardBody className="flex flex-col gap-4">
             <Typography variant="h4" color="blue-gray">
-              Add Supplier
+             Create GRN
             </Typography>
             <Typography
               className="mb-3 font-normal"
               variant="paragraph"
               color="gray"
             >
-              Enter Details Here
+              Enter Good Recieve Note Details Here
             </Typography>
 
             
             <div className=" flex flex-row justify-between ">
               <div className=" flex flex-col justify-between">
                 <Typography className="mb-2" variant="h6">
-                  Name:
+                  Supplier ID:
                 </Typography>
 
-                <Input label="Name" size="lg" />
+                <Input label="Supplier ID" size="lg" placeholder="S-001" />
               </div>
 
               <div className="flex flex-col justify-between">
                 <Typography className="mb-2" variant="h6">
-                  Email:
+                  Full Amount:
                 </Typography>
-                <Input label="Email" size="lg" />
+                <Input label=" Full Amount" size="lg" placeholder="100,000.00"/>
               </div>
             </div>
 
@@ -61,27 +61,41 @@ function FormComp({title}) {
             <div className=" flex flex-row justify-between ">
               <div className=" flex flex-col justify-between">
                 <Typography className="mb-2" variant="h6">
-                  Address:
+                  Date:
                 </Typography>
 
-                <Input label="Address" size="lg" />
+                <Input label="Date" size="lg" type="date" placeholder="DD/MM/YYYY" />
               </div>
 
               <div className="flex flex-col justify-between">
                 <Typography className="mb-2" variant="h6">
                   Telephone:
                 </Typography>
-                <Input label="Telephone" size="lg" />
+                <Input label="Telephone" size="lg" placeholder="077-111 1111" />
               </div>
             </div>
 
             <div className=" flex flex-row justify-between ">
               <div className=" flex flex-col justify-between">
                 <Typography className="mb-2" variant="h6">
-                Stock Item:
+                Stock Items:
                 </Typography>
 
-                <Input label=" Stock Item" size="lg" />
+                <Input label=" Stock Items" size="lg" placeholder="I-001" />
+              </div>
+              <div className=" flex flex-col justify-between">
+                <Typography className="mb-2" variant="h6">
+                Quantity:
+                </Typography>
+
+                <Input label="Quantity" size="lg" />
+              </div>
+              <div className=" flex flex-col justify-between">
+                <Typography className="mb-2" variant="h6">
+                Price:
+                </Typography>
+
+                <Input label="Price" size="lg" placeholder="100,000.00"/>
               </div>
 
             </div>
@@ -106,4 +120,4 @@ function FormComp({title}) {
     </>
   );
 }
-export default FormComp
+export default AddGrnForm

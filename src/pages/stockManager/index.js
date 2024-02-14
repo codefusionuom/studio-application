@@ -20,16 +20,7 @@ function index() {
     <Layout sections = {stockManagerList}>
              <Outlet />
         </Layout>      
-     {/* <DashboardSmgr/> */}
-    {/* <Suppliers/>
     
-    <GrnStock/>
-    <StockItem/>
-    <ReturnedStock/>
-    <Category/>
-    <SMpayment/>
-    <SMpaymentDetails/> */}
-    {/* <SampleForm/> */}
 </>
   )
 }

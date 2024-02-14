@@ -12,16 +12,18 @@ import {
 } from "@material-tailwind/react";
 import SmallCard from "../../../components/cards/card";
  
-function FormComp({title}) {
+function AddCategoryForm({title}) {
+
+    
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen((cur) => !cur); 
  
   return (
     <>
-      <SmallCard className=" w-full" title={title} onClick={handleOpen} />
+      <SmallCard className=" w-full cursor-pointer" title={title} onClick={handleOpen} />
 
       <Dialog
-        // size=""
+       
         open={open}
         handler={handleOpen}
         className="bg-transparent shadow-none w-fit"
@@ -29,61 +31,71 @@ function FormComp({title}) {
         <Card className="mx-auto w-full ">
           <CardBody className="flex flex-col gap-4">
             <Typography variant="h4" color="blue-gray">
-              Add Supplier
+             Add New Category
             </Typography>
             <Typography
               className="mb-3 font-normal"
               variant="paragraph"
               color="gray"
             >
-              Enter Details Here
+              Enter Category details Here
             </Typography>
 
             
             <div className=" flex flex-row justify-between ">
-              <div className=" flex flex-col justify-between">
-                <Typography className="mb-2" variant="h6">
-                  Name:
-                </Typography>
-
-                <Input label="Name" size="lg" />
-              </div>
+              
 
               <div className="flex flex-col justify-between">
                 <Typography className="mb-2" variant="h6">
-                  Email:
+                  Category ID:
                 </Typography>
-                <Input label="Email" size="lg" />
+                <Input label="Category ID" size="lg" placeholder="C-001"/>
               </div>
+              <div className="flex flex-col justify-between">
+                <Typography className="mb-2" variant="h6">
+                  Category Name:
+                </Typography>
+                <Input label="Category Name" size="lg" placeholder="" />
+              </div>
+              
+
             </div>
 
 
             <div className=" flex flex-row justify-between ">
+            <div className=" flex flex-col justify-between">
+                <Typography className="mb-2" variant="h6">
+                Item Cost:
+                </Typography>
+
+                <Input label="Item Cost" size="lg" placeholder="100,000.00"/>
+              </div>
+            
               <div className=" flex flex-col justify-between">
                 <Typography className="mb-2" variant="h6">
-                  Address:
+                  Sell Price:
                 </Typography>
 
-                <Input label="Address" size="lg" />
+                <Input label=" Sell Price" size="lg" placeholder="100,000.00" />
               </div>
+             
 
-              <div className="flex flex-col justify-between">
-                <Typography className="mb-2" variant="h6">
-                  Telephone:
-                </Typography>
-                <Input label="Telephone" size="lg" />
-              </div>
+
+             
             </div>
 
+            
+
             <div className=" flex flex-row justify-between ">
-              <div className=" flex flex-col justify-between">
+              <div className=" flex flex-col w-full">
                 <Typography className="mb-2" variant="h6">
-                Stock Item:
+                Description:
                 </Typography>
 
-                <Input label=" Stock Item" size="lg" />
+                <Input label="Description" size="lg" placeholder="Enter description here" type="textarea" />
               </div>
-
+              
+             
             </div>
 
 
@@ -106,4 +118,4 @@ function FormComp({title}) {
     </>
   );
 }
-export default FormComp
+export default AddCategoryForm

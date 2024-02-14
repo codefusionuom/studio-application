@@ -5,12 +5,13 @@ import { Card, CardHeader, Input, Typography, Button, CardBody, Chip, CardFooter
 import Datepicker from "../../components/datePicker/Datepicker";
 import { Pagination } from "../../components/pagination/pagination";
 import SmallCard from '../../components/cards/card';
-import AddSupplierForm from './AddSupplierForm';
+
 import { useState } from 'react';
 import Modal from './Stk_components/Modal';
 import Table from './Stk_components/Table';
 import { supplierTH,supplierTR } from './Stk_components/data';
 import FormComp from './Stk_components/FormComp';
+
 function Suppliers() {
     const [isFormVisible, setFormVisible] = useState(false);
 
@@ -27,17 +28,15 @@ function Suppliers() {
       <div className="flex flex-col gap-10">
         <div className="flex gap-10">
           <div>
-            <SmallCard
-              className=" w-full cursor-pointer"
-              title="+ Create Supplier"
-              onClick={openForm}
-            />
+            
             {isFormVisible && (
               <Modal onClose={closeForm}>
-                <AddSupplierForm onClose={closeForm} />
+                <FormComp onClose={closeForm} />
               </Modal>
+             
             )}
           </div>
+          <FormComp title={'+ Add supplier'} onClose={closeForm} />
 
           <Card className="w-full rounded">
             <div className=" flex p-4 gap-6 items-center">

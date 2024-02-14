@@ -5,8 +5,9 @@ import { Card, CardHeader, Input, Typography, Button, CardBody, Chip, CardFooter
 import Datepicker from "../../components/datePicker/Datepicker";
 import { Pagination } from "../../components/pagination/pagination";
 import SmallCard from '../../components/cards/card';
-import AddCategoryForm from './AddCategoryForm';
+
 import Modal from './Stk_components/Modal';
+import FormComp from './Stk_components/FormComp';
 
 function Category() {
     const [isFormVisible, setFormVisible] = useState(false);
@@ -31,7 +32,7 @@ function Category() {
             />
             {isFormVisible && (
               <Modal onClose={closeForm}>
-                <AddCategoryForm onClose={closeForm} />
+                <FormComp onClose={closeForm} />
               </Modal>
             )}
           </div>
