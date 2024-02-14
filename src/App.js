@@ -16,10 +16,16 @@ import EventManager from './pages/eventManager';
 import StockManager from './pages/stockManager';
 import EmployeeManager from './pages/employeeManager';
 import SuperAdmin from './pages/superAdmin';
+
+import EmployeeManagerDashboard from './pages/employeeManager/dashboard';
+import EmployeePayment from './pages/employeeManager/payment';
+import Attendance from './pages/employeeManager/attendance';
+
 import EventManagerDashboard from './pages/eventManager/EventManagerdashboard';
 import EventRequests from './pages/eventManager/eventRequests';
 import EventManagerEventCalendar from './pages/eventManager/eventManagerEventCalendar';
 import EventManagerEvents from './pages/eventManager/eventManagerEvents';
+
 
 function App() {
   return (
@@ -31,7 +37,7 @@ function App() {
       <Route path="/customerManager" element={<CustomerManager />}>
         <Route  path="/customerManager/" element={<CustomerManagerDashboard />} />
         <Route  path="/customerManager/customers" element={<Customers />} />
-        <Route   path="/customerManager/paymentDetails" element={<PaymentDetails />} />
+        <Route   path="/customerManager/paymentDetails/:id" element={<PaymentDetails />} />
         <Route  path="/customerManager/eventCalandar" element={<EventCalandar />} />
         <Route   path="/customerManager/createCustomerRequest" element={<CreateCustomerRequest />} />
         <Route   path="/customerManager/paymentList" element={<PaymentList />} />
@@ -49,6 +55,10 @@ function App() {
         
       </Route>
       <Route path="/employeeManager" element={<EmployeeManager />}>
+        <Route  path="/employeeManager/" element={<EmployeeManagerDashboard />} />
+        <Route  path="/employeeManager/payment" element={<EmployeePayment />} />
+        <Route  path='/employeeManager/attendance' element={<Attendance />} />
+        
         
       </Route>
       <Route path="/superAdmin" element={<SuperAdmin />}>
