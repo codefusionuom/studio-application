@@ -16,10 +16,16 @@ import EventManager from './pages/eventManager';
 import StockManager from './pages/stockManager';
 import EmployeeManager from './pages/employeeManager';
 import SuperAdmin from './pages/superAdmin';
+<<<<<<< HEAD
 import EventManagerDashboard from './pages/eventManager/EventManagerdashboard';
 import EventRequests from './pages/eventManager/eventRequests';
 import EventManagerEventCalendar from './pages/eventManager/eventManagerEventCalendar';
 import EventManagerEvents from './pages/eventManager/eventManagerEvents';
+=======
+import EmployeeManagerDashboard from './pages/employeeManager/dashboard';
+import EmployeePayment from './pages/employeeManager/payment';
+import Attendance from './pages/employeeManager/attendance';
+>>>>>>> 17dbe14c8344d522f4192a3e10114f794bf6f14c
 
 function App() {
   return (
@@ -49,6 +55,10 @@ function App() {
         
       </Route>
       <Route path="/employeeManager" element={<EmployeeManager />}>
+        <Route  path="/employeeManager/" element={<EmployeeManagerDashboard />} />
+        <Route  path="/employeeManager/payment" element={<EmployeePayment />} />
+        <Route  path='/employeeManager/attendance' element={<Attendance />} />
+        
         
       </Route>
       <Route path="/superAdmin" element={<SuperAdmin />}>
