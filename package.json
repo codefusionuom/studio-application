@@ -12,6 +12,7 @@
     "@fullcalendar/timegrid": "^6.1.10",
     "@heroicons/react": "^2.1.1",
     "@material-tailwind/react": "^2.1.8",
+    "@mui/base": "^5.0.0-beta.36",
     "@mui/icons-material": "^5.15.5",
     "@reduxjs/toolkit": "^2.0.1",
     "@testing-library/jest-dom": "^5.17.0",
