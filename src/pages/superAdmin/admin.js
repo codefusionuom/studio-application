@@ -1,54 +1,22 @@
 import React from 'react'
 import { MagnifyingGlassIcon, ChevronUpDownIcon, } from "@heroicons/react/24/outline";
-import { PencilIcon, UserPlusIcon } from "@heroicons/react/24/solid";
+import { PencilSquareIcon, UserPlusIcon } from "@heroicons/react/24/solid";
 import { Card, CardHeader, Input, Typography, Button, CardBody, Chip, CardFooter, Tabs, TabsHeader, Tab, Avatar, IconButton, Tooltip, Select, Option, } from "@material-tailwind/react";
 import Datepicker from "../../components/datePicker/Datepicker";
 import { Pagination } from "../../components/pagination/pagination";
 import SmallCard from '../../components/cards/card';
-// import { TABLE_HEAD, TABLE_ROWS } from './path/to/otherFile';
+import Card2 from '../../components/cards/Card2';
 
 
 function CustomerRequests() {
     return (
         <div className='flex flex-col gap-10'>
-            <div className='flex gap-10'>
-                <SmallCard className=" w-full" title="Create Customer Request" />
-                <Card className='w-full rounded'>
-                    {/* <div className=" flex p-4 gap-6">
-                        <Select size="lg" label="Select By: Event Id" className="z-10">
-                            <Option>Material Tailwind HTML</Option>
-                            <Option>Material Tailwind React</Option>
-                            <Option>Material Tailwind Vue</Option>
-                            <Option>Material Tailwind Angular</Option>
-                            <Option>Material Tailwind Svelte</Option>
-                        </Select>
-
-                        <Input size="lg"
-                            label="Search"
-                            icon={<MagnifyingGlassIcon className="h-5 w-5" />}
-                        />
-                    </div> */}
-                </Card>
-            </div>
+                <Card2  title1="CREATE ADMINS" title2={'Make new admin account'}/> 
             <div>
                 <Card className=" w-full border-2 rounded">
                     <CardHeader floated={false} shadow={false} className="rounded-none">
                         <div className="flex flex-col items-center justify-between gap-4  md:flex-row ">
-                            <Typography className='text-2xl'>Customer Requests</Typography>
-                            <div className=" flex p-4 gap-6">
-                        <Select size="lg" label="Select By: Event Id" className="z-10">
-                            <Option>Material Tailwind HTML</Option>
-                            <Option>Material Tailwind React</Option>
-                            <Option>Material Tailwind Vue</Option>
-                            <Option>Material Tailwind Angular</Option>
-                            <Option>Material Tailwind Svelte</Option>
-                        </Select>
-
-                        <Input size="lg"
-                            label="Search"
-                            icon={<MagnifyingGlassIcon className="h-5 w-5" />}
-                        />
-                    </div>
+                            <Typography className='text-2xl'>Admin List</Typography>
                         </div>
                     </CardHeader>
                     <CardBody className="overflow-scroll px-0">
@@ -73,7 +41,7 @@ function CustomerRequests() {
                             </thead>
                             <tbody>
                                 {TABLE_ROWS.map(
-                                    ({ img, name, email, job, org, online, date }, index) => {
+                                    ({ img, name, status1,status2, EmployeeID, time, phoneNo,edit }, index) => {
                                         const isLast = index === TABLE_ROWS.length - 1;
                                         const classes = isLast
                                             ? "p-4"
@@ -96,7 +64,14 @@ function CustomerRequests() {
                                                                 color="blue-gray"
                                                                 className="font-normal opacity-70"
                                                             >
-                                                                {email}
+                                                                {status1}
+                                                            </Typography>
+                                                            <Typography
+                                                                variant="small"
+                                                                color="blue-gray"
+                                                                className="font-normal opacity-70"
+                                                            >
+                                                                {status2}
                                                             </Typography>
                                                         </div>
                                                     </div>
@@ -108,25 +83,19 @@ function CustomerRequests() {
                                                             color="blue-gray"
                                                             className="font-normal"
                                                         >
-                                                            {job}
-                                                        </Typography>
-                                                        <Typography
-                                                            variant="small"
-                                                            color="blue-gray"
-                                                            className="font-normal opacity-70"
-                                                        >
-                                                            {org}
+                                                            {EmployeeID}
                                                         </Typography>
                                                     </div>
                                                 </td>
                                                 <td className={classes}>
                                                     <div className="w-max">
-                                                        <Chip
-                                                            variant="ghost"
-                                                            size="sm"
-                                                            value={online ? "online" : "offline"}
-                                                            color={online ? "green" : "blue-gray"}
-                                                        />
+                                                        <Typography
+                                                            variant="small"
+                                                            color="blue-gray"
+                                                            className="font-normal"
+                                                        >
+                                                            {time}
+                                                        </Typography>
                                                     </div>
                                                 </td>
                                                 <td className={classes}>
@@ -135,15 +104,16 @@ function CustomerRequests() {
                                                         color="blue-gray"
                                                         className="font-normal"
                                                     >
-                                                        {date}
+                                                        {phoneNo}
+                                                        {}
                                                     </Typography>
                                                 </td>
                                                 <td className={classes}>
                                                     <Tooltip content="Edit User">
-                                                        <IconButton variant="text">
-                                                            <PencilIcon className="h-4 w-4" />
-                                                        </IconButton>
-                                                    </Tooltip>
+                                                <IconButton variant="text">
+                                                    <PencilSquareIcon className="h-7 w-7" />
+                                                </IconButton>
+                                            </Tooltip>
                                                 </td>
                                             </tr>
                                         );
@@ -152,14 +122,6 @@ function CustomerRequests() {
                             </tbody>
                         </table>
                     </CardBody>
-                    <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
-                        <Typography>
-                            233 results
-                        </Typography>
-                        <div className="flex gap-2">
-                            <Pagination />
-                        </div>
-                    </CardFooter>
                 </Card>
             </div>
         </div>
@@ -169,55 +131,44 @@ function CustomerRequests() {
 export default CustomerRequests
 
 
-const TABLE_HEAD = ["Member", "Function", "Status", "Employed", "Edit"];
+const TABLE_HEAD = ["Name", "Employee ID", "Reported Time", "Phone Number",""];
 
 const TABLE_ROWS = [
     {
         img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg",
-        name: "John Michael",
-        email: "john@creative-tim.com",
-        job: "Manager",
-        org: "Organization",
-        online: true,
-        date: "23/04/18",
+        name: "Jane Cooper",
+        status1: "Customer manager",
+        status2: "Event manager",
+        EmployeeID: '#01ec2551',
+        time: "8.00  AM",
+        phoneNo:"077 88452631",
     },
     {
-        img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-2.jpg",
-        name: "Alexa Liras",
-        email: "alexa@creative-tim.com",
-        job: "Programator",
-        org: "Developer",
-        online: false,
-        date: "23/04/18",
+        img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg",
+        name: "Floyd Miles",
+        status1: "Event manager",
+        status2: "",
+        EmployeeID: '#03ec1479',
+        time: "10.00  AM",
+        phoneNo:"071 45856921"
     },
     {
-        img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-1.jpg",
-        name: "Laurent Perrier",
-        email: "laurent@creative-tim.com",
-        job: "Executive",
-        org: "Projects",
-        online: false,
-        date: "19/09/17",
+        img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg",
+        name: "Ronald Richards",
+        status1: "Employee manager",
+        status2: "",
+        EmployeeID: '#03ed4793',
+        time: "11.00  AM",
+        phoneNo:"045 2287456"
     },
     {
-        img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-4.jpg",
-        name: "Michael Levi",
-        email: "michael@creative-tim.com",
-        job: "Programator",
-        org: "Developer",
-        online: true,
-        date: "24/12/08",
+        img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg",
+        name: "Marvin McKinney",
+        status1: "Stock manager",
+        status2: "",
+        EmployeeID: '#07kc4863',
+        time: "8.00  AM",
+        phoneNo:"077 58645621"
     },
-    {
-        img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-5.jpg",
-        name: "Richard Gran",
-        email: "richard@creative-tim.com",
-        job: "Manager",
-        org: "Executive",
-        online: false,
-        date: "04/10/21",
-    },
-
-
-
+  
 ];

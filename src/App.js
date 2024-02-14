@@ -16,6 +16,10 @@ import EventManager from './pages/eventManager';
 import StockManager from './pages/stockManager';
 import EmployeeManager from './pages/employeeManager';
 import SuperAdmin from './pages/superAdmin';
+import SuperAdminDashboard from './pages/superAdmin/Dashboard';
+import SuperAdminAdmins from './pages/superAdmin/admin';
+import SuperAdminEventCalandar from './pages/superAdmin/EventCalander';
+import SuperAdminDepartment from './pages/superAdmin/Department';
 
 function App() {
   return (
@@ -24,8 +28,8 @@ function App() {
     <Route path="/" element={<div>login</div>}>
         
         </Route>
-      <Route path="/customerManager" element={<CustomerManager />}>
-        <Route  path="/customerManager/" element={<CustomerManagerDashboard />} />
+       <Route path="/customerManager" element={<CustomerManager />}>
+        <Route  path="/customerManager" element={<CustomerManagerDashboard />} />
         <Route  path="/customerManager/customers" element={<Customers />} />
         <Route   path="/customerManager/paymentDetails" element={<PaymentDetails />} />
         <Route  path="/customerManager/eventCalandar" element={<EventCalandar />} />
@@ -33,6 +37,8 @@ function App() {
         <Route   path="/customerManager/paymentList" element={<PaymentList />} />
         <Route  path="/customerManager/customerRequest" element={<CustomerRequests />} />
       </Route>
+
+
       <Route path="/eventManager" element={<EventManager />}>
         
       </Route>
@@ -40,11 +46,16 @@ function App() {
         
       </Route>
       <Route path="/employeeManager" element={<EmployeeManager />}>
-        
-      </Route>
+      </Route> 
+      
       <Route path="/superAdmin" element={<SuperAdmin />}>
-        
+        <Route path="/superAdmin" element={<SuperAdminDashboard />}/>
+        <Route path="/superAdmin/admin" element={<SuperAdminAdmins />}/>
+        <Route path="/superAdmin/EventCalander" element={<SuperAdminEventCalandar />}/>
+        <Route path="/superAdmin/Department" element={<SuperAdminDepartment />}/>
       </Route>
+
+    
     </Routes>
     
       
