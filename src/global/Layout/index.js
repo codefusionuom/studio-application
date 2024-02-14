@@ -1,5 +1,4 @@
 import React from 'react'
-import SidebarNim from './sidebar'
 import Topbar from './Topbar'
 import { DefaultSidebar } from './newbar'
 
