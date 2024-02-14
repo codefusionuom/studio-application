@@ -16,6 +16,9 @@ import EventManager from './pages/eventManager';
 import StockManager from './pages/stockManager';
 import EmployeeManager from './pages/employeeManager';
 import SuperAdmin from './pages/superAdmin';
+import EmployeeManagerDashboard from './pages/employeeManager/dashboard';
+import EmployeePayment from './pages/employeeManager/payment';
+import Attendance from './pages/employeeManager/attendance';
 import SuperAdminDashboard from './pages/superAdmin/Dashboard';
 import SuperAdminAdmins from './pages/superAdmin/admin';
 import SuperAdminEventCalandar from './pages/superAdmin/EventCalander';
@@ -46,8 +49,12 @@ function App() {
         
       </Route>
       <Route path="/employeeManager" element={<EmployeeManager />}>
-      </Route> 
-      
+        <Route  path="/employeeManager/" element={<EmployeeManagerDashboard />} />
+        <Route  path="/employeeManager/payment" element={<EmployeePayment />} />
+        <Route  path='/employeeManager/attendance' element={<Attendance />} />
+        
+        
+      </Route>
       <Route path="/superAdmin" element={<SuperAdmin />}>
         <Route path="/superAdmin" element={<SuperAdminDashboard />}/>
         <Route path="/superAdmin/admin" element={<SuperAdminAdmins />}/>
