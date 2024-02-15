@@ -25,8 +25,10 @@ const CreateEvent2 = () => {
   return (
     <div>
       <CardEvent
+      onTap={handleOpen}
         title={
-          <Button onClick={handleOpen}>
+        
+          <>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -42,7 +44,7 @@ const CreateEvent2 = () => {
               />
             </svg>
             Add Task
-          </Button>
+          </>
         }
         onClick={() => console.log("ffff")}
       />

@@ -13,9 +13,11 @@ import {
 } from "@material-tailwind/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { DayPicker } from "react-day-picker";
+import { useNavigate } from "react-router-dom";
 
 const CreateEvent = () => {
   const [date, setDate] = React.useState();
+  const navigate = useNavigate();
   return (
     <div>
       <div className="bg-cl-4 mt-8 ">
@@ -434,7 +436,9 @@ const CreateEvent = () => {
               </div>
             </Card>
 
-            <Button color="blue" className="mt-auto">Next</Button>
+            <Button color="blue" className="mt-auto" onClick={()=>{
+               navigate('/eventManager/createEvent2')
+            }}   >Next</Button>
           </form>
         </div>
       </div>

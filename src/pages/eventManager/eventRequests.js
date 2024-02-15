@@ -13,6 +13,8 @@ import {
   Select,
 } from "@material-tailwind/react";
 import CardEvent from "./cardEvent";
+import { useNavigate } from "react-router-dom";
+
 
 const TABS = [
   {
@@ -86,10 +88,15 @@ const TABLE_ROWS = [
   },
 ];
 const EventRequests = () => {
+  const navigate = useNavigate();
+ 
   return (
     <div className="">
       <div className="flex space-x-4 justify-between">
         <CardEvent
+        onTap={() =>{
+          navigate('/eventManager/createEvent')
+        }}
           title={
             <>
               <svg
@@ -344,7 +351,9 @@ const EventRequests = () => {
                 10
               </IconButton>
             </div>
-            <Button variant="outlined" size="sm">
+            <Button variant="outlined" size="sm" onClick={()=>{
+               
+            }}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -359,6 +368,7 @@ const EventRequests = () => {
                   d="m8.25 4.5 7.5 7.5-7.5 7.5"
                 />
               </svg>
+              
             </Button>
           </div>
         </CardFooter>
