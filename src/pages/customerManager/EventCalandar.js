@@ -160,7 +160,7 @@ function EventCalandar() {
             </CardBody>
            
         </Card>
-    );
+
     </div>
 
     

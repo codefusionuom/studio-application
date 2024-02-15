@@ -3,88 +3,30 @@ import { PencilIcon, UserPlusIcon } from "@heroicons/react/24/solid";
 import { Card, CardHeader, Input, Typography, Button, CardBody, Chip, CardFooter, Tabs, TabsHeader, Tab, Avatar, IconButton, Tooltip, Select, Option, } from "@material-tailwind/react";
 import Datepicker from "../../components/datePicker/Datepicker";
 import { Pagination } from "../../components/pagination/pagination";
-import { useState } from "react";
-import axios from "axios";
-import { isAsyncThunkAction } from "@reduxjs/toolkit";
-import { setActive } from "@material-tailwind/react/components/Tabs/TabsContext";
-import { useNavigate } from "react-router-dom";
 
-function PaymentList() {
-    const [search, setSearch] = useState("")
-    const [active, setActive] = useState(1)
-    const [numberofresults, setNumberofresults] = useState(1)
-    const [payments,setPayments]=useState([])
-    const [date, setDate] = useState();
-
-
-    const navigate=useNavigate()
-    const handlePaymentDetails=async(id)=>{
-            navigate(`/customerManager/paymentDetails/${id}`)
-    }
-    const handleSearch = async(query) => {
-        if (!query) {
-            return
-        }
-
-        console.log(date)
-        try {
-            const {data}=await axios.get(`http://localhost:5000/customerManager/payment/?search=${search}&page=${active}&date=${date}`)
-            setNumberofresults(data.count)
-            setPayments(data.rows)
-        } catch (error) {
-            
-        }
-       
-    }
-
-
+function EmployeeList() {
     return (
         <Card className=" w-full border-2 ">
             <CardHeader floated={false} shadow={false} className="rounded-none">
-                <div className="flex flex-col items-center justify-start gap-4  md:flex-row ">
-                    <Datepicker  date={date} setDate={setDate}/>
-                    {/* <Input size="lg"
-                        label="Search"
-                        icon={<MagnifyingGlassIcon className="h-5 w-5" />}
-                        className=""
-                        onChange={(e) => handleSearch(e.target.value)}
-                    /> */}
-                    <div className="relative flex w-full max-w-[24rem] ">
-                        <Input
-                            type="email"
-                            label="Email Address"
-                            value={search}
-                            onChange={(e)=>setSearch(e.target.value)}
-                            className="pr-20"
-                            containerProps={{
-                                className: "min-w-0",
-                            }}
-                        />
-                        <Button
-                            size="sm"
-                            color={search ? "gray" : "blue-gray"}
-                            disabled={!search}
-                            className="!absolute right-0 bottom-0 rounded"
-                            onClick={handleSearch}
-                        >
-                            <MagnifyingGlassIcon className="h-6 w-5" />
-                        </Button>
+                <div className="flex flex-col items-center justify-between gap-4  md:flex-row ">
+                    <div className="text-2xl pt-6 pl-10 font-semibold">
+                    <p>Employee List</p>
                     </div>
 
-                    {/* <div className=" flex p-4 gap-6"> */}
-                    {/* <Select size="lg" label="Select By: Event Id" className="z-10">
+                    <div className=" flex p-4 gap-6">
+                        <Select size="lg" label="Sort By: Newest" className="z-10">
                             <Option>Material Tailwind HTML</Option>
                             <Option>Material Tailwind React</Option>
                             <Option>Material Tailwind Vue</Option>
                             <Option>Material Tailwind Angular</Option>
                             <Option>Material Tailwind Svelte</Option>
-                        </Select> */}
+                        </Select>
 
-                    {/* <Input size="lg"
+                        <Input size="lg"
                             label="Search"
                             icon={<MagnifyingGlassIcon className="h-5 w-5" />}
-                        /> */}
-                    {/* </div> */}
+                        />
+                    </div>
                 </div>
             </CardHeader>
             <CardBody className="overflow-scroll px-0">
@@ -94,7 +36,7 @@ function PaymentList() {
                             {TABLE_HEAD.map((head, index) => (
                                 <th
                                     key={head}
-                                    className="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50"
+                                    className="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50 "
                                 >
                                     <Typography
                                         variant="small"
@@ -108,36 +50,30 @@ function PaymentList() {
                         </tr>
                     </thead>
                     <tbody>
-                        {payments.map(
-                            ({ id,amount,payment }, index) => {
+                        {TABLE_ROWS.map(
+                            ({ img, name, email, job, org, phoneNumber, employeeId, online, date }, index) => {
                                 const isLast = index === TABLE_ROWS.length - 1;
                                 const classes = isLast
                                     ? "p-4"
                                     : "p-4 border-b border-blue-gray-50";
 
                                 return (
-                                    <tr key={id} onClick={()=>handlePaymentDetails(id)}>
+                                    <tr key={name}>
                                         <td className={classes}>
                                             <div className="flex items-center gap-3">
-                                                <div className="flex flex-col">
+                                                <div className="flex flex-col pl-8">
                                                     <Typography
                                                         variant="small"
                                                         color="blue-gray"
                                                         className="font-normal"
                                                     >
-                                                        {amount}
+                                                        {name}
                                                     </Typography>
-                                                    <Typography
-                                                        variant="small"
-                                                        color="blue-gray"
-                                                        className="font-normal opacity-70"
-                                                    >
-                                                        {payment}
-                                                    </Typography>
+                                                    
                                                 </div>
                                             </div>
                                         </td>
-                                        {/* <td className={classes}>
+                                        <td className={classes}>
                                             <div className="flex flex-col">
                                                 <Typography
                                                     variant="small"
@@ -146,16 +82,28 @@ function PaymentList() {
                                                 >
                                                     {job}
                                                 </Typography>
-                                                <Typography
-                                                    variant="small"
-                                                    color="blue-gray"
-                                                    className="font-normal opacity-70"
-                                                >
-                                                    {org}
-                                                </Typography>
+                                                
                                             </div>
-                                        </td> */}
-                                        {/* <td className={classes}>
+                                        </td>
+                                        <td className={classes}>
+                                            <Typography
+                                                variant="small"
+                                                color="blue-gray"
+                                                className="font-normal"
+                                            >
+                                                {phoneNumber}
+                                            </Typography>
+                                        </td>
+                                        <td className={classes}>
+                                            <Typography
+                                                variant="small"
+                                                color="blue-gray"
+                                                className="font-normal"
+                                            >
+                                                {employeeId}
+                                            </Typography>
+                                        </td>
+                                        <td className={classes}>
                                             <div className="w-max">
                                                 <Chip
                                                     variant="ghost"
@@ -164,8 +112,8 @@ function PaymentList() {
                                                     color={online ? "green" : "blue-gray"}
                                                 />
                                             </div>
-                                        </td> */}
-                                        {/* <td className={classes}>
+                                        </td>
+                                        <td className={classes}>
                                             <Typography
                                                 variant="small"
                                                 color="blue-gray"
@@ -173,7 +121,7 @@ function PaymentList() {
                                             >
                                                 {date}
                                             </Typography>
-                                        </td> */}
+                                        </td>
                                         <td className={classes}>
                                             <Tooltip content="Edit User">
                                                 <IconButton variant="text">
@@ -190,16 +138,16 @@ function PaymentList() {
             </CardBody>
             <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
                 <Typography>
-                    {numberofresults}
+233 results
                 </Typography>
                 <div className="flex gap-2">
-                    <Pagination active={active} setActive={setActive}/>
+                   <Pagination />
                 </div>
             </CardFooter>
         </Card>
     );
 }
-export default PaymentList
+export default EmployeeList
 
 
 // const TABS = [
@@ -217,7 +165,7 @@ export default PaymentList
 //     },
 // ];
 
-const TABLE_HEAD = ["Member", "Function", "Status", "Employed", "Edit"];
+const TABLE_HEAD = ["Employee Name", "Department", "Phone Number", "Employee ID", "Status", "Employed", "Edit"];
 
 const TABLE_ROWS = [
     {
@@ -226,6 +174,8 @@ const TABLE_ROWS = [
         email: "john@creative-tim.com",
         job: "Manager",
         org: "Organization",
+        phoneNumber: "0714567890",
+        employeeId: "#12345",
         online: true,
         date: "23/04/18",
     },
@@ -235,6 +185,8 @@ const TABLE_ROWS = [
         email: "alexa@creative-tim.com",
         job: "Programator",
         org: "Developer",
+        phoneNumber: "0714567890",
+        employeeId: "#12345",
         online: false,
         date: "23/04/18",
     },
@@ -244,6 +196,8 @@ const TABLE_ROWS = [
         email: "laurent@creative-tim.com",
         job: "Executive",
         org: "Projects",
+        phoneNumber: "0714567890",
+        employeeId: "#12345",
         online: false,
         date: "19/09/17",
     },
@@ -253,6 +207,8 @@ const TABLE_ROWS = [
         email: "michael@creative-tim.com",
         job: "Programator",
         org: "Developer",
+        phoneNumber: "0714567890",
+        employeeId: "#12345",
         online: true,
         date: "24/12/08",
     },
@@ -262,6 +218,8 @@ const TABLE_ROWS = [
         email: "richard@creative-tim.com",
         job: "Manager",
         org: "Executive",
+        phoneNumber: "0714567890",
+        employeeId: "#12345",
         online: false,
         date: "04/10/21",
     },

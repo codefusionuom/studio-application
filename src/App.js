@@ -29,6 +29,20 @@ import FormComp from './pages/stockManager/Stk_components/FormComp';
 
 
 
+import EmployeeManagerDashboard from './pages/employeeManager/dashboard';
+import EmployeePayment from './pages/employeeManager/payment';
+import Attendance from './pages/employeeManager/attendance';
+import SuperAdminDashboard from './pages/superAdmin/Dashboard';
+import SuperAdminAdmins from './pages/superAdmin/admin';
+import SuperAdminEventCalandar from './pages/superAdmin/EventCalander';
+import SuperAdminDepartment from './pages/superAdmin/Department';
+
+import EventManagerDashboard from './pages/eventManager/EventManagerdashboard';
+import EventRequests from './pages/eventManager/eventRequests';
+import EventManagerEventCalendar from './pages/eventManager/eventManagerEventCalendar';
+import EventManagerEvents from './pages/eventManager/eventManagerEvents';
+
+
 function App() {
   return (
 <>
@@ -36,8 +50,8 @@ function App() {
     <Route path="/" element={<div>login</div>}>
         
         </Route>
-      <Route path="/customerManager" element={<CustomerManager />}>
-        <Route  path="/customerManager/" element={<CustomerManagerDashboard />} />
+       <Route path="/customerManager" element={<CustomerManager />}>
+        <Route  path="/customerManager" element={<CustomerManagerDashboard />} />
         <Route  path="/customerManager/customers" element={<Customers />} />
         <Route   path="/customerManager/paymentDetails/:id" element={<PaymentDetails />} />
         <Route  path="/customerManager/eventCalandar" element={<EventCalandar />} />
@@ -45,8 +59,12 @@ function App() {
         <Route   path="/customerManager/paymentList" element={<PaymentList />} />
         <Route  path="/customerManager/customerRequest" element={<CustomerRequests />} />
       </Route>
-      <Route path="/eventManager" element={<EventManager />}>
-        
+
+      <Route path="/eventManager" element={<EventManager/>}>
+        <Route path="/eventManager" element={<EventManagerDashboard/>}/>
+        <Route path="/eventManager/eventRequests" element={<EventRequests />}/>
+        <Route path="/eventManager/eventCalandar" element={<EventManagerEventCalendar/>} />
+        <Route path="/eventManager/Events" element={<EventManagerEvents/>} />
       </Route>
       
       <Route path="/stockManager" element={<StockManager />}>
@@ -62,11 +80,20 @@ function App() {
       </Route>
     
       <Route path="/employeeManager" element={<EmployeeManager />}>
+        <Route  path="/employeeManager/" element={<EmployeeManagerDashboard />} />
+        <Route  path="/employeeManager/payment" element={<EmployeePayment />} />
+        <Route  path='/employeeManager/attendance' element={<Attendance />} />
+        
         
       </Route>
       <Route path="/superAdmin" element={<SuperAdmin />}>
-        
+        <Route path="/superAdmin" element={<SuperAdminDashboard />}/>
+        <Route path="/superAdmin/admin" element={<SuperAdminAdmins />}/>
+        <Route path="/superAdmin/EventCalander" element={<SuperAdminEventCalandar />}/>
+        <Route path="/superAdmin/Department" element={<SuperAdminDepartment />}/>
       </Route>
+
+    
     </Routes>
     
       

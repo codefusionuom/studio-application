@@ -1,90 +1,29 @@
 import { MagnifyingGlassIcon, ChevronUpDownIcon, } from "@heroicons/react/24/outline";
-import { PencilIcon, UserPlusIcon } from "@heroicons/react/24/solid";
+import { PencilSquareIcon, UserPlusIcon } from "@heroicons/react/24/solid";
 import { Card, CardHeader, Input, Typography, Button, CardBody, Chip, CardFooter, Tabs, TabsHeader, Tab, Avatar, IconButton, Tooltip, Select, Option, } from "@material-tailwind/react";
 import Datepicker from "../../components/datePicker/Datepicker";
 import { Pagination } from "../../components/pagination/pagination";
-import { useState } from "react";
-import axios from "axios";
-import { isAsyncThunkAction } from "@reduxjs/toolkit";
-import { setActive } from "@material-tailwind/react/components/Tabs/TabsContext";
-import { useNavigate } from "react-router-dom";
 
-function PaymentList() {
-    const [search, setSearch] = useState("")
-    const [active, setActive] = useState(1)
-    const [numberofresults, setNumberofresults] = useState(1)
-    const [payments,setPayments]=useState([])
-    const [date, setDate] = useState();
-
-
-    const navigate=useNavigate()
-    const handlePaymentDetails=async(id)=>{
-            navigate(`/customerManager/paymentDetails/${id}`)
-    }
-    const handleSearch = async(query) => {
-        if (!query) {
-            return
-        }
-
-        console.log(date)
-        try {
-            const {data}=await axios.get(`http://localhost:5000/customerManager/payment/?search=${search}&page=${active}&date=${date}`)
-            setNumberofresults(data.count)
-            setPayments(data.rows)
-        } catch (error) {
-            
-        }
-       
-    }
-
-
+function PaymentListTable() {
     return (
-        <Card className=" w-full border-2 ">
+        <Card className=" w-full border-2 mt-5">
             <CardHeader floated={false} shadow={false} className="rounded-none">
-                <div className="flex flex-col items-center justify-start gap-4  md:flex-row ">
-                    <Datepicker  date={date} setDate={setDate}/>
-                    {/* <Input size="lg"
-                        label="Search"
-                        icon={<MagnifyingGlassIcon className="h-5 w-5" />}
-                        className=""
-                        onChange={(e) => handleSearch(e.target.value)}
-                    /> */}
-                    <div className="relative flex w-full max-w-[24rem] ">
-                        <Input
-                            type="email"
-                            label="Email Address"
-                            value={search}
-                            onChange={(e)=>setSearch(e.target.value)}
-                            className="pr-20"
-                            containerProps={{
-                                className: "min-w-0",
-                            }}
-                        />
-                        <Button
-                            size="sm"
-                            color={search ? "gray" : "blue-gray"}
-                            disabled={!search}
-                            className="!absolute right-0 bottom-0 rounded"
-                            onClick={handleSearch}
-                        >
-                            <MagnifyingGlassIcon className="h-6 w-5" />
-                        </Button>
-                    </div>
-
-                    {/* <div className=" flex p-4 gap-6"> */}
-                    {/* <Select size="lg" label="Select By: Event Id" className="z-10">
+                <div className="flex flex-col items-center justify-between gap-4  md:flex-row ">
+                    <Datepicker />
+                    <div className=" flex p-4 gap-6">
+                        <Select size="lg" label="Select By: Event Id" className="z-10">
                             <Option>Material Tailwind HTML</Option>
                             <Option>Material Tailwind React</Option>
                             <Option>Material Tailwind Vue</Option>
                             <Option>Material Tailwind Angular</Option>
                             <Option>Material Tailwind Svelte</Option>
-                        </Select> */}
+                        </Select>
 
-                    {/* <Input size="lg"
+                        <Input size="lg"
                             label="Search"
                             icon={<MagnifyingGlassIcon className="h-5 w-5" />}
-                        /> */}
-                    {/* </div> */}
+                        />
+                    </div>
                 </div>
             </CardHeader>
             <CardBody className="overflow-scroll px-0">
@@ -108,15 +47,15 @@ function PaymentList() {
                         </tr>
                     </thead>
                     <tbody>
-                        {payments.map(
-                            ({ id,amount,payment }, index) => {
+                        {TABLE_ROWS.map(
+                            ({ img, name, email, ServiceType1,ServiceType2, org, EventID, TotCost, TotPaid }, index) => {
                                 const isLast = index === TABLE_ROWS.length - 1;
                                 const classes = isLast
                                     ? "p-4"
                                     : "p-4 border-b border-blue-gray-50";
 
                                 return (
-                                    <tr key={id} onClick={()=>handlePaymentDetails(id)}>
+                                    <tr key={name}>
                                         <td className={classes}>
                                             <div className="flex items-center gap-3">
                                                 <div className="flex flex-col">
@@ -125,59 +64,82 @@ function PaymentList() {
                                                         color="blue-gray"
                                                         className="font-normal"
                                                     >
-                                                        {amount}
+                                                        {name}
                                                     </Typography>
-                                                    <Typography
+                                                    {/* <Typography
                                                         variant="small"
                                                         color="blue-gray"
                                                         className="font-normal opacity-70"
                                                     >
-                                                        {payment}
-                                                    </Typography>
+                                                        {email}
+                                                    </Typography> */}
                                                 </div>
                                             </div>
                                         </td>
-                                        {/* <td className={classes}>
+                                        <td className={classes}>
                                             <div className="flex flex-col">
                                                 <Typography
                                                     variant="small"
                                                     color="blue-gray"
                                                     className="font-normal"
                                                 >
-                                                    {job}
+                                                    {ServiceType1}
                                                 </Typography>
                                                 <Typography
+                                                    variant="small"
+                                                    color="blue-gray"
+                                                    className="font-normal"
+                                                >
+                                                    {ServiceType2}
+                                                </Typography>
+                                                {/* <Typography
                                                     variant="small"
                                                     color="blue-gray"
                                                     className="font-normal opacity-70"
                                                 >
                                                     {org}
-                                                </Typography>
+                                                </Typography> */}
                                             </div>
-                                        </td> */}
-                                        {/* <td className={classes}>
+                                        </td>
+                                        <td className={classes}>
                                             <div className="w-max">
-                                                <Chip
+                                                {/* <Chip
                                                     variant="ghost"
                                                     size="sm"
                                                     value={online ? "online" : "offline"}
                                                     color={online ? "green" : "blue-gray"}
-                                                />
+                                                /> */}
+                                                <Typography
+                                                    variant="small"
+                                                    color="blue-gray"
+                                                    className="font-normal"
+                                                >
+                                                    {EventID}
+                                                </Typography>
                                             </div>
-                                        </td> */}
-                                        {/* <td className={classes}>
+                                        </td>
+                                        <td className={classes}>
                                             <Typography
                                                 variant="small"
                                                 color="blue-gray"
                                                 className="font-normal"
                                             >
-                                                {date}
+                                                {TotCost}
                                             </Typography>
-                                        </td> */}
+                                        </td>
+                                        <td className={classes}>
+                                            <Typography
+                                                variant="small"
+                                                color="blue-gray"
+                                                className="font-normal"
+                                            >
+                                                {TotPaid}
+                                            </Typography>
+                                        </td>
                                         <td className={classes}>
                                             <Tooltip content="Edit User">
                                                 <IconButton variant="text">
-                                                    <PencilIcon className="h-4 w-4" />
+                                                    <PencilSquareIcon className="h-7 w-7" />
                                                 </IconButton>
                                             </Tooltip>
                                         </td>
@@ -190,16 +152,16 @@ function PaymentList() {
             </CardBody>
             <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
                 <Typography>
-                    {numberofresults}
+233 results
                 </Typography>
                 <div className="flex gap-2">
-                    <Pagination active={active} setActive={setActive}/>
+                   <Pagination />
                 </div>
             </CardFooter>
         </Card>
     );
 }
-export default PaymentList
+export default PaymentListTable
 
 
 // const TABS = [
@@ -217,52 +179,68 @@ export default PaymentList
 //     },
 // ];
 
-const TABLE_HEAD = ["Member", "Function", "Status", "Employed", "Edit"];
+const TABLE_HEAD = ["Customer Name", "Service Type", "Event ID", "Total Cost", "Total Paid", "Edit"];
 
 const TABLE_ROWS = [
     {
         img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg",
         name: "John Michael",
-        email: "john@creative-tim.com",
-        job: "Manager",
-        org: "Organization",
-        online: true,
-        date: "23/04/18",
+        // email: "john@creative-tim.com",
+        ServiceType1: "Wedding",
+        ServiceType2: "Photography",
+        // org: "Organization",
+        EventID: 'WP-1002',
+        TotCost: "23/04/18",
+        TotPaid:"150,000.00"
     },
     {
         img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-2.jpg",
-        name: "Alexa Liras",
-        email: "alexa@creative-tim.com",
-        job: "Programator",
-        org: "Developer",
-        online: false,
-        date: "23/04/18",
+        name: "Floyd MIles",
+        // email: "john@creative-tim.com",
+        ServiceType1: "Mug Printing",
+        // org: "Organization",
+        EventID: 'MP-20',
+        TotCost: "1,500.00",
+        TotPaid:"10,000.00"
     },
     {
         img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-1.jpg",
-        name: "Laurent Perrier",
-        email: "laurent@creative-tim.com",
-        job: "Executive",
-        org: "Projects",
-        online: false,
-        date: "19/09/17",
+        name: "John Michael",
+        // email: "john@creative-tim.com",
+        ServiceType1: "Birthday Shoot",
+        // org: "Organization",
+        EventID: 'BP-201',
+        TotCost: "20,000.00",
+        TotPaid:"150,000.00"
     },
     {
         img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-4.jpg",
-        name: "Michael Levi",
-        email: "michael@creative-tim.com",
-        job: "Programator",
-        org: "Developer",
-        online: true,
-        date: "24/12/08",
+         name: "Marvin McKinney",
+        // email: "john@creative-tim.com",
+        ServiceType1: "Digital Printing",
+        // org: "Organization",
+        EventID: 'DP-38',
+        TotCost: "4750.00",
+        TotPaid:"80,000.00"
     },
     {
         img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-5.jpg",
-        name: "Richard Gran",
-        email: "richard@creative-tim.com",
-        job: "Manager",
-        org: "Executive",
-        online: false,
-        date: "04/10/21",
+        name: "Jerome Bell",
+        // email: "john@creative-tim.com",
+        ServiceType1: "Mug Printing",
+        // org: "Organization",
+        EventID: 'MP-41',
+        TotCost: "750.00",
+        TotPaid:"550,000.00"
+    },
+    {
+        img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-5.jpg",
+        name: "Kathryn Murphy",
+        // email: "john@creative-tim.com",
+        ServiceType1: "Pre shoot",
+        // org: "Organization",
+        EventID: 'PS-402',
+        TotCost: "50,000.00",
+        TotPaid:"20,000.00"
     },
 ];

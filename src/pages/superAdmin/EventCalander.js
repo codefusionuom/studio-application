@@ -1,90 +1,60 @@
-import { MagnifyingGlassIcon, ChevronUpDownIcon, } from "@heroicons/react/24/outline";
-import { PencilIcon, UserPlusIcon } from "@heroicons/react/24/solid";
+import FullCalendar from '@fullcalendar/react'
+import dayGridPlugin from "@fullcalendar/daygrid";
+import React from 'react'
+import Timeline from 'react-calendar-timeline/lib/lib/Timeline';
+import moment from 'moment';
+import 'react-calendar-timeline/lib/Timeline.css'
 import { Card, CardHeader, Input, Typography, Button, CardBody, Chip, CardFooter, Tabs, TabsHeader, Tab, Avatar, IconButton, Tooltip, Select, Option, } from "@material-tailwind/react";
-import Datepicker from "../../components/datePicker/Datepicker";
-import { Pagination } from "../../components/pagination/pagination";
-import { useState } from "react";
-import axios from "axios";
-import { isAsyncThunkAction } from "@reduxjs/toolkit";
-import { setActive } from "@material-tailwind/react/components/Tabs/TabsContext";
-import { useNavigate } from "react-router-dom";
+import { MagnifyingGlassIcon, PencilIcon } from '@heroicons/react/24/outline';
 
-function PaymentList() {
-    const [search, setSearch] = useState("")
-    const [active, setActive] = useState(1)
-    const [numberofresults, setNumberofresults] = useState(1)
-    const [payments,setPayments]=useState([])
-    const [date, setDate] = useState();
+// import "@fullcalendar/core/main.css";
+// import "@fullcalendar/daygrid/main.css";
+// import "@fullcalendar/timegrid/main.css";
+// import EventCalendar from 'react-event-calendar'
+function SuperAdminEventCalandar() {
+  return (
+    <div className='bg-cl-4 rounded py-10 px-20 flex flex-col gap-20'>
+      <FullCalendar className=""
+        defaultView="dayGridMonth"
+        themeSystem="Simplex"
+        header={{
+          left: "prev,next",
+          center: "title",
+          right: "dayGridMonth,timeGridWeek,timeGridDay",
+        }}
+        plugins={[dayGridPlugin]}
+        events={events}
+        displayEventEnd="true"
+        contentHeight= "900px"
+        borderColor="red"
 
+        eventColor={"red"}
+      />
+      <Timeline  className="w-[1000px]" 
+       groups={groups}
+      items={items}
+      defaultTimeStart={moment().add(-8, 'hour')}
+      defaultTimeEnd={moment().add(8, 'hour')}/>
+    
 
-    const navigate=useNavigate()
-    const handlePaymentDetails=async(id)=>{
-            navigate(`/customerManager/paymentDetails/${id}`)
-    }
-    const handleSearch = async(query) => {
-        if (!query) {
-            return
-        }
-
-        console.log(date)
-        try {
-            const {data}=await axios.get(`http://localhost:5000/customerManager/payment/?search=${search}&page=${active}&date=${date}`)
-            setNumberofresults(data.count)
-            setPayments(data.rows)
-        } catch (error) {
-            
-        }
-       
-    }
-
-
-    return (
-        <Card className=" w-full border-2 ">
+    {/* <Card className=" w-full border-2 ">
             <CardHeader floated={false} shadow={false} className="rounded-none">
-                <div className="flex flex-col items-center justify-start gap-4  md:flex-row ">
-                    <Datepicker  date={date} setDate={setDate}/>
-                    {/* <Input size="lg"
-                        label="Search"
-                        icon={<MagnifyingGlassIcon className="h-5 w-5" />}
-                        className=""
-                        onChange={(e) => handleSearch(e.target.value)}
-                    /> */}
-                    <div className="relative flex w-full max-w-[24rem] ">
-                        <Input
-                            type="email"
-                            label="Email Address"
-                            value={search}
-                            onChange={(e)=>setSearch(e.target.value)}
-                            className="pr-20"
-                            containerProps={{
-                                className: "min-w-0",
-                            }}
-                        />
-                        <Button
-                            size="sm"
-                            color={search ? "gray" : "blue-gray"}
-                            disabled={!search}
-                            className="!absolute right-0 bottom-0 rounded"
-                            onClick={handleSearch}
-                        >
-                            <MagnifyingGlassIcon className="h-6 w-5" />
-                        </Button>
-                    </div>
-
-                    {/* <div className=" flex p-4 gap-6"> */}
-                    {/* <Select size="lg" label="Select By: Event Id" className="z-10">
+                <div className="flex flex-col items-center justify-between gap-4  md:flex-row ">
+                    
+                    <div className=" flex p-4 gap-6">
+                        <Select size="lg" label="Select By: Event Id" className="z-10">
                             <Option>Material Tailwind HTML</Option>
                             <Option>Material Tailwind React</Option>
                             <Option>Material Tailwind Vue</Option>
                             <Option>Material Tailwind Angular</Option>
                             <Option>Material Tailwind Svelte</Option>
-                        </Select> */}
+                        </Select>
 
-                    {/* <Input size="lg"
+                        <Input size="lg"
                             label="Search"
                             icon={<MagnifyingGlassIcon className="h-5 w-5" />}
-                        /> */}
-                    {/* </div> */}
+                        />
+                    </div>
                 </div>
             </CardHeader>
             <CardBody className="overflow-scroll px-0">
@@ -108,15 +78,15 @@ function PaymentList() {
                         </tr>
                     </thead>
                     <tbody>
-                        {payments.map(
-                            ({ id,amount,payment }, index) => {
+                        {TABLE_ROWS.map(
+                            ({ img, name, email, job, org, online, date }, index) => {
                                 const isLast = index === TABLE_ROWS.length - 1;
                                 const classes = isLast
                                     ? "p-4"
                                     : "p-4 border-b border-blue-gray-50";
 
                                 return (
-                                    <tr key={id} onClick={()=>handlePaymentDetails(id)}>
+                                    <tr key={name}>
                                         <td className={classes}>
                                             <div className="flex items-center gap-3">
                                                 <div className="flex flex-col">
@@ -125,19 +95,19 @@ function PaymentList() {
                                                         color="blue-gray"
                                                         className="font-normal"
                                                     >
-                                                        {amount}
+                                                        {name}
                                                     </Typography>
                                                     <Typography
                                                         variant="small"
                                                         color="blue-gray"
                                                         className="font-normal opacity-70"
                                                     >
-                                                        {payment}
+                                                        {email}
                                                     </Typography>
                                                 </div>
                                             </div>
                                         </td>
-                                        {/* <td className={classes}>
+                                        <td className={classes}>
                                             <div className="flex flex-col">
                                                 <Typography
                                                     variant="small"
@@ -154,8 +124,8 @@ function PaymentList() {
                                                     {org}
                                                 </Typography>
                                             </div>
-                                        </td> */}
-                                        {/* <td className={classes}>
+                                        </td>
+                                        <td className={classes}>
                                             <div className="w-max">
                                                 <Chip
                                                     variant="ghost"
@@ -164,8 +134,8 @@ function PaymentList() {
                                                     color={online ? "green" : "blue-gray"}
                                                 />
                                             </div>
-                                        </td> */}
-                                        {/* <td className={classes}>
+                                        </td>
+                                        <td className={classes}>
                                             <Typography
                                                 variant="small"
                                                 color="blue-gray"
@@ -173,7 +143,7 @@ function PaymentList() {
                                             >
                                                 {date}
                                             </Typography>
-                                        </td> */}
+                                        </td>
                                         <td className={classes}>
                                             <Tooltip content="Edit User">
                                                 <IconButton variant="text">
@@ -188,34 +158,94 @@ function PaymentList() {
                     </tbody>
                 </table>
             </CardBody>
-            <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
-                <Typography>
-                    {numberofresults}
-                </Typography>
-                <div className="flex gap-2">
-                    <Pagination active={active} setActive={setActive}/>
-                </div>
-            </CardFooter>
-        </Card>
-    );
+           
+        </Card> */}
+
+    </div>
+
+    
+  )
 }
-export default PaymentList
 
 
-// const TABS = [
-//     {
-//         label: "All",
-//         value: "all",
-//     },
-//     {
-//         label: "Monitored",
-//         value: "monitored",
-//     },
-//     {
-//         label: "Unmonitored",
-//         value: "unmonitored",
-//     },
-// ];
+const groups = [{ id: 1, title: 'group 1' }, { id: 2, title: 'group 2' }]
+
+const items = [
+  {
+    id: 1,
+    group: 1,
+    title: 'item 1',
+    start_time: moment(),
+    end_time: moment().add(1, 'hour')
+  },
+  {
+    id: 2,
+    group: 2,
+    title: 'item 2',
+    start_time: moment().add(-0.5, 'hour'),
+    end_time: moment().add(0.5, 'hour')
+  },
+  {
+    id: 3,
+    group: 1,
+    title: 'item 3',
+    start_time: moment().add(2, 'hour'),
+    end_time: moment().add(3, 'hour')
+  }
+]
+
+const events = [
+  { title: "All Day Event", start: getDate("YEAR-MONTH-01") },
+  {
+    title: "Long Event",
+    start: getDate("YEAR-MONTH-07"),
+    end: getDate("YEAR-MONTH-10"),
+    backgroundColor: "pink",
+    borderColor:"pink"
+  },
+  {
+    groupId: "999",
+    title: "Repeating Event",
+    start: getDate("YEAR-MONTH-09T16:00:00+00:00"),
+    
+  },
+  // {
+  //   groupId: "999",
+  //   title: "Repeating Event",
+  //   start: getDate("YEAR-MONTH-16T16:00:00+00:00")
+  // },
+  {
+    title: "Conference",
+    start: getDate("YEAR-MONTH-17"),
+    end: getDate("YEAR-MONTH-19")
+  },
+  {
+    title: "Meeting",
+    start: getDate("YEAR-MONTH-18T10:30:00+00:00"),
+    end: getDate("YEAR-MONTH-18T12:30:00+00:00")
+  },
+  // { title: "Lunch", start: getDate("YEAR-MONTH-18T12:00:00+00:00") },
+  // { title: "Birthday Party", start: getDate("YEAR-MONTH-19T07:00:00+00:00") },
+  // { title: "Meeting", start: getDate("YEAR-MONTH-18T14:30:00+00:00") },
+  // { title: "Happy Hour", start: getDate("YEAR-MONTH-18T17:30:00+00:00") },
+  //{ title: "Dinner", start: getDate("YEAR-MONTH-18T20:00:00+00:00") }
+];
+
+function getDate(dayString) {
+  const today = new Date();
+  const year = today.getFullYear().toString();
+  let month = (today.getMonth() + 1).toString();
+
+  if (month.length === 1) {
+    month = "0" + month;
+  }
+
+  return dayString.replace("YEAR", year).replace("MONTH", month);
+}
+
+export default SuperAdminEventCalandar
+
+
 
 const TABLE_HEAD = ["Member", "Function", "Status", "Employed", "Edit"];
 
