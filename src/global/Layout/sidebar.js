@@ -176,7 +176,7 @@ export default function SidebarNim() {
               <InfoOutlinedIcon sx={{color:"black"}} />
             </Avatar>
             <Typography fontSize={"24px"} color={"white"} align="center">
-Smoe Joe
+                    Smoe Joe
             </Typography>
             <Typography fontFamily={"16px"} color={"rgba(255, 255, 255, 0.40)"} align="center" sx={{
                 display: "flex",
