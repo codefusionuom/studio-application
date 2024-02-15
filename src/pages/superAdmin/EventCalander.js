@@ -11,7 +11,7 @@ import { MagnifyingGlassIcon, PencilIcon } from '@heroicons/react/24/outline';
 // import "@fullcalendar/daygrid/main.css";
 // import "@fullcalendar/timegrid/main.css";
 // import EventCalendar from 'react-event-calendar'
-function EventCalandar() {
+function SuperAdminEventCalandar() {
   return (
     <div className='bg-cl-4 rounded py-10 px-20 flex flex-col gap-20'>
       <FullCalendar className=""
@@ -37,7 +37,7 @@ function EventCalandar() {
       defaultTimeEnd={moment().add(8, 'hour')}/>
     
 
-    <Card className=" w-full border-2 ">
+    {/* <Card className=" w-full border-2 ">
             <CardHeader floated={false} shadow={false} className="rounded-none">
                 <div className="flex flex-col items-center justify-between gap-4  md:flex-row ">
                     
@@ -159,7 +159,7 @@ function EventCalandar() {
                 </table>
             </CardBody>
            
-        </Card>
+        </Card> */}
 
     </div>
 
@@ -243,7 +243,7 @@ function getDate(dayString) {
   return dayString.replace("YEAR", year).replace("MONTH", month);
 }
 
-export default EventCalandar
+export default SuperAdminEventCalandar
 
 
 

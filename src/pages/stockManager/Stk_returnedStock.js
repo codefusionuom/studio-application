@@ -1,47 +1,51 @@
-import React from 'react'
+import React ,{useState}from 'react'
 import { MagnifyingGlassIcon, ChevronUpDownIcon, } from "@heroicons/react/24/outline";
 import { PencilIcon, UserPlusIcon } from "@heroicons/react/24/solid";
 import { Card, CardHeader, Input, Typography, Button, CardBody, Chip, CardFooter, Tabs, TabsHeader, Tab, Avatar, IconButton, Tooltip, Select, Option, } from "@material-tailwind/react";
 import Datepicker from "../../components/datePicker/Datepicker";
 import { Pagination } from "../../components/pagination/pagination";
 import SmallCard from '../../components/cards/card';
-// import { TABLE_HEAD, TABLE_ROWS } from './path/to/otherFile';
+import Table from './Stk_components/Table';
+import { returnedDetailList, returnedTHead } from './Stk_components/data';
+import AddReturnStockForm from './Stk_forms/AddReturnStockForm';
+import Modal from './Stk_components/Modal';
 
+function ReturnedStock() {
+    const [isFormVisible, setFormVisible] = useState(false);
 
-function CustomerRequests() {
+    const openForm = () => {
+      setFormVisible(true);
+
+    };
+  
+    const closeForm = () => {
+      setFormVisible(false);
+    };
     return (
         <div className='flex flex-col gap-10'>
-            <div className='flex gap-10'>
-                <SmallCard className=" w-full" title="Create Customer Request" />
-                <Card className='w-full rounded'>
-                    {/* <div className=" flex p-4 gap-6">
-                        <Select size="lg" label="Select By: Event Id" className="z-10">
-                            <Option>Material Tailwind HTML</Option>
-                            <Option>Material Tailwind React</Option>
-                            <Option>Material Tailwind Vue</Option>
-                            <Option>Material Tailwind Angular</Option>
-                            <Option>Material Tailwind Svelte</Option>
-                        </Select>
+             <div className="flex gap-10">
+          <div>
+            
+            {isFormVisible && (
+              <Modal onClose={closeForm}>
+                <AddReturnStockForm onClose={closeForm} />
+              </Modal>
+             
+            )}
+          </div>
+          <AddReturnStockForm title={'+  Return Stock Item'} onClose={closeForm} />
 
-                        <Input size="lg"
-                            label="Search"
-                            icon={<MagnifyingGlassIcon className="h-5 w-5" />}
-                        />
-                    </div> */}
-                </Card>
-            </div>
-            <div>
-                <Card className=" w-full border-2 rounded">
-                    <CardHeader floated={false} shadow={false} className="rounded-none">
-                        <div className="flex flex-col items-center justify-between gap-4  md:flex-row ">
-                            <Typography className='text-2xl'>Customer Requests</Typography>
-                            <div className=" flex p-4 gap-6">
-                        <Select size="lg" label="Select By: Event Id" className="z-10">
-                            <Option>Material Tailwind HTML</Option>
-                            <Option>Material Tailwind React</Option>
-                            <Option>Material Tailwind Vue</Option>
-                            <Option>Material Tailwind Angular</Option>
-                            <Option>Material Tailwind Svelte</Option>
+
+
+               
+                <Card className='w-full rounded'>
+                    <div className=" flex p-4 gap-6 items-center">
+                        <Select size="lg" label="Select By: Item Id" className="z-10">
+                            <Option>Item Id</Option>
+                            <Option>Date</Option>
+                            <Option>Supplier Name</Option>
+                            <Option>Item Id</Option>
+                            <Option>Item Name</Option>
                         </Select>
 
                         <Input size="lg"
@@ -49,6 +53,15 @@ function CustomerRequests() {
                             icon={<MagnifyingGlassIcon className="h-5 w-5" />}
                         />
                     </div>
+                </Card>
+            </div>
+            <div>
+
+                <Table title="Returned Stock" headerList={returnedTHead} rowList={returnedDetailList}/>
+                {/* <Card className=" w-full border-2 rounded">
+                    <CardHeader floated={false} shadow={false} className="rounded-none">
+                        <div className="flex flex-col items-center justify-between gap-4  md:flex-row ">
+                            <Typography className='text-2xl'>Returned Stock Items</Typography>
                         </div>
                     </CardHeader>
                     <CardBody className="overflow-scroll px-0">
@@ -161,15 +174,16 @@ function CustomerRequests() {
                         </div>
                     </CardFooter>
                 </Card>
-            </div>
+            */}
+            </div> 
         </div>
     )
 }
 
-export default CustomerRequests
+export default ReturnedStock
 
 
-const TABLE_HEAD = ["Member", "Function", "Status", "Employed", "Edit"];
+const TABLE_HEAD = ["GRN No", "SupplierID", "Date", "Amount", "Edit"];
 
 const TABLE_ROWS = [
     {
@@ -217,7 +231,4 @@ const TABLE_ROWS = [
         online: false,
         date: "04/10/21",
     },
-
-
-
-];
+]
