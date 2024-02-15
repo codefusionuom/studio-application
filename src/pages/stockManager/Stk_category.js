@@ -1,47 +1,49 @@
-import React from 'react'
+import React,{useState} from 'react'
 import { MagnifyingGlassIcon, ChevronUpDownIcon, } from "@heroicons/react/24/outline";
 import { PencilIcon, UserPlusIcon } from "@heroicons/react/24/solid";
-import { Card, CardHeader, Input, Typography, Button, CardBody, Chip, CardFooter, Tabs, TabsHeader, Tab, Avatar, IconButton, Tooltip, Select, Option, Dialog, } from "@material-tailwind/react";
+import { Card, CardHeader, Input, Typography, Button, CardBody, Chip, CardFooter, Tabs, TabsHeader, Tab, Avatar, IconButton, Tooltip, Select, Option, } from "@material-tailwind/react";
 import Datepicker from "../../components/datePicker/Datepicker";
 import { Pagination } from "../../components/pagination/pagination";
 import SmallCard from '../../components/cards/card';
 
-function Customers() {
-    const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen((cur) => !cur);
+import Modal from './Stk_components/Modal';
+import FormComp from './Stk_components/FormComp';
+
+function Category() {
+    const [isFormVisible, setFormVisible] = useState(false);
+
+    const openForm = () => {
+      setFormVisible(true);
+
+    };
+  
+    const closeForm = () => {
+      setFormVisible(false);
+    };
     return (
         <div className='flex flex-col gap-10'>
             <div className='flex gap-10'>
-                <SmallCard className=" w-full" title="Create Customer " onClick={handleOpen} />
-                <Card className='w-full rounded'>
-                    {/* <div className=" flex p-4 gap-6">
-                        <Select size="lg" label="Select By: Event Id" className="z-10">
-                            <Option>Material Tailwind HTML</Option>
-                            <Option>Material Tailwind React</Option>
-                            <Option>Material Tailwind Vue</Option>
-                            <Option>Material Tailwind Angular</Option>
-                            <Option>Material Tailwind Svelte</Option>
-                        </Select>
-
-                        <Input size="lg"
-                            label="Search"
-                            icon={<MagnifyingGlassIcon className="h-5 w-5" />}
-                        />
-                    </div> */}
-                </Card>
-            </div>
+                
             <div>
-                <Card className=" w-full border-2 rounded">
-                    <CardHeader floated={false} shadow={false} className="rounded-none  z-30">
-                        <div className="flex flex-col items-center justify-between gap-4  md:flex-row ">
-                            <Typography className='text-2xl'>Customers</Typography>
-                    <div className=" flex p-4 gap-6 ">
-                        <Select size="lg" label="Select By: Event Id" className="z-10">
-                            <Option>Material Tailwind HTML</Option>
-                            <Option>Material Tailwind React</Option>
-                            <Option>Material Tailwind Vue</Option>
-                            <Option>Material Tailwind Angular</Option>
-                            <Option>Material Tailwind Svelte</Option>
+            <SmallCard
+              className=" w-full cursor-pointer"
+              title="+ Create Category"
+              onClick={openForm}
+            />
+            {isFormVisible && (
+              <Modal onClose={closeForm}>
+                <FormComp onClose={closeForm} />
+              </Modal>
+            )}
+          </div>
+                <Card className='w-full rounded'>
+                    <div className=" flex p-4 gap-6 items-center">
+                        <Select size="lg" label="Select By: Item Id" className="z-10">
+                            <Option>Category Id</Option>
+                            <Option>Date</Option>
+                            <Option>Supplier Name</Option>
+                            <Option>Item Id</Option>
+                            <Option>Item Name</Option>
                         </Select>
 
                         <Input size="lg"
@@ -49,9 +51,16 @@ function Customers() {
                             icon={<MagnifyingGlassIcon className="h-5 w-5" />}
                         />
                     </div>
+                </Card>
+            </div>
+            <div>
+                <Card className=" w-full border-2 rounded">
+                    <CardHeader floated={false} shadow={false} className="rounded-none">
+                        <div className="flex flex-col items-center justify-between gap-4  md:flex-row ">
+                            <Typography className='text-2xl'>Category List</Typography>
                         </div>
                     </CardHeader>
-                    <CardBody className="overflow-scroll px-0 z-10">
+                    <CardBody className="overflow-scroll px-0">
                         <table className="mt-4 w-full min-w-max table-auto text-left">
                             <thead>
                                 <tr>
@@ -141,7 +150,7 @@ function Customers() {
                                                 <td className={classes}>
                                                     <Tooltip content="Edit User">
                                                         <IconButton variant="text">
-                                                            <PencilIcon className="h-4 w-4" onClick={handleOpen} />
+                                                            <PencilIcon className="h-4 w-4" />
                                                         </IconButton>
                                                     </Tooltip>
                                                 </td>
@@ -161,63 +170,15 @@ function Customers() {
                         </div>
                     </CardFooter>
                 </Card>
-                <Dialog
-        size="xs"
-        open={open}
-        handler={handleOpen}
-        className="bg-transparent shadow-none"
-      >
-        <Card className="mx-auto w-full max-w-[24rem]">
-          <CardBody className="flex flex-col gap-4">
-            <Typography variant="h4" color="blue-gray">
-              Sign In
-            </Typography>
-            <Typography
-              className="mb-3 font-normal"
-              variant="paragraph"
-              color="gray"
-            >
-              Enter your email and password to Sign In.
-            </Typography>
-            <Typography className="-mb-2" variant="h6">
-              Your Email
-            </Typography>
-            <Input label="Email" size="lg" />
-            <Typography className="-mb-2" variant="h6">
-              Your Password
-            </Typography>
-            <Input label="Password" size="lg" />
-           
-          </CardBody>
-          <CardFooter className="pt-0">
-            <Button variant="gradient" onClick={handleOpen} fullWidth>
-              Sign In
-            </Button>
-            <Typography variant="small" className="mt-4 flex justify-center">
-              Don&apos;t have an account?
-              <Typography
-                as="a"
-                href="#signup"
-                variant="small"
-                color="blue-gray"
-                className="ml-1 font-bold"
-                onClick={handleOpen}
-              >
-                Sign up
-              </Typography>
-            </Typography>
-          </CardFooter>
-        </Card>
-      </Dialog>
             </div>
         </div>
     )
 }
 
-export default Customers
+export default Category
 
 
-const TABLE_HEAD = ["Member", "Function", "Status", "Employed", "Edit"];
+const TABLE_HEAD = ["GRN No", "SupplierID", "Date", "Amount", "Edit"];
 
 const TABLE_ROWS = [
     {
@@ -265,7 +226,4 @@ const TABLE_ROWS = [
         online: false,
         date: "04/10/21",
     },
-
-
-
-];
+]

@@ -1,3 +1,5 @@
+
+
 export const userRoles=[{
     id:2,name:"Customer Manager",path:"/customerManager"}, {id:3,name:"Event Manager",path:"/eventManager"}, {id:1,name:"Super Admin",path:"/superAdmin"}, {id:5,name:"Stock Manager",path:"/stockManager"}, {id:4,name:"Employee Manager",path:"/employeeManager"}]
 
@@ -6,7 +8,7 @@ export const customerList = [{
         <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" />
     </svg>
 }, {
-    name: "Custome Requests",path:"/customerManager/customerRequest", icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
+    name: "Customer Requests",path:"/customerManager/customerRequest", icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
     <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0M3.124 7.5A8.969 8.969 0 0 1 5.292 3m13.416 0a8.969 8.969 0 0 1 2.168 4.5" />
   </svg>
   
@@ -100,3 +102,32 @@ export const eventManagerList = [{
   </svg>
   
 },]
+
+
+
+
+
+//stock admin side bar list
+export const stockManagerList = [{
+    name: "Dashboard",path:"/stockManager", icon:""
+},
+ {
+    name: "GRN",path:"/stockManager/grn", icon: ""
+}, 
+{
+    name: "Suppliers",path:"/stockManager/supplier", icon:""
+},
+{
+    name: "Payment",path:"/stockManager/payment", icon:""
+},
+
+{
+    name: "Returned Stock",path:"/stockManager/returnedStock" , icon: ""
+  
+},
+{
+    name: "Stock Item",path:"/stockManager/stockItem" , icon: ""
+},
+{
+    name: "Settings", icon: ""
+}]

@@ -16,6 +16,18 @@ import EventManager from './pages/eventManager';
 import StockManager from './pages/stockManager';
 import EmployeeManager from './pages/employeeManager';
 import SuperAdmin from './pages/superAdmin';
+import DashboardSmgr from './pages/stockManager/Stk_dashboard';
+import Category from './pages/stockManager/Stk_category';
+import SMpayment from './pages/stockManager/Stk_payment';
+import SMpaymentDetails from './pages/stockManager/Stk_paymentDetail';
+import GrnStock from './pages/stockManager/Stk_grn';
+import StockItem from './pages/stockManager/Stk_StockItem';
+import Suppliers from './pages/stockManager/Stk_supplier';
+import ReturnedStock from './pages/stockManager/Stk_returnedStock';
+import FormComp from './pages/stockManager/Stk_components/FormComp';
+
+
+
 
 import EmployeeManagerDashboard from './pages/employeeManager/dashboard';
 import EmployeePayment from './pages/employeeManager/payment';
@@ -56,8 +68,17 @@ function App() {
       </Route>
       
       <Route path="/stockManager" element={<StockManager />}>
-        
+        <Route index={true} path="/stockManager/" element={<DashboardSmgr />} />
+        <Route index={false}  path="/stockManager/category" element={<Category />} />
+        <Route index={false}  path="/stockManager/paymentDetails" element={<SMpaymentDetails />} />
+        <Route index={false}  path="/stockManager/payment" element={<SMpayment />} />
+        <Route index={false}  path="/stockManager/grn" element={<GrnStock />} />
+        <Route index={false}  path="/stockManager/returnedStock" element={<ReturnedStock />} />
+        <Route index={false}  path="/stockManager/stockItem" element={<StockItem />} />
+        <Route index={false}  path="/stockManager/supplier" element={<Suppliers />} />
+        <Route index={false}  path="/stockManager/form" element={<FormComp />} />
       </Route>
+    
       <Route path="/employeeManager" element={<EmployeeManager />}>
         <Route  path="/employeeManager/" element={<EmployeeManagerDashboard />} />
         <Route  path="/employeeManager/payment" element={<EmployeePayment />} />
