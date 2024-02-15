@@ -35,7 +35,7 @@ function Customers() {
                     <CardHeader floated={false} shadow={false} className="rounded-none  z-30">
                         <div className="flex flex-col items-center justify-between gap-4  md:flex-row ">
                             <Typography className='text-2xl'>Customers</Typography>
-                            <div className=" flex p-4 gap-6 ">
+                    <div className=" flex p-4 gap-6 ">
                         <Select size="lg" label="Select By: Event Id" className="z-10">
                             <Option>Material Tailwind HTML</Option>
                             <Option>Material Tailwind React</Option>
