@@ -11,7 +11,7 @@ import { customerList } from '../../global/Layout/data'
 import Layout from '../../global/Layout'
 import { Outlet, Route, Routes } from 'react-router-dom'
 import { stockManagerList } from '../../global/Layout/data'
-import SampleForm from './Stk_components/Form'
+import FormComp from './Stk_forms/FormComp'
 
 
 function index() {

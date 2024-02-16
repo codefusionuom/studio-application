@@ -8,13 +8,11 @@ import {
   CardFooter,
   Typography,
   Input,
-  Checkbox,Textarea
+  Checkbox,
 } from "@material-tailwind/react";
 import SmallCard from "../../../components/cards/card";
  
-function AddStockItemForm({title}) {
-
-    
+function AddPaymentForm({title}) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen((cur) => !cur); 
  
@@ -31,90 +29,75 @@ function AddStockItemForm({title}) {
         <Card className="mx-auto w-full ">
           <CardBody className="flex flex-col gap-4">
             <Typography variant="h4" color="blue-gray">
-             Add New Stock Item
+             New Payment
             </Typography>
             <Typography
               className="mb-3 font-normal"
               variant="paragraph"
               color="gray"
             >
-              Enter  Stock item details Here
+              Enter Payment Details Here
             </Typography>
 
             
             <div className=" flex flex-row justify-evenly ">
-              
+              <div className=" flex flex-col justify-evenly">
+                <Typography className="mb-2" variant="h6">
+                  Supplier ID:
+                </Typography>
+
+                <Input label="Supplier ID" size="lg" placeholder="S-001" />
+              </div>
 
               <div className="flex flex-col justify-between">
                 <Typography className="mb-2" variant="h6">
-                  Item Name:
+                  Supplier Name:
                 </Typography>
-                <Input label="Item Name" size="lg" placeholder="frame"/>
+                <Input label="Supplier Name" size="lg" placeholder=""/>
               </div>
+            </div>
+
+
+            <div className=" flex flex-row justify-evenly ">
+              <div className=" flex flex-col justify-between">
+                <Typography className="mb-2" variant="h6">
+                  Date:
+                </Typography>
+
+                <Input label="Date" size="lg" type="date" placeholder="DD/MM/YYYY" />
+              </div>
+
               <div className="flex flex-col justify-between">
                 <Typography className="mb-2" variant="h6">
-                  Category:
+                  Telephone:
                 </Typography>
-                <Input label="Category" size="lg" placeholder="C-111" />
+                <Input label="Telephone" size="lg" placeholder="077-111 1111" />
               </div>
-              
-
             </div>
 
-
-            <div className=" flex flex-row justify-evenly  ">
-            <div className=" flex flex-col justify-between">
-                <Typography className="mb-2" variant="h6">
-                Item Cost:
-                </Typography>
-
-                <Input label="Item Cost" size="lg" placeholder="100,000.00"/>
-              </div>
-            
+            <div className=" flex flex-row  justify-around ">
               <div className=" flex flex-col justify-between">
                 <Typography className="mb-2" variant="h6">
-                  Sell Price:
+                Stock Items:
                 </Typography>
 
-                <Input label=" Sell Price" size="lg" placeholder="100,000.00" />
-              </div>
-             
-
-
-             
-            </div>
-
-            <div className=" flex flex-row justify-evenly  ">
-            
-              <div className=" flex flex-col justify-between">
-                <Typography className="mb-2" variant="h6">
-                  Quantity:
-                </Typography>
-
-                <Input label="Quantity" size="lg" placeholder="" />
+                <Input label=" Stock Items" size="lg" placeholder="I-001" />
               </div>
               <div className=" flex flex-col justify-between">
                 <Typography className="mb-2" variant="h6">
-                  Min Quantity:
+                Quantity:
                 </Typography>
 
-                <Input label=" Min Quantity" size="lg" placeholder="" />
+                <Input label="Quantity" size="lg" />
               </div>
-
-
-             
-            </div>
-
-            <div className=" flex flex-row justify-between ">
-              <div className=" flex flex-col w-full">
+              <div className=" flex flex-col justify-between">
                 <Typography className="mb-2" variant="h6">
-                Description:
+                Price:
                 </Typography>
 
-                <Textarea label="Enter Description here" size="lg" />
+                <Input label="Price" size="lg" placeholder="100,000.00"/>
               </div>
-              
-             
+
             </div>
 
 
@@ -137,4 +120,4 @@ function AddStockItemForm({title}) {
     </>
   );
 }
-export default AddStockItemForm
+export default AddPaymentForm

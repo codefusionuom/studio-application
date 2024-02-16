@@ -1,6 +1,6 @@
 
 
-export const TABLE_HEAD = ["GRN No","","Item","Supplier Name", "Status", "Date", "Amount", "Edit"];
+export const TABLE_HEAD = ["GRN No","","Item","Supplier Name","Date", "Amount", "Edit"];
 
 export const TABLE_ROWS = [
     {
@@ -8,7 +8,7 @@ export const TABLE_ROWS = [
         name: "John Michael",
         email: "john@creative-tim.com",
         item: "Frame",
-        online: true,
+       
         date: "23/04/18",
         amount: "$500"
     },
@@ -17,7 +17,7 @@ export const TABLE_ROWS = [
         name: "Alexa Liras",
         email: "alexa@creative-tim.com",
         item: "Photograph",
-        online: false,
+       
         date: "23/04/18",
         amount: "$500"
     },
@@ -26,7 +26,7 @@ export const TABLE_ROWS = [
         name: "Laurent Perrier",
         email: "laurent@creative-tim.com",
         item: "Card",
-        online: false,
+        
         date: "19/09/17",
         amount: "$500"
     },
@@ -35,7 +35,7 @@ export const TABLE_ROWS = [
         name: "Michael Levi",
         email: "michael@creative-tim.com",
         item: "Frame",
-        online: true,
+        
         date: "24/12/08",
         amount: "$500"
     },
@@ -44,7 +44,7 @@ export const TABLE_ROWS = [
         name: "Richard Gran",
         email: "richard@creative-tim.com",
         item: "Frame",
-        online: false,
+       
         date: "04/10/21",
         amount: "$500"
     },
@@ -55,7 +55,7 @@ export const TABLE_ROWS = [
 //Returned stock
 
 
-export const returnedTHead = ["Item Id","","Item","Supplier Name", "Status", "Date", "Amount", "Edit"];
+export const returnedTHead = ["Item Id","","Item","Supplier Name",  "Date", "Amount", "Edit"];
 
 export const returnedDetailList = [
     {
@@ -63,7 +63,7 @@ export const returnedDetailList = [
         name: "John Michael",
         email: "john@creative-tim.com",
         item: "Frame",
-        online: true,
+       
         date: "23/04/18",
         amount: "$500"
     },
@@ -72,7 +72,7 @@ export const returnedDetailList = [
         name: "Alexa Liras",
         email: "alexa@creative-tim.com",
         item: "Photograph",
-        online: false,
+      
         date: "23/04/18",
         amount: "$500"
     },
@@ -81,7 +81,7 @@ export const returnedDetailList = [
         name: "Laurent Perrier",
         email: "laurent@creative-tim.com",
         item: "Card",
-        online: false,
+        
         date: "19/09/17",
         amount: "$500"
     },
@@ -90,7 +90,7 @@ export const returnedDetailList = [
         name: "Michael Levi",
         email: "michael@creative-tim.com",
         item: "Frame",
-        online: true,
+        
         date: "24/12/08",
         amount: "$500"
     },
@@ -99,7 +99,7 @@ export const returnedDetailList = [
         name: "Richard Gran",
         email: "richard@creative-tim.com",
         item: "Frame",
-        online: false,
+        
         date: "04/10/21",
         amount: "$500"
     },
@@ -108,7 +108,7 @@ export const returnedDetailList = [
 
 //payment
 
-export const paymentTHead = ["GRN Id","Supplier Id","Item","Supplier Name", "Status", "Date", "Amount", "Edit"];
+export const paymentTHead = ["GRN Id","Supplier Id","Item","Supplier Name", "Date", "Amount", "Edit"];
 
 export const paymentList = [
     {
@@ -117,7 +117,7 @@ export const paymentList = [
         name: "John Michael",
         email: "john@creative-tim.com",
         item: "Frame",
-        online: true,
+        
         date: "23/04/18",
         amount: "$500"
     },
@@ -127,7 +127,7 @@ export const paymentList = [
         name: "Alexa Liras",
         email: "alexa@creative-tim.com",
         item: "Photograph",
-        online: false,
+      
         date: "23/04/18",
         amount: "$500"
     },
@@ -137,7 +137,7 @@ export const paymentList = [
         name: "Laurent Perrier",
         email: "laurent@creative-tim.com",
         item: "Card",
-        online: false,
+      
         date: "19/09/17",
         amount: "$500"
     },
@@ -147,7 +147,7 @@ export const paymentList = [
         name: "Michael Levi",
         email: "michael@creative-tim.com",
         item: "Frame",
-        online: true,
+      
         date: "24/12/08",
         amount: "$500"
     },
@@ -157,7 +157,7 @@ export const paymentList = [
         name: "Richard Gran",
         email: "richard@creative-tim.com",
         item: "Frame",
-        online: false,
+       
         date: "04/10/21",
         amount: "$500"
     },
@@ -166,7 +166,7 @@ export const paymentList = [
 
 //Supplier list
 
-export const supplierTH = ["Supplier Id","", "Item", "Supplier Name", "Status", "Date","Amount","Edit"];
+export const supplierTH = ["Supplier Id","", "Item", "Supplier Name",  "Date","Amount","Edit"];
 
 export const supplierTR = [
     {
@@ -174,7 +174,7 @@ export const supplierTR = [
         name: "John Michael",
         email: "john@creative-tim.com",
         item: "Frame",
-        online: true,
+        
         date: "23/04/18",
         amount: "$5400"
     },
@@ -183,7 +183,7 @@ export const supplierTR = [
         name: "Alexa Liras",
         email: "alexa@creative-tim.com",
         item: "Photograph",
-        online: false,
+       
         date: "23/04/18",
         amount: "$7500"
     },
@@ -192,7 +192,7 @@ export const supplierTR = [
         name: "Laurent Perrier",
         email: "laurent@creative-tim.com",
         item: "Card",
-        online: false,
+        
         date: "19/09/17",
         amount: "$5500"
     },
@@ -201,7 +201,7 @@ export const supplierTR = [
         name: "Michael Levi",
         email: "michael@creative-tim.com",
         item: "Frame",
-        online: true,
+      
         date: "24/12/08",
         amount: "$700"
     },
@@ -210,7 +210,7 @@ export const supplierTR = [
         name: "Richard Gran",
         email: "richard@creative-tim.com",
         item: "Frame",
-        online: false,
+       
         date: "04/10/21",
         amount: "$1500"
     },
@@ -221,7 +221,7 @@ export const supplierTR = [
 //Returned stock
 
 
-export const stkItemTHead = ["Item Id","","Item","Supplier Name", "Status", "Date", "Amount", "Edit"];
+export const stkItemTHead = ["Item Id","","Item","Supplier Name", "Date", "Amount", "Edit"];
 
 export const stkItemList = [
     {
@@ -229,7 +229,7 @@ export const stkItemList = [
         name: "John Michael",
         email: "john@creative-tim.com",
         item: "Frame",
-        online: true,
+       
         date: "23/04/18",
         amount: "$500"
     },
@@ -238,7 +238,7 @@ export const stkItemList = [
         name: "Alexa Liras",
         email: "alexa@creative-tim.com",
         item: "Photograph",
-        online: false,
+      
         date: "23/04/18",
         amount: "$500"
     },
@@ -247,7 +247,7 @@ export const stkItemList = [
         name: "Laurent Perrier",
         email: "laurent@creative-tim.com",
         item: "Card",
-        online: false,
+        
         date: "19/09/17",
         amount: "$500"
     },
@@ -256,7 +256,7 @@ export const stkItemList = [
         name: "Michael Levi",
         email: "michael@creative-tim.com",
         item: "Frame",
-        online: true,
+        
         date: "24/12/08",
         amount: "$500"
     },
@@ -265,7 +265,7 @@ export const stkItemList = [
         name: "Richard Gran",
         email: "richard@creative-tim.com",
         item: "Frame",
-        online: false,
+        
         date: "04/10/21",
         amount: "$500"
     },

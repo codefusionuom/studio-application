@@ -10,7 +10,7 @@ import { useState } from 'react';
 import Modal from './Stk_components/Modal';
 import Table from './Stk_components/Table';
 import { supplierTH,supplierTR } from './Stk_components/data';
-import FormComp from './Stk_components/FormComp';
+import FormComp from './Stk_forms/FormComp';
 
 function Suppliers() {
     const [isFormVisible, setFormVisible] = useState(false);

@@ -80,8 +80,7 @@ function DashboardSmgr() {
 
       <ChartStk/>
 
-      <Button>Summary Report</Button>
-         
+      
   
 
 

@@ -15,10 +15,7 @@ function EmployeePayment() {
         <div>
 
 
-
-
-
-        <form>
+       <form>
         <div className='bg-cl-4 rounded'>
             <div className='PersonalInfo pt-10'>
                 

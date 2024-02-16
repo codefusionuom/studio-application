@@ -9,6 +9,7 @@ import {
   Typography,
   Input,
   Checkbox,
+  Textarea,
 } from "@material-tailwind/react";
 import SmallCard from "../../../components/cards/card";
  
@@ -42,7 +43,7 @@ function AddCategoryForm({title}) {
             </Typography>
 
             
-            <div className=" flex flex-row justify-between ">
+            <div className=" flex flex-row justify-evenly ">
               
 
               <div className="flex flex-col justify-between">
@@ -62,37 +63,18 @@ function AddCategoryForm({title}) {
             </div>
 
 
-            <div className=" flex flex-row justify-between ">
-            <div className=" flex flex-col justify-between">
-                <Typography className="mb-2" variant="h6">
-                Item Cost:
-                </Typography>
-
-                <Input label="Item Cost" size="lg" placeholder="100,000.00"/>
-              </div>
+             
             
-              <div className=" flex flex-col justify-between">
-                <Typography className="mb-2" variant="h6">
-                  Sell Price:
-                </Typography>
-
-                <Input label=" Sell Price" size="lg" placeholder="100,000.00" />
-              </div>
-             
-
-
-             
-            </div>
 
             
 
-            <div className=" flex flex-row justify-between ">
+            <div className=" flex flex-row justify-evenly ">
               <div className=" flex flex-col w-full">
                 <Typography className="mb-2" variant="h6">
                 Description:
                 </Typography>
+                <Textarea label="Enter Description here" size="lg" />
 
-                <Input label="Description" size="lg" placeholder="Enter description here" type="textarea" />
               </div>
               
              

@@ -7,7 +7,7 @@ import { Pagination } from "../../components/pagination/pagination";
 import SmallCard from '../../components/cards/card';
 
 import Modal from './Stk_components/Modal';
-import FormComp from './Stk_components/FormComp';
+import FormComp from './Stk_forms/FormComp';
 
 function Category() {
     const [isFormVisible, setFormVisible] = useState(false);

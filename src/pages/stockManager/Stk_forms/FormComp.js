@@ -36,11 +36,11 @@ function FormComp({title}) {
               variant="paragraph"
               color="gray"
             >
-              Enter Details Here
+              Enter supplier Details Here
             </Typography>
 
             
-            <div className=" flex flex-row justify-between ">
+            <div className=" flex flex-row justify-evenly ">
               <div className=" flex flex-col justify-between">
                 <Typography className="mb-2" variant="h6">
                   Name:
@@ -58,7 +58,7 @@ function FormComp({title}) {
             </div>
 
 
-            <div className=" flex flex-row justify-between ">
+            <div className=" flex flex-row justify-evenly">
               <div className=" flex flex-col justify-between">
                 <Typography className="mb-2" variant="h6">
                   Address:
@@ -75,13 +75,21 @@ function FormComp({title}) {
               </div>
             </div>
 
-            <div className=" flex flex-row justify-between ">
+            <div className=" flex flex-row justify-evenly ">
               <div className=" flex flex-col justify-between">
                 <Typography className="mb-2" variant="h6">
                 Stock Item:
                 </Typography>
 
                 <Input label=" Stock Item" size="lg" />
+              </div>
+
+              <div className=" flex flex-col justify-between">
+                <Typography className="mb-2" variant="h6">
+                Cost:
+                </Typography>
+
+                <Input label=" Cost" size="lg" />
               </div>
 
             </div>

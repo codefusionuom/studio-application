@@ -11,6 +11,7 @@ import {
   Checkbox,
 } from "@material-tailwind/react";
 import SmallCard from "../../../components/cards/card";
+
  
 function CategoryList({title}) {
 
@@ -20,7 +21,8 @@ function CategoryList({title}) {
  
   return (
     <>
-      <SmallCard className=" w-full cursor-pointer" title={title} onClick={handleOpen} />
+      <SmallCard className=" w-full cursor-pointer bg-yellow-700" title={title} onClick={handleOpen} />
+     
 
       <Dialog
        
