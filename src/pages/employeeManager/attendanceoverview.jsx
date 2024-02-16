@@ -4,6 +4,7 @@ import { Card, CardHeader, Input, Typography, Button, CardBody, Chip, CardFooter
 import Datepicker from "../../components/datePicker/Datepicker";
 import { Pagination } from "../../components/pagination/pagination";
 import { RadioHorizontalList } from "./attendanceradio";
+import ViewAttendance from "./attendance/viewattendancebutton";
 
 function AttendanceOverviewList() {
     return (
@@ -16,13 +17,15 @@ function AttendanceOverviewList() {
                     <div>
                         <RadioHorizontalList></RadioHorizontalList>
                     </div>
-                    <div className=" flex p-4 gap-6">
+                    {/* <div className=" flex p-4 gap-6">
                         <div className="w-72">
                             <Input label="Date" disabled />
                         </div>
 
-                        <Button>View Attendance</Button>
-                    </div>
+                        <Button color="blue">View Attendance</Button>
+                    </div> */}
+                    <ViewAttendance></ViewAttendance>
+                    
                 </div>
             </CardHeader>
             <CardBody className="overflow-scroll px-0">
@@ -122,10 +125,11 @@ function AttendanceOverviewList() {
                                                     // case "wfo": return <div className="flex"><Chip color="blue" value="Work from office" /></div>;
                                                     // case "la": return <div className="flex"><Chip color="yellow" value="Late arrival" /></div>;
                                                     // default: return <div className="flex"><Chip color="red" value="Absent" /></div>
-                                                    case "wfh": return <div className="flex"><Typography className="flex bg-gray-600 rounded pl-3 pr-3 text-sm font-semibold pt-1 pb-1 text-white w-3/4 justify-center">Work from home</Typography></div>;
-                                                    case "wfo": return <div className="flex"><Typography className="flex justify-center bg-light-blue-400 rounded pl-3 pr-3 text-sm font-semibold pt-1 pb-1 text-white w-3/4">Work from office</Typography></div>;
-                                                    case "la": return <div className="flex"><Typography className="flex justify-center bg-yellow-500 rounded pl-3 pr-3 text-sm font-semibold pt-1 pb-1 text-black w-3/4">Late Arrival</Typography></div>;
-                                                    default: return <div className="flex"><Typography className="flex justify-center bg-red-500 rounded pl-3 pr-3 text-sm font-semibold pt-1 pb-1 text-white w-3/4">Absent</Typography></div>;
+                                                    case "wfh": return <div className="flex"><Typography className="flex bg-gray-300 rounded pl-3 pr-3 text-sm pt-1 pb-1 pt-1 text-gray-600">Work from home</Typography></div>;
+                                                    case "wfo": return <div className="flex"><Typography className="flex bg-light-blue-100 rounded pl-3 pr-3 text-sm pt-1 pb-1 text-light-blue-600 pt-1 ">Work from office</Typography></div>;
+                                                    case "la": return <div className="flex"><Typography className="flex bg-yellow-100 rounded pl-3 pr-3 text-sm pt-1 pb-1 text-yellow-800">Late Arrival</Typography></div>;
+                                                    case "hd": return <div className="flex"><Typography className="flex bg-yellow-100 rounded pl-3 pr-3 text-sm pt-1 pb-1 text-yellow-800">Half-Day</Typography></div>;
+                                                    default: return <div className="flex"><Typography className="flex bg-red-100 rounded pl-3 pr-3 text-sm pt-1 pb-1 text-red-600">Absent</Typography></div>;
                                                 }
                                                 })()}
                                         </td>

@@ -5,13 +5,13 @@ import Datepicker from "../../components/datePicker/Datepicker";
 import { Pagination } from "../../components/pagination/pagination";
 import UpdateEmployee from "./empForms/updateEmployee";
 
-function EmployeeList() {
+function AdvanceRequestList() {
     return (
         <Card className=" w-full border-2 ">
             <CardHeader floated={false} shadow={false} className="rounded-none">
                 <div className="flex flex-col items-center justify-between gap-4  md:flex-row ">
                     <div className="text-2xl pt-6 pl-10 font-semibold">
-                    <p>Employee List</p>
+                    <p>Advance Request List</p>
                     </div>
 
                     <div className=" flex p-4 gap-6">
@@ -52,7 +52,7 @@ function EmployeeList() {
                     </thead>
                     <tbody>
                         {TABLE_ROWS.map(
-                            ({ img, name, email, job, org, phoneNumber, employeeId, online, date }, index) => {
+                            ({ img, name, email, designation, advance, phoneNumber, employeeId, online, date }, index) => {
                                 const isLast = index === TABLE_ROWS.length - 1;
                                 const classes = isLast
                                     ? "p-4"
@@ -81,7 +81,7 @@ function EmployeeList() {
                                                     color="blue-gray"
                                                     className="font-normal"
                                                 >
-                                                    {job}
+                                                    {employeeId}
                                                 </Typography>
                                                 
                                             </div>
@@ -92,43 +92,18 @@ function EmployeeList() {
                                                 color="blue-gray"
                                                 className="font-normal"
                                             >
-                                                {phoneNumber}
+                                                {advance}
                                             </Typography>
                                         </td>
+                                        
+                                        
+                                        
                                         <td className={classes}>
-                                            <Typography
-                                                variant="small"
-                                                color="blue-gray"
-                                                className="font-normal"
-                                            >
-                                                {employeeId}
-                                            </Typography>
-                                        </td>
-                                        <td className={classes}>
-                                            <div className="w-max">
-                                                <Chip
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    value={online ? "online" : "offline"}
-                                                    color={online ? "green" : "blue-gray"}
-                                                />
-                                            </div>
-                                        </td>
-                                        <td className={classes}>
-                                            <Typography
-                                                variant="small"
-                                                color="blue-gray"
-                                                className="font-normal"
-                                            >
-                                                {date}
-                                            </Typography>
-                                        </td>
-                                        <td className={classes}>
-                                            <Tooltip content="Edit User">
-                                                {/* <IconButton variant="text">
+                                            <Tooltip content="Remove User">
+                                                <IconButton variant="text">
                                                     <PencilIcon className="h-4 w-4" />
-                                                </IconButton> */}
-                                                <UpdateEmployee/>
+                                                </IconButton>
+                                                {/* <UpdateEmployee/> */}
                                             </Tooltip>
                                         </td>
                                     </tr>
@@ -149,7 +124,7 @@ function EmployeeList() {
         </Card>
     );
 }
-export default EmployeeList
+export default AdvanceRequestList
 
 
 // const TABS = [
@@ -167,15 +142,15 @@ export default EmployeeList
 //     },
 // ];
 
-const TABLE_HEAD = ["Employee Name", "Department", "Phone Number", "Employee ID", "Status", "Employed", "Edit"];
+const TABLE_HEAD = ["Employee Name", "Employee ID", "Advance", "Remove"];
 
 const TABLE_ROWS = [
     {
         img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg",
         name: "John Michael",
         email: "john@creative-tim.com",
-        job: "Manager",
-        org: "Organization",
+        designation: "Manager",
+        advance: "10,000",
         phoneNumber: "0714567890",
         employeeId: "#12345",
         online: true,
@@ -185,8 +160,8 @@ const TABLE_ROWS = [
         img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-2.jpg",
         name: "Alexa Liras",
         email: "alexa@creative-tim.com",
-        job: "Programator",
-        org: "Developer",
+        designation: "Programator",
+        advance: "25,000",
         phoneNumber: "0714567890",
         employeeId: "#12345",
         online: false,
@@ -196,8 +171,8 @@ const TABLE_ROWS = [
         img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-1.jpg",
         name: "Laurent Perrier",
         email: "laurent@creative-tim.com",
-        job: "Executive",
-        org: "Projects",
+        designation: "Executive",
+        advance: "100,000",
         phoneNumber: "0714567890",
         employeeId: "#12345",
         online: false,
@@ -207,8 +182,8 @@ const TABLE_ROWS = [
         img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-4.jpg",
         name: "Michael Levi",
         email: "michael@creative-tim.com",
-        job: "Programator",
-        org: "Developer",
+        designation: "Programator",
+        advance: "15,000",
         phoneNumber: "0714567890",
         employeeId: "#12345",
         online: true,
@@ -218,8 +193,8 @@ const TABLE_ROWS = [
         img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-5.jpg",
         name: "Richard Gran",
         email: "richard@creative-tim.com",
-        job: "Manager",
-        org: "Executive",
+        designation: "Manager",
+        advance: "80,000",
         phoneNumber: "0714567890",
         employeeId: "#12345",
         online: false,

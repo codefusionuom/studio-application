@@ -33,7 +33,7 @@ function EmployeePayment() {
                     <div className='w-80 pt-5 pb-5'></div>
                     </div>
                 </div>
-                <div className='flex justify-evenly'>
+                <div className='flex justify-evenly pt-5'>
                     <div className='pt-5'>
                     <p>Employee ID :</p>
                     <div className="w-80 pt-1 pb-10">
@@ -108,7 +108,7 @@ function EmployeePayment() {
                     
                     </div>
                 </div>
-                <div className='flex justify-evenly'>
+                <div className='flex justify-evenly pt-5'>
                     <div className='pt-5'>
                     <p>Basic Salary :</p>
                     <div className="w-80 pt-1 pb-10">
@@ -194,25 +194,25 @@ function EmployeePayment() {
                     <div className='w-80 pt-5 pb-5'></div>
                     </div>
                 </div>
-                <div className='flex justify-evenly'>
+                <div className='flex justify-evenly pt-5'>
                     <div className='pt-5'>
                     <p>  </p>
-                    <div className="w-80 pt-1 pb-10">
+                    <div className="w-80 pt-1 pb-5">
                     </div>
                     </div>
                     <div>
                     <p className='pt-5'>Cost</p>
-                    <div className="w-80 pt-1 pb-10">
+                    <div className="w-80 pt-1 pb-5">
                     </div>
                     </div>
                     <div className='pt-5'>
                     <p>Percentage</p>
-                    <div className="w-80 pt-1 pb-10">
+                    <div className="w-80 pt-1 pb-5">
                     </div>
                     </div>
                     <div className='pt-5'>
                     <p>Allowance</p>
-                    <div className="w-80 pt-1 pb-10">
+                    <div className="w-80 pt-1 pb-5">
                     </div>
                     </div>
                 </div>
@@ -422,8 +422,26 @@ function EmployeePayment() {
                     <div className='w-80 pt-5 pb-5'></div>
                     </div>
                 </div>
+                <div className='flex justify-evenly pt-5'>
+                    <div className='pt-5'>
+                    <p>  </p>
+                    <div className="w-80 pt-1 pb-10">
+                    </div>
+                    </div>
+                    <div>
+                    <p className='pt-5'>Cost</p>
+                    <div className="w-80 pt-1 pb-5">
+                    </div>
+                    </div>
+                    
+                    <div className='pt-5'>
+                    <p>Deduction</p>
+                    <div className="w-80 pt-1 pb-5">
+                    </div>
+                    </div>
+                </div>
                 
-                <div className='flex justify-evenly pt-10'>
+                <div className='flex justify-evenly'>
                     <div>
                         <p>Medical</p>
                         <div className="w-60  pt-1 pb-10">
@@ -540,11 +558,11 @@ function EmployeePayment() {
                         <Datepicker></Datepicker>
                     </div>
                     <div className='pt-10'>
-                    <p>Payment Period (From)</p>
+                    <p>Payment Period (To)</p>
                         <Datepicker></Datepicker>
                     </div>
                     <div className='pt-10'>
-                    <p>Payment Period (From)</p>
+                    <p>Payment Date</p>
                         <Datepicker></Datepicker>
                     </div>
                 </div>
@@ -552,10 +570,10 @@ function EmployeePayment() {
             </div>
             <div className='flex justify-evenly pb-10 pt-10'>
                 <div>
-                    <Button>Cancel</Button>
+                    <Button variant='outlined'>Cancel</Button>
                 </div>
                 <div>
-                <Button>Submit</Button>
+                <Button color='green'>Submit and view paysheet</Button>
                 </div>
             </div>
         </div>

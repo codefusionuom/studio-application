@@ -90,7 +90,7 @@ function Attendance() {
                 <div>
                 </div>
                 <div>
-                    <Button>Submit</Button>
+                    <Button color="green">Create</Button>
                 </div>
             </div>
 
