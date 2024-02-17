@@ -8,7 +8,7 @@ function CustomerManagerDashboard() {
     <div className='flex flex-col gap-12'>
       <div className='flex gap-10'>
         <NotificationCard title={"Customer Requests"} notificationNumber={4}/>
-        <Card title={"+   Add New Request"}/>
+        <Card title={"  Add New Request"}/>
         </div>
         <div className=''>
         <Payment/>

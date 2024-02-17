@@ -13,6 +13,7 @@ import CreateCustomerRequest from './pages/customerManager/CreateCustomerRequest
 import EventCalandar from './pages/customerManager/EventCalandar';
 import Customers from './pages/customerManager/Customers';
 import EventManager from './pages/eventManager';
+
 import StockManager from './pages/stockManager';
 import EmployeeManager from './pages/employeeManager';
 import SuperAdmin from './pages/superAdmin';

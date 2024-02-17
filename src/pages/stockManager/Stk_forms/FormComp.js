@@ -18,7 +18,7 @@ function FormComp({title}) {
  
   return (
     <>
-      <SmallCard className=" w-full" title={title} onClick={handleOpen} />
+      <SmallCard className=" cursor-pointer" title={title} onClick={handleOpen} />
 
       <Dialog
         // size=""

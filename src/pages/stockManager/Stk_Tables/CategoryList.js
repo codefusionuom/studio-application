@@ -21,7 +21,8 @@ function CategoryList({title}) {
  
   return (
     <>
-      <SmallCard className=" w-full cursor-pointer bg-yellow-700" title={title} onClick={handleOpen} />
+      {/* <SmallCard className="  cursor-pointer bg-yellow-700" title={title} onClick={handleOpen} /> */}
+      <Button className="  cursor-pointer bg-blue-700 text-white text-lg " onClick={handleOpen}>{title}</Button>
      
 
       <Dialog

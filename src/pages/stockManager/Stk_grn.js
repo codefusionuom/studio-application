@@ -35,7 +35,7 @@ function GrnStock() {
              
             )}
           </div>
-          <AddGrnForm title={'+ Create GRN'} onClose={closeForm} />
+          <AddGrnForm title={' Create GRN'} onClose={closeForm} />
                 <Card className='w-full rounded'>
                     <div className=" flex p-4 gap-6 items-center">
                         <Select size="lg" label="Select By: GRN Id" className="z-10">

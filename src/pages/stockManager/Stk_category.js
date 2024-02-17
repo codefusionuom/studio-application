@@ -27,7 +27,7 @@ function Category() {
             <div>
             <SmallCard
               className=" w-full cursor-pointer"
-              title="+ Create Category"
+              title=" Create Category"
               onClick={openForm}
             />
             {isFormVisible && (

@@ -12,6 +12,7 @@ import ReturnItemList from './Stk_Tables/ReturnItemList.js'
 
 import ChartStk from './Stk_components/chart.js'
 import { Button } from '@material-tailwind/react'
+import FormComp from './Stk_forms/FormComp.js'
 
 
 function DashboardSmgr() {
@@ -26,7 +27,46 @@ function DashboardSmgr() {
       setFormVisible(false);
     };
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col gap-5">
+
+
+
+      <div className=" flex flex-row justify-around gap-5">
+      {/* <Card title={"Stock Item Availability"} /> */}
+      <div>
+          {isFormVisible && (
+            <Modal onClose={closeForm}>
+              <AddStockItemForm onClose={closeForm} />
+            </Modal>
+          )}
+        </div>
+        <AddStockItemForm title={" Create Stock Item"} onClose={closeForm} />
+
+       
+        <div>
+          {isFormVisible && (
+            <Modal onClose={closeForm}>
+              <AddCategoryForm onClose={closeForm} />
+            </Modal>
+          )}
+        </div>
+        <AddCategoryForm title={" Add New Category"} onClose={closeForm} />
+
+        <div>
+          {isFormVisible && (
+            <Modal onClose={closeForm}>
+              <FormComp onClose={closeForm} />
+            </Modal>
+          )}
+        </div>
+        <FormComp title={" Add New Supplier"} onClose={closeForm} />
+        
+
+      </div>
+
+
+      <ChartStk/>
+
       <div className=" flex flex-row justify-between">
         <div>
           {isFormVisible && (
@@ -52,33 +92,15 @@ function DashboardSmgr() {
           )}
           <ReturnItemList title={"Return Item List"} onClose={closeForm} />
         </div>
+
+        
+  
       </div>
+      
+     
 
 
-      <div className=" flex flex-row justify-between">
-      <Card title={"Stock Item Availability"} />
-      <div>
-          {isFormVisible && (
-            <Modal onClose={closeForm}>
-              <AddStockItemForm onClose={closeForm} />
-            </Modal>
-          )}
-        </div>
-        <AddStockItemForm title={"+ Create Stock Item"} onClose={closeForm} />
-
-       
-        <div>
-          {isFormVisible && (
-            <Modal onClose={closeForm}>
-              <AddCategoryForm onClose={closeForm} />
-            </Modal>
-          )}
-        </div>
-        <AddCategoryForm title={"+ Add New Category"} onClose={closeForm} />
-
-      </div>
-
-      <ChartStk/>
+     
 
       
   

@@ -36,7 +36,7 @@ function Suppliers() {
              
             )}
           </div>
-          <FormComp title={'+ Add supplier'} onClose={closeForm} />
+          <FormComp title={' Add supplier'} onClose={closeForm} />
 
           <Card className="w-full rounded">
             <div className=" flex p-4 gap-6 items-center">

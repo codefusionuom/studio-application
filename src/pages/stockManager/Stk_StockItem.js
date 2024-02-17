@@ -34,7 +34,7 @@ function StockItem() {
              
             )}
           </div>
-          <AddStockItemForm title={'+ Create Stock Item'} onClose={closeForm} />
+          <AddStockItemForm title={' Create Stock Item'} onClose={closeForm} />
                 
                 <Card className='w-full rounded'>
                     <div className=" flex p-4 gap-6 items-center">

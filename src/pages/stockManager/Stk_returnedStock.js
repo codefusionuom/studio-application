@@ -33,7 +33,7 @@ function ReturnedStock() {
              
             )}
           </div>
-          <AddReturnStockForm title={'+  Return Stock Item'} onClose={closeForm} />
+          <AddReturnStockForm title={'  Return Stock Item'} onClose={closeForm} />
 
 
 

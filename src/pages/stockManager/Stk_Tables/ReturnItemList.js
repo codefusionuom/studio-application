@@ -20,8 +20,7 @@ function ReturnItemList({title}) {
  
   return (
     <>
-      <SmallCard className=" w-full cursor-pointer" title={title} onClick={handleOpen} />
-
+      <Button className="  cursor-pointer bg-blue-700 text-white text-lg text " onClick={handleOpen}>{title}</Button>
       <Dialog
        
         open={open}

@@ -20,7 +20,7 @@ function AddStockItemForm({title}) {
  
   return (
     <>
-      <SmallCard className=" w-full cursor-pointer" title={title} onClick={handleOpen} />
+      <SmallCard className=" cursor-pointer" title={title} onClick={handleOpen} />
 
       <Dialog
        

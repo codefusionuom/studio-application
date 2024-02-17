@@ -34,7 +34,7 @@ function SMpayment() {
              
             )}
           </div>
-          <AddPaymentForm title={'+ Add payment'} onClose={closeForm} />
+          <AddPaymentForm title={' Add payment'} onClose={closeForm} />
 
              <Card className='w-full rounded'>
                     <div className=" flex p-4 gap-6 items-center">
