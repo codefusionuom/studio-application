@@ -1,9 +1,9 @@
 import React from 'react'
 import { Input } from "@material-tailwind/react";
-import Datepicker from '../../components/datePicker/Datepicker';
+import Datepicker from '../../../components/datePicker/Datepicker';
 import { Button } from "@material-tailwind/react";
-import ViewSalary from './payment/viewSalartbutton';
-import DashCard2 from './dashButtonCard copy';
+// import { Select, Option } from '@material-tailwind/react';
+import { Select, Option, } from "@material-tailwind/react";
 
 
 
@@ -12,20 +12,10 @@ import DashCard2 from './dashButtonCard copy';
 
 
 
-function EmployeePayment() {
+
+function SalaryList() {
     return (
         <div>
-
-            <div>
-            <div className='flex align-left pb-5'>
-                {/* <DashCard title2={"Register Employee"} title3={"Add Personal Here"}/> */}
-                {/* <RegisterEmployee></RegisterEmployee> */}
-                {/* <DashCard2 title2={"Advance Request"} title3={"Salary Advance"}/> */}
-                {/* <AdvanceSalary></AdvanceSalary> */}
-                <ViewSalary></ViewSalary>
-                {/* <DashCard2 title2={""} title3={""}/> */}
-            </div>
-            </div>
 
 
 
@@ -35,12 +25,33 @@ function EmployeePayment() {
         <div className='bg-cl-4 rounded'>
 
 
+
+            <div>
+            <div className='flex justify-evenly pt-5'>
+                    <div className='mt-'>
+                    <p>Select Employee ID :</p>
+                    <div className="w-80 pt-1 pb-10">
+                        <Select size="lg" label="Select Employee ID" className="z-10">
+                            <Option>#12345</Option>
+                            <Option>#64532</Option>
+                            <Option>#84521</Option>
+                            
+                        </Select>
+                    </div>
+                    </div>
+                    <div>
+                    <p className='pt-5'></p>
+                    <div className="w-80 pt-1 pb-10">
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
             
-
-
-
-
-
             <div className='PersonalInfo pt-10'>
                 
                 <div className=''>
@@ -58,13 +69,13 @@ function EmployeePayment() {
                     <div className='pt-5'>
                     <p>Employee ID :</p>
                     <div className="w-80 pt-1 pb-10">
-                        <Input label="Username" />
+                        <Input disabled label="Select Employee ID" />
                     </div>
                     </div>
                     <div>
                     <p className='pt-5'>Name :</p>
                     <div className="w-80 pt-1 pb-10">
-                        <Input label="Name" />
+                        <Input disabled label="Select Employee ID" />
                     </div>
                     </div>
                 </div>
@@ -72,13 +83,13 @@ function EmployeePayment() {
                     <div>
                         <p>Designation :</p>
                         <div className="w-80  pt-1 pb-10">
-                            <Input label="Designation" />
+                            <Input disabled label="Select Employee ID" />
                         </div>
                     </div>
                     <div>
                         <p>Employee Status :</p>
                         <div className="w-80 pt-1 pb-10">
-                            <Input label="Employee Status" />
+                            <Input disabled label="Select Employee ID" />
                         </div>
                     </div>
                 </div>
@@ -86,13 +97,13 @@ function EmployeePayment() {
                     <div>
                         <p>Department :</p>
                         <div className="w-80 pt-1 pb-1-">
-                            <Input label="Department" />
+                            <Input disabled label="Select Employee ID" />
                         </div>
                     </div>
                     <div>
                         <p>Bank :</p>
                         <div className="w-80 pt-1 pb-10">
-                            <Input label="Bank" />
+                            <Input disabled label="Select Employee ID" />
                         </div>
                     </div>
                 </div>
@@ -100,13 +111,13 @@ function EmployeePayment() {
                     <div>
                         <p>EPF Number :</p>
                         <div className="w-80 pt-1 pb-10">
-                            <Input label="EPF Number" />
+                            <Input disabled label="Select Employee ID" />
                         </div>
                     </div>
                     <div>
                         <p>Account Number :</p>
                         <div className="w-80 pt-1 pb-10">
-                            <Input label="Account Number" />
+                            <Input disabled label="Select Employee ID" />
                         </div>
                     </div>
                 </div>
@@ -133,13 +144,13 @@ function EmployeePayment() {
                     <div className='pt-5'>
                     <p>Basic Salary :</p>
                     <div className="w-80 pt-1 pb-10">
-                        <Input label="Basic Salary" />
+                        <Input disabled label="Select Employee ID" />
                     </div>
                     </div>
                     <div>
                     <p className='pt-5'>Basic Rate :</p>
                     <div className="w-80 pt-1 pb-10">
-                        <Input label="Basic Rate" />
+                        <Input disabled label="Select Employee ID" />
                     </div>
                     </div>
                 </div>
@@ -147,13 +158,13 @@ function EmployeePayment() {
                     <div>
                         <p>Over Time Hours :</p>
                         <div className="w-80  pt-1 pb-10">
-                            <Input label="Over Time Hours" />
+                            <Input disabled label="Select Employee ID" />
                         </div>
                     </div>
                     <div>
                         <p>Hours Worked :</p>
                         <div className="w-80 pt-1 pb-10">
-                            <Input label="Hours Worked" />
+                            <Input disabled label="Select Employee ID" />
                         </div>
                     </div>
                 </div>
@@ -161,13 +172,13 @@ function EmployeePayment() {
                     <div>
                         <p>Overtime Hours :</p>
                         <div className="w-80 pt-1 pb-1-">
-                            <Input label="Overtime Hours" />
+                            <Input disabled label="Select Employee ID" />
                         </div>
                     </div>
                     <div>
                         <p>Overtime Amount :</p>
                         <div className="w-80 pt-1 pb-10">
-                            <Input label="Overtime Amount" />
+                            <Input disabled label="Select Employee ID" />
                         </div>
                     </div>
                 </div>
@@ -175,13 +186,13 @@ function EmployeePayment() {
                     <div>
                         <p>Double Overtime Hours :</p>
                         <div className="w-80 pt-1 pb-10">
-                            <Input label="Double Overtime Hours" />
+                            <Input disabled label="Select Employee ID" />
                         </div>
                     </div>
                     <div>
                         <p>Double Overtime Amount :</p>
                         <div className="w-80 pt-1 pb-10">
-                            <Input label="Double Overtime Amount" />
+                            <Input disabled label="Select Employee ID" />
                         </div>
                     </div>
                 </div>
@@ -189,7 +200,7 @@ function EmployeePayment() {
                     <div>
                         <p>Bonus :</p>
                         <div className="w-80 pt-1 pb-10">
-                            <Input label="Bonus" />
+                            <Input disabled label="Select Employee ID" />
                         </div>
                     </div>
                     <div>
@@ -594,7 +605,6 @@ function EmployeePayment() {
                     <Button variant='outlined'>Cancel</Button>
                 </div>
                 <div>
-                <Button color='green'>Submit and view paysheet</Button>
                 </div>
             </div>
         </div>
@@ -621,4 +631,4 @@ function EmployeePayment() {
         </div>
     )
 }
-export default EmployeePayment
+export default SalaryList

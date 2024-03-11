@@ -7,6 +7,7 @@ import DashTableCard from './dashTableCard.js'
 import RegisterEmployee from './empForms/registerEmployees.jsx'
 import DashCard2 from './dashButtonCard copy.js'
 import AdvanceSalary from './empForms/advanceSalary.jsx'
+import { QuickView1 } from './dashQuick copy.js'
 
 
 
@@ -16,7 +17,8 @@ function EmployeeManagerDashboard() {
     return (
         <div>
             <div>
-                <QuickView/>
+                {/* <QuickView/> */}
+                <QuickView1></QuickView1>
             </div>
 
             <div className='flex justify-evenly pb-5'>
