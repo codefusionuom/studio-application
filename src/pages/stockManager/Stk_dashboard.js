@@ -12,7 +12,7 @@ import ReturnItemList from './Stk_Tables/ReturnItemList.js'
 
 import ChartStk from './Stk_components/chart.js'
 import { Button } from '@material-tailwind/react'
-import FormComp from './Stk_forms/FormComp.js'
+import AddSupplier from './Stk_forms/AddSupplier.js'
 
 
 function DashboardSmgr() {
@@ -55,11 +55,11 @@ function DashboardSmgr() {
         <div>
           {isFormVisible && (
             <Modal onClose={closeForm}>
-              <FormComp onClose={closeForm} />
+              <AddSupplier onClose={closeForm} />
             </Modal>
           )}
         </div>
-        <FormComp title={" Add New Supplier"} onClose={closeForm} />
+        <AddSupplier title={" Add New Supplier"} onClose={closeForm} />
         
 
       </div>

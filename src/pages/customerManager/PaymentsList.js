@@ -71,20 +71,20 @@ function PaymentList() {
                         </Button>
                     </div>
 
-                    {/* <div className=" flex p-4 gap-6"> */}
-                    {/* <Select size="lg" label="Select By: Event Id" className="z-10">
+                    {/* <div className=" flex p-4 gap-6">
+                    <Select size="lg" label="Select By: Event Id" className="z-10">
                             <Option>Material Tailwind HTML</Option>
                             <Option>Material Tailwind React</Option>
                             <Option>Material Tailwind Vue</Option>
                             <Option>Material Tailwind Angular</Option>
                             <Option>Material Tailwind Svelte</Option>
-                        </Select> */}
+                        </Select>
 
-                    {/* <Input size="lg"
+                    <Input size="lg"
                             label="Search"
                             icon={<MagnifyingGlassIcon className="h-5 w-5" />}
-                        /> */}
-                    {/* </div> */}
+                        /> 
+                    </div> */}
                 </div>
             </CardHeader>
             <CardBody className="overflow-scroll px-0">

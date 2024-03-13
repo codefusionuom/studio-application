@@ -25,7 +25,7 @@ import GrnStock from './pages/stockManager/Stk_grn';
 import StockItem from './pages/stockManager/Stk_StockItem';
 import Suppliers from './pages/stockManager/Stk_supplier';
 import ReturnedStock from './pages/stockManager/Stk_returnedStock';
-import FormComp from './pages/stockManager/Stk_forms/FormComp';
+import AddSupplier from './pages/stockManager/Stk_forms/AddSupplier';
 
 
 

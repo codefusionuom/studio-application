@@ -119,7 +119,7 @@ import Datepicker from "../../../components/datePicker/Datepicker";
             <Typography variant="h4" color="blue-gray" className=" text-center" >
             Stock Summary
             </Typography>
-            <Input label="Select Month" size="sm" type="date" />
+            <Input label="Select Month" size="md" type="date" />
           
             </div>
         
