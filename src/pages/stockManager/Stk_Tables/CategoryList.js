@@ -168,6 +168,7 @@ function CategoryList({ title }) {
       await axios.delete(`http://localhost:5000/stockManager/category/${id}`);
       setCategories(categories.filter((category) => category.id !== id));
       console.log("Successfully deleted category");
+      alert("Successfully deleted category");
     } catch (error) {
       console.error("Error deleting category:", error);
     }

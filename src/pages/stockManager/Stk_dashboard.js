@@ -31,7 +31,7 @@ function DashboardSmgr() {
 
 
 
-      <div className=" flex flex-row justify-around gap-5">
+      <div className=" flex flex-row gap-5">
       {/* <Card title={"Stock Item Availability"} /> */}
       <div>
           {isFormVisible && (
@@ -52,31 +52,22 @@ function DashboardSmgr() {
         </div>
         <AddCategoryForm title={" Add New Category"} onClose={closeForm} />
 
-        <div>
+        {/* <div>
           {isFormVisible && (
             <Modal onClose={closeForm}>
               <AddSupplier onClose={closeForm} />
             </Modal>
           )}
         </div>
-        <AddSupplier title={" Add New Supplier"} onClose={closeForm} />
+        <AddSupplier title={" Add New Supplier"} onClose={closeForm} /> */}
         
 
-      </div>
+     
 
 
-      <ChartStk/>
 
-      <div className=" flex flex-row justify-between">
-        <div>
-          {isFormVisible && (
-            <Modal onClose={closeForm}>
-              <CategoryList onClose={closeForm} />
-            </Modal>
-          )}
-          <CategoryList title={"Category List"} onClose={closeForm} />
-        </div>
-        <div>
+      <div className=" flex flex-row mt-5 gap-5">
+      <div className=''>
           {isFormVisible && (
             <Modal onClose={closeForm}>
               <StockItemList onClose={closeForm} />
@@ -84,18 +75,30 @@ function DashboardSmgr() {
           )}
           <StockItemList title={"Stock Item List"} onClose={closeForm} />
         </div>
-        <div>
+        <div className='ml-12'>
+          {isFormVisible && (
+            <Modal onClose={closeForm}>
+              <CategoryList onClose={closeForm} />
+            </Modal>
+          )}
+          <CategoryList title={"Category List    "} onClose={closeForm} />
+        </div>
+       
+        {/* <div>
           {isFormVisible && (
             <Modal onClose={closeForm}>
               <ReturnItemList onClose={closeForm} />
             </Modal>
           )}
           <ReturnItemList title={"Return Item List"} onClose={closeForm} />
-        </div>
+        </div> */}
 
         
   
       </div>
+      </div>
+      
+      <ChartStk/>
       
      
 

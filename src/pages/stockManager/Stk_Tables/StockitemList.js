@@ -207,7 +207,7 @@ function StockItemList({ title }) {
 
   return (
     <>
-      <Button className="cursor-pointer bg-blue-700 text-white text-lg" onClick={handleOpen}>
+      <Button className="cursor-pointer bg-blue-700 text-white text-lg ml-12" onClick={handleOpen}>
         {title}
       </Button>
 
