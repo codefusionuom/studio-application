@@ -6,7 +6,7 @@ import {
     Select,
     MagnifyingGlassIcon,
     Option,
-    Input
+    Input,Button, CardFooter
   } from "@material-tailwind/react";
   import Chart from "react-apexcharts";
   import { Square3Stack3DIcon } from "@heroicons/react/24/outline";
@@ -21,7 +21,7 @@ import Datepicker from "../../../components/datePicker/Datepicker";
     height: 240,
     series: [
       {
-        name: "Sales",
+        name: "Stock",
         data: [50, 40, 300, 320, 500, 350, 200, 230, 500],
       },
     ],
@@ -119,7 +119,8 @@ import Datepicker from "../../../components/datePicker/Datepicker";
             <Typography variant="h4" color="blue-gray" className=" text-center" >
             Stock Summary
             </Typography>
-            <Input label="Select Month" size="sm" type="date" />
+            <Input label="Select Month" size="md" type="date" />
+          
             </div>
         
                              
@@ -131,6 +132,15 @@ import Datepicker from "../../../components/datePicker/Datepicker";
         <CardBody className="px-2 pb-0">
           <Chart {...chartConfig} />
         </CardBody>
+        <CardFooter >
+          <div className=" flex float-right">
+          <Button className=' bg-blue-900 w-fit '>Summary Report</Button>
+          </div>
+        
+        </CardFooter>
+
+        
+         
       </Card>
     );
   }

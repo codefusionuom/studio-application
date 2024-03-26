@@ -7,7 +7,8 @@ import { Pagination } from "../../components/pagination/pagination";
 import SmallCard from '../../components/cards/card';
 
 import Modal from './Stk_components/Modal';
-import FormComp from './Stk_components/FormComp';
+import AddSupplier from './Stk_forms/AddSupplier';
+import AddCategoryForm from './Stk_forms/AddCategoryForm';
 
 function Category() {
     const [isFormVisible, setFormVisible] = useState(false);
@@ -27,12 +28,12 @@ function Category() {
             <div>
             <SmallCard
               className=" w-full cursor-pointer"
-              title="+ Create Category"
+              title=" Create Category"
               onClick={openForm}
             />
             {isFormVisible && (
               <Modal onClose={closeForm}>
-                <FormComp onClose={closeForm} />
+                <AddCategoryForm onClose={closeForm} />
               </Modal>
             )}
           </div>

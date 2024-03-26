@@ -18,7 +18,7 @@ function AddGrnForm({title}) {
  
   return (
     <>
-      <SmallCard className=" w-full cursor-pointer" title={title} onClick={handleOpen} />
+      <SmallCard className=" cursor-pointer" title={title} onClick={handleOpen} />
 
       <Dialog
        
@@ -40,7 +40,7 @@ function AddGrnForm({title}) {
             </Typography>
 
             
-            <div className=" flex flex-row justify-between ">
+            <div className=" flex flex-row justify-evenly ">
               <div className=" flex flex-col justify-between">
                 <Typography className="mb-2" variant="h6">
                   Supplier ID:
@@ -58,7 +58,7 @@ function AddGrnForm({title}) {
             </div>
 
 
-            <div className=" flex flex-row justify-between ">
+            <div className=" flex flex-row justify-evenly ">
               <div className=" flex flex-col justify-between">
                 <Typography className="mb-2" variant="h6">
                   Date:

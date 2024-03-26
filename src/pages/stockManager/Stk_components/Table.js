@@ -3,7 +3,7 @@ import { PencilIcon, UserPlusIcon } from "@heroicons/react/24/solid";
 import { Card, CardHeader, Input, Typography, Button, CardBody, Chip, CardFooter, Tabs, TabsHeader, Tab, Avatar, IconButton, Tooltip, Select, Option, } from "@material-tailwind/react";
 import Datepicker from '../../../components/datePicker/Datepicker';
 import { Pagination } from '../../../components/pagination/pagination';
-import {TABLE_HEAD,TABLE_ROWS} from '../Stk_components/data'
+import {TABLE_HEAD,TABLE_ROWS} from './data'
 
 function Table({title,rowList,headerList}) {
   return (
@@ -112,7 +112,7 @@ function Table({title,rowList,headerList}) {
                                                
                                                
                                                
-                                                <td className={classes}>
+                                                {/* <td className={classes}>
                                                     <div className="w-max">
                                                         <Chip
                                                             variant="ghost"
@@ -121,7 +121,7 @@ function Table({title,rowList,headerList}) {
                                                             color={online ? "green" : "gray"}
                                                         />
                                                     </div>
-                                                </td>
+                                                </td> */}
                                                 <td className={classes}>
                                                     <Typography
                                                         variant="small"

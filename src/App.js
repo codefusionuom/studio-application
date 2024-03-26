@@ -13,6 +13,7 @@ import CreateCustomerRequest from './pages/customerManager/CreateCustomerRequest
 import EventCalandar from './pages/customerManager/EventCalandar';
 import Customers from './pages/customerManager/Customers';
 import EventManager from './pages/eventManager';
+
 import StockManager from './pages/stockManager';
 import EmployeeManager from './pages/employeeManager';
 import SuperAdmin from './pages/superAdmin';
@@ -24,7 +25,7 @@ import GrnStock from './pages/stockManager/Stk_grn';
 import StockItem from './pages/stockManager/Stk_StockItem';
 import Suppliers from './pages/stockManager/Stk_supplier';
 import ReturnedStock from './pages/stockManager/Stk_returnedStock';
-import FormComp from './pages/stockManager/Stk_components/FormComp';
+import AddSupplier from './pages/stockManager/Stk_forms/AddSupplier';
 
 
 
@@ -76,8 +77,7 @@ function App() {
         <Route index={false}  path="/stockManager/returnedStock" element={<ReturnedStock />} />
         <Route index={false}  path="/stockManager/stockItem" element={<StockItem />} />
         <Route index={false}  path="/stockManager/supplier" element={<Suppliers />} />
-        <Route index={false}  path="/stockManager/form" element={<FormComp />} />
-      </Route>
+        </Route>
     
       <Route path="/employeeManager" element={<EmployeeManager />}>
         <Route  path="/employeeManager/" element={<EmployeeManagerDashboard />} />

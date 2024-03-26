@@ -12,6 +12,7 @@ import ReturnItemList from './Stk_Tables/ReturnItemList.js'
 
 import ChartStk from './Stk_components/chart.js'
 import { Button } from '@material-tailwind/react'
+import AddSupplier from './Stk_forms/AddSupplier.js'
 
 
 function DashboardSmgr() {
@@ -26,37 +27,12 @@ function DashboardSmgr() {
       setFormVisible(false);
     };
   return (
-    <div className="flex flex-col gap-10">
-      <div className=" flex flex-row justify-between">
-        <div>
-          {isFormVisible && (
-            <Modal onClose={closeForm}>
-              <CategoryList onClose={closeForm} />
-            </Modal>
-          )}
-          <CategoryList title={"Category List"} onClose={closeForm} />
-        </div>
-        <div>
-          {isFormVisible && (
-            <Modal onClose={closeForm}>
-              <StockItemList onClose={closeForm} />
-            </Modal>
-          )}
-          <StockItemList title={"Stock Item List"} onClose={closeForm} />
-        </div>
-        <div>
-          {isFormVisible && (
-            <Modal onClose={closeForm}>
-              <ReturnItemList onClose={closeForm} />
-            </Modal>
-          )}
-          <ReturnItemList title={"Return Item List"} onClose={closeForm} />
-        </div>
-      </div>
+    <div className="flex flex-col gap-5">
 
 
-      <div className=" flex flex-row justify-between">
-      <Card title={"Stock Item Availability"} />
+
+      <div className=" flex flex-row gap-5">
+      {/* <Card title={"Stock Item Availability"} /> */}
       <div>
           {isFormVisible && (
             <Modal onClose={closeForm}>
@@ -64,7 +40,7 @@ function DashboardSmgr() {
             </Modal>
           )}
         </div>
-        <AddStockItemForm title={"+ Create Stock Item"} onClose={closeForm} />
+        <AddStockItemForm title={" Create Stock Item"} onClose={closeForm} />
 
        
         <div>
@@ -74,14 +50,62 @@ function DashboardSmgr() {
             </Modal>
           )}
         </div>
-        <AddCategoryForm title={"+ Add New Category"} onClose={closeForm} />
+        <AddCategoryForm title={" Add New Category"} onClose={closeForm} />
 
+        {/* <div>
+          {isFormVisible && (
+            <Modal onClose={closeForm}>
+              <AddSupplier onClose={closeForm} />
+            </Modal>
+          )}
+        </div>
+        <AddSupplier title={" Add New Supplier"} onClose={closeForm} /> */}
+        
+
+     
+
+
+
+      <div className=" flex flex-row mt-5 gap-5">
+      <div className=''>
+          {isFormVisible && (
+            <Modal onClose={closeForm}>
+              <StockItemList onClose={closeForm} />
+            </Modal>
+          )}
+          <StockItemList title={"Stock Item List"} onClose={closeForm} />
+        </div>
+        <div className='ml-12'>
+          {isFormVisible && (
+            <Modal onClose={closeForm}>
+              <CategoryList onClose={closeForm} />
+            </Modal>
+          )}
+          <CategoryList title={"Category List    "} onClose={closeForm} />
+        </div>
+       
+        {/* <div>
+          {isFormVisible && (
+            <Modal onClose={closeForm}>
+              <ReturnItemList onClose={closeForm} />
+            </Modal>
+          )}
+          <ReturnItemList title={"Return Item List"} onClose={closeForm} />
+        </div> */}
+
+        
+  
       </div>
-
+      </div>
+      
       <ChartStk/>
+      
+     
 
-      <Button>Summary Report</Button>
-         
+
+     
+
+      
   
 
 
