@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import {
   Button,
   Dialog,
@@ -14,9 +14,68 @@ import SmallCard from "../../../components/cards/card";
 import DashCard from "../dashButtonCard";
 import { PencilIcon } from "@heroicons/react/24/solid";
 import { IconButton } from "@material-tailwind/react";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 
  
-function UpdateEmployee() {
+function UpdateEmployee({idx}) {
+
+
+    // const empId=idx
+
+
+    // const {id} = useParams()
+    const [empName,setEmpName] = useState()
+    const [empId=idx,setEmpId] = useState()
+    const [id=idx,setid] = useState()
+    const [empAdd,setEmpAdd] = useState()
+    const [empType,setEmpType] = useState()
+    const [empSalary,setEmpSalary] = useState()
+    const [empDepartment,setEmpDepartment] = useState()
+    const [empNumber,setEmpNumber] = useState()
+    const navigate = useNavigate()
+
+    
+
+
+    useEffect(()=>{
+      axios.get('http://localhost:5000/employeeManager/getEmployeeByid/'+id)
+      .then(result => {console.log(result)
+          setEmpName(result.data.empName)
+          setEmpAdd(result.data.empAdd)
+          setEmpDepartment(result.data.empDepartment)
+          setEmpType(result.data.empType)
+          setEmpNumber(result.data.empNumber)
+          setEmpSalary(result.data.empSalary)
+      })
+      .catch(err => console.log(err))
+  },[])
+
+
+
+    const Update = (e) => {
+    e.preventDefault()
+    axios.put("http://localhost:5000/employeeManager/updateEmployee/"+id, {empAdd,empDepartment,empName,empNumber,empSalary,empType})
+    .then(result => {
+        console.log(result)
+        window.location.reload()
+        // navigate('/')
+    })
+    .catch(err => console.log(err))
+    }
+
+
+    const handleDelete = (e) => {
+      axios.delete('http://localhost:5000/employeeManager/deleteEmployee/'+id)
+      .then(res => {console.log(res)
+          window.location.reload()
+        })
+      .catch(err => console.log(err))
+
+    }
+
+
+
 
     
   const [open, setOpen] = React.useState(false);
@@ -68,13 +127,13 @@ function UpdateEmployee() {
                 <Typography className="mb-2" variant="h6">
                   Employee ID :
                 </Typography>
-                <Input label="" size="lg"/>
+                <Input label="" size="lg" value={empId} />
               </div>
               <div className="flex flex-col justify-between">
                 <Typography className="mb-2" variant="h6">
                   Employee Name :
                 </Typography>
-                <Input label="" size="lg"/>
+                <Input label="" size="lg" value={empName} onChange={(e) => setEmpName(e.target.value)}/>
               </div>
               
 
@@ -87,7 +146,7 @@ function UpdateEmployee() {
                 Address :
                 </Typography>
 
-                <Input label="" size="lg"/>
+                <Input label="" size="lg" value={empAdd} onChange={(e) => setEmpAdd(e.target.value)}/>
               </div>
             
               <div className=" flex flex-col justify-between">
@@ -95,7 +154,7 @@ function UpdateEmployee() {
                   Type:
                 </Typography>
 
-                <Input label="  " size="lg"/>
+                <Input label="  " size="lg" value={empType} onChange={(e) => setEmpType(e.target.value)}/>
               </div>
              
 
@@ -110,14 +169,14 @@ function UpdateEmployee() {
                   Basic Salary:
                 </Typography>
 
-                <Input label="" size="lg"/>
+                <Input label="" size="lg" value={empSalary} onChange={(e) => setEmpSalary(e.target.value)}/>
               </div>
               <div className=" flex flex-col justify-between">
                 <Typography className="mb-2" variant="h6">
                   Add Deoartment :
                 </Typography>
 
-                <Input label=" " size="lg" />
+                <Input label=" " size="lg"  value={empDepartment} onChange={(e) => setEmpDepartment(e.target.value)}/>
               </div>
 
 
@@ -131,7 +190,7 @@ function UpdateEmployee() {
                   Contact number :
                 </Typography>
 
-                <Input label="" size="lg" />
+                <Input label="" size="lg"  value={empNumber} onChange={(e) => setEmpNumber(e.target.value)}/>
               </div>
               <div className=" flex flex-col justify-between">
                 <Typography className="mb-2" variant="h6">
@@ -153,10 +212,10 @@ function UpdateEmployee() {
               <Button className=" bg-yellow-800" onClick={handleOpen}>
                 Clear
               </Button>
-              <Button className=" bg-red-500" onClick={handleOpen}>
+              <Button className=" bg-red-500" onClick={handleDelete}>
                 Delete
               </Button>
-              <Button className=" bg-green-600" onClick={handleOpen}>
+              <Button className=" bg-green-600" onClick={Update}>
                 Update
               </Button>
             </div>

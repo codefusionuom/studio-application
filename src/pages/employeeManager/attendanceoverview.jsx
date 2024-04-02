@@ -5,8 +5,45 @@ import Datepicker from "../../components/datePicker/Datepicker";
 import { Pagination } from "../../components/pagination/pagination";
 import { RadioHorizontalList } from "./attendanceradio";
 import ViewAttendance from "./attendance/viewattendancebutton";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 function AttendanceOverviewList() {
+
+
+    const [users, setUser] = useState([])
+    const [users1, setUser1] = useState([])
+    const [empName,setEmpName] = useState()
+    const [id,setid] = useState()
+
+    useEffect(()=>{
+            
+
+        axios.get('http://localhost:5000/employeeManager/getAttendance')
+        .then(result => setUser(result.data))
+        .catch(err => console.log(err))
+
+        // axios.get('http://localhost:5000/employeeManager/getEmployees')
+        // .then(result => {console.log(result)
+        //     setUser1(result.data)
+        //     console.log("rrrr");
+        //     console.log(users1);
+        // })
+        //     .catch(err => console.log(err))
+            console.log(users);
+
+
+
+
+
+
+    },[])
+
+
+
+ 
+
+
     return (
         <Card className=" w-full border-2 ">
             <CardHeader floated={false} shadow={false} className="rounded-none">
@@ -49,7 +86,7 @@ function AttendanceOverviewList() {
                         </tr>
                     </thead>
                     <tbody>
-                        {TABLE_ROWS.map(
+                        {/* {TABLE_ROWS.map(
                             ({ day, name, chin, chout, interval, whours, employeeId, status, date }, index) => {
                                 const isLast = index === TABLE_ROWS.length - 1;
                                 const classes = isLast
@@ -120,23 +157,106 @@ function AttendanceOverviewList() {
                                         </td>
                                         <td className="p-4 border-b border-blue-gray-50 w-2/12">
                                         {(() => {
-                                            switch(status) {
-                                                    // case "wfh": return <div className="flex"><Chip color="gray" value="Work from home" /></div>;
+                                            switch(status) { */}
+                                                    {/* // case "wfh": return <div className="flex"><Chip color="gray" value="Work from home" /></div>;
                                                     // case "wfo": return <div className="flex"><Chip color="blue" value="Work from office" /></div>;
                                                     // case "la": return <div className="flex"><Chip color="yellow" value="Late arrival" /></div>;
                                                     // default: return <div className="flex"><Chip color="red" value="Absent" /></div>
-                                                    case "wfh": return <div className="flex"><Typography className="flex bg-gray-300 rounded pl-3 pr-3 text-sm pt-1 pb-1 pt-1 text-gray-600">Work from home</Typography></div>;
-                                                    case "wfo": return <div className="flex"><Typography className="flex bg-light-blue-100 rounded pl-3 pr-3 text-sm pt-1 pb-1 text-light-blue-600 pt-1 ">Work from office</Typography></div>;
-                                                    case "la": return <div className="flex"><Typography className="flex bg-yellow-100 rounded pl-3 pr-3 text-sm pt-1 pb-1 text-yellow-800">Late Arrival</Typography></div>;
-                                                    case "hd": return <div className="flex"><Typography className="flex bg-yellow-100 rounded pl-3 pr-3 text-sm pt-1 pb-1 text-yellow-800">Half-Day</Typography></div>;
-                                                    default: return <div className="flex"><Typography className="flex bg-red-100 rounded pl-3 pr-3 text-sm pt-1 pb-1 text-red-600">Absent</Typography></div>;
-                                                }
-                                                })()}
+                        //                             case "wfh": return <div className="flex"><Typography className="flex bg-gray-300 rounded pl-3 pr-3 text-sm pt-1 pb-1 pt-1 text-gray-600">Work from home</Typography></div>;
+                        //                             case "wfo": return <div className="flex"><Typography className="flex bg-light-blue-100 rounded pl-3 pr-3 text-sm pt-1 pb-1 text-light-blue-600 pt-1 ">Work from office</Typography></div>;
+                        //                             case "la": return <div className="flex"><Typography className="flex bg-yellow-100 rounded pl-3 pr-3 text-sm pt-1 pb-1 text-yellow-800">Late Arrival</Typography></div>;
+                        //                             case "hd": return <div className="flex"><Typography className="flex bg-yellow-100 rounded pl-3 pr-3 text-sm pt-1 pb-1 text-yellow-800">Half-Day</Typography></div>;
+                        //                             default: return <div className="flex"><Typography className="flex bg-red-100 rounded pl-3 pr-3 text-sm pt-1 pb-1 text-red-600">Absent</Typography></div>;
+                        //                         }
+                        //                         })()}
+                        //                 </td>
+                        //             </tr>
+                        //         );
+                        //     },
+                        // )} */}
+
+
+
+
+                        {(users).map((user) => {
+
+                                return (
+                                    <tr key={id}>
+                                        <td >
+                                            <div className="flex items-center gap-3">
+                                                <div className="flex flex-col">
+                                                    <Typography
+                                                        variant="small"
+                                                        color="blue-gray"
+                                                        className="font-normal"
+                                                    >
+                                                        {user.date}
+                                                    </Typography>
+                                                </div>
+                                            </div>
                                         </td>
+                                        
+                                        <td>
+                                            
+                                        
+                                            <div className="flex flex-col">
+                                                <Typography
+                                                    variant="small"
+                                                    color="blue-gray"
+                                                    className="font-normal"
+                                                >
+                                                    {user.employee.empName}
+                                                </Typography>
+                                            </div>
+                                                
+                                        </td>
+                                          
+                                        <td >
+                                            <Typography
+                                                variant="small"
+                                                color="blue-gray"
+                                                className="font-normal"
+                                            >
+                                                {user.dayType}
+                                            </Typography>
+                                        </td>
+                                        <td >
+                                            <Typography
+                                                variant="small"
+                                                color="blue-gray"
+                                                className="font-normal"
+                                            >
+                                                {user.checkIn}
+                                            </Typography>
+                                        </td>
+                                        <td >
+                                        <Typography
+                                                variant="small"
+                                                color="blue-gray"
+                                                className="font-normal"
+                                            >
+                                                {user.checkOut}
+                                            </Typography>
+                                        </td>
+                                        <td >
+                                            <Typography
+                                                variant="small"
+                                                color="blue-gray"
+                                                className="font-normal"
+                                            >
+                                                {user.leaveType}
+                                            </Typography>
+                                        </td>
+                                        
                                     </tr>
                                 );
                             },
                         )}
+
+
+
+
+
                     </tbody>
                 </table>
             </CardBody>
@@ -169,7 +289,7 @@ export default AttendanceOverviewList
 //     },
 // ];
 
-const TABLE_HEAD = ["Date", "Day", "Employee ID", "Check-In", "Check-out", "Work hours", "Status"];
+const TABLE_HEAD = ["Date", "Employee Name", "Day Type", "Check-In", "Check-out", "Leave Type"];
 
 const TABLE_ROWS = [
     {

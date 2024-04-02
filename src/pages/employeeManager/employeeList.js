@@ -4,8 +4,34 @@ import { Card, CardHeader, Input, Typography, Button, CardBody, Chip, CardFooter
 import Datepicker from "../../components/datePicker/Datepicker";
 import { Pagination } from "../../components/pagination/pagination";
 import UpdateEmployee from "./empForms/updateEmployee";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
 function EmployeeList() {
+
+
+
+
+    const [users, setUser] = useState([])
+
+    useEffect(()=>{
+        axios.get('http://localhost:5000/employeeManager/getEmployees')
+        .then(result => setUser(result.data))
+        .catch(err => console.log(err))
+        console.log(users)
+    },[])
+    
+
+
+    
+
+
+
+
+
+
+
     return (
         <Card className=" w-full border-2 ">
             <CardHeader floated={false} shadow={false} className="rounded-none">
@@ -51,15 +77,15 @@ function EmployeeList() {
                         </tr>
                     </thead>
                     <tbody>
-                        {TABLE_ROWS.map(
-                            ({ img, name, email, job, org, phoneNumber, employeeId, online, date }, index) => {
+                        {/* {TABLE_ROWS.map(
+                            ({ empId, empName, empAdd, empType, empSalart, empNumber, empDepartment, online, date }, index) => {
                                 const isLast = index === TABLE_ROWS.length - 1;
                                 const classes = isLast
                                     ? "p-4"
                                     : "p-4 border-b border-blue-gray-50";
 
                                 return (
-                                    <tr key={name}>
+                                    <tr key={empId}>
                                         <td className={classes}>
                                             <div className="flex items-center gap-3">
                                                 <div className="flex flex-col pl-8">
@@ -68,7 +94,7 @@ function EmployeeList() {
                                                         color="blue-gray"
                                                         className="font-normal"
                                                     >
-                                                        {name}
+                                                        {empId}
                                                     </Typography>
                                                     
                                                 </div>
@@ -81,7 +107,7 @@ function EmployeeList() {
                                                     color="blue-gray"
                                                     className="font-normal"
                                                 >
-                                                    {job}
+                                                    {empName}
                                                 </Typography>
                                                 
                                             </div>
@@ -92,7 +118,7 @@ function EmployeeList() {
                                                 color="blue-gray"
                                                 className="font-normal"
                                             >
-                                                {phoneNumber}
+                                                {empDepartment}
                                             </Typography>
                                         </td>
                                         <td className={classes}>
@@ -101,7 +127,7 @@ function EmployeeList() {
                                                 color="blue-gray"
                                                 className="font-normal"
                                             >
-                                                {employeeId}
+                                                {empNumber}
                                             </Typography>
                                         </td>
                                         <td className={classes}>
@@ -120,21 +146,121 @@ function EmployeeList() {
                                                 color="blue-gray"
                                                 className="font-normal"
                                             >
-                                                {date}
+                                                {empType}
                                             </Typography>
                                         </td>
                                         <td className={classes}>
+                                            <Tooltip content="Edit User"> */}
+                                                {/* <IconButton variant="text">
+                                                    <PencilIcon className="h-4 w-4" />
+                                                </IconButton> */}
+                                                {/* <UpdateEmployee/>
+                                            </Tooltip>
+                                        </td>
+                                    </tr>
+                                );
+                            },
+                        )} */}
+
+
+
+                        {users.map((user) => {
+                                // const isLast = index === TABLE_ROWS.length - 1;
+                                // const classes = isLast
+                                //     ? "p-4"
+                                //     : "p-4 border-b border-blue-gray-50";
+
+                                    // const classes ="p-4 border-b border-blue-gray-50";
+
+                                return (
+                                    <tr key={user.empId}>
+                                        <td >
+                                            <div className="flex items-center gap-3">
+                                                <div className="flex flex-col pl-8">
+                                                    <Typography
+                                                        variant="small"
+                                                        color="blue-gray"
+                                                        className="font-normal"
+                                                    >
+                                                        {user.empId}
+                                                    </Typography>
+                                                    
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td >
+                                            <div className="flex flex-col">
+                                                <Typography
+                                                    variant="small"
+                                                    color="blue-gray"
+                                                    className="font-normal"
+                                                >
+                                                    {user.empName}
+                                                </Typography>
+                                                
+                                            </div>
+                                        </td>
+                                        <td >
+                                            <Typography
+                                                variant="small"
+                                                color="blue-gray"
+                                                className="font-normal"
+                                            >
+                                                {user.empDepartment}
+                                            </Typography>
+                                        </td>
+                                        <td >
+                                            <Typography
+                                                variant="small"
+                                                color="blue-gray"
+                                                className="font-normal"
+                                            >
+                                                {user.empNumber}
+                                            </Typography>
+                                        </td>
+                                        <td >
+                                            <div className="w-max">
+                                                {/* <Chip
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    value={online ? "online" : "offline"}
+                                                    color={online ? "green" : "blue-gray"}
+                                                /> */}
+                                            </div>
+                                        </td>
+                                        <td >
+                                            <Typography
+                                                variant="small"
+                                                color="blue-gray"
+                                                className="font-normal"
+                                            >
+                                                {user.empType}
+                                            </Typography>
+                                        </td>
+                                        <td >
                                             <Tooltip content="Edit User">
                                                 {/* <IconButton variant="text">
                                                     <PencilIcon className="h-4 w-4" />
                                                 </IconButton> */}
-                                                <UpdateEmployee/>
+                                                {/* <button onClick={sendid}>
+
+                                                </button> */}
+                                                {/* <button>{user.empId}</button> */}
+                                                <UpdateEmployee idx={user.id}/>
+                                                
+                                                
                                             </Tooltip>
                                         </td>
                                     </tr>
                                 );
                             },
                         )}
+
+
+
+
+
+
                     </tbody>
                 </table>
             </CardBody>
