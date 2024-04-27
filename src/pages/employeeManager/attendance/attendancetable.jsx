@@ -1,9 +1,6 @@
-import { MagnifyingGlassIcon, ChevronUpDownIcon, } from "@heroicons/react/24/outline";
-import { PencilIcon, UserPlusIcon } from "@heroicons/react/24/solid";
 import { Card, CardHeader, Input, Typography, Button, CardBody, Chip, CardFooter, Tabs, TabsHeader, Tab, Avatar, IconButton, Tooltip, Select, Option, } from "@material-tailwind/react";
 import { Pagination } from "../../../components/pagination/pagination";
 import { RadioHorizontalList } from "../attendanceradio";
-import Datepicker from "../../../components/datePicker/Datepicker";
 
 function AttendanceList() {
     return (
@@ -11,7 +8,7 @@ function AttendanceList() {
             <CardHeader floated={false} shadow={false} className="rounded-none">
                 <div className="flex flex-col items-center justify-between gap-4  md:flex-row ">
                     <div className="text-2xl pt-6 pl-10 font-semibold">
-                    <p>Attendance Overview</p>
+                        <p>Attendance Overview</p>
                     </div>
                     <div>
                         <RadioHorizontalList></RadioHorizontalList>
@@ -20,7 +17,6 @@ function AttendanceList() {
                         <div className="w-72">
                             <Input label="Date" disabled />
                         </div>
-
                         <Button color="blue">View Attendance</Button>
                     </div>
                 </div>
@@ -98,7 +94,7 @@ function AttendanceList() {
                                             </Typography>
                                         </td>
                                         <td className={classes}>
-                                        <Typography
+                                            <Typography
                                                 variant="small"
                                                 color="blue-gray"
                                                 className="font-normal"
@@ -116,8 +112,8 @@ function AttendanceList() {
                                             </Typography>
                                         </td>
                                         <td className="p-4 border-b border-blue-gray-50 w-2/12">
-                                        {(() => {
-                                            switch(status) {
+                                            {(() => {
+                                                switch (status) {
                                                     // case "wfh": return <div className="flex"><Chip color="gray" value="Work from home" /></div>;
                                                     // case "wfo": return <div className="flex"><Chip color="blue" value="Work from office" /></div>;
                                                     // case "la": return <div className="flex"><Chip color="yellow" value="Late arrival" /></div>;
@@ -128,7 +124,7 @@ function AttendanceList() {
                                                     case "hd": return <div className="flex"><Typography className="flex bg-yellow-100 rounded pl-3 pr-3 text-sm pt-1 pb-1 text-yellow-800">Half-Day</Typography></div>;
                                                     default: return <div className="flex"><Typography className="flex bg-red-100 rounded pl-3 pr-3 text-sm pt-1 pb-1 text-red-600">Absent</Typography></div>;
                                                 }
-                                                })()}
+                                            })()}
                                         </td>
                                     </tr>
                                 );
@@ -139,10 +135,10 @@ function AttendanceList() {
             </CardBody>
             <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
                 <Typography>
-233 results
+                    233 results
                 </Typography>
                 <div className="flex gap-2">
-                   <Pagination />
+                    <Pagination />
                 </div>
             </CardFooter>
         </Card>
