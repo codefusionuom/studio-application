@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import dayGridPlugin from "@fullcalendar/daygrid";
 import {
   Card,
   CardHeader,
@@ -7,8 +9,23 @@ import {
   Chip,
   IconButton,
   Tooltip,
+  Spinner,
 } from "@material-tailwind/react";
+import FullCalendar from "@fullcalendar/react";
 const EventManagerEventCalendar = () => {
+  const [oneDayEvents , setOneDayEvents] = useState([]);
+  let [eventList, setEventList] = React.useState([]);
+
+  const getOneDayEvents = () =>{
+    axios.get('http://localhost:5000/eventManager/getOnedayEvents').then( (response) => {
+      console.log("oneday events ",response.data.oneDayEvents);
+      setOneDayEvents(response.data.oneDayEvents);
+    })
+  }
+  useEffect(() => {
+    getOneDayEvents();
+  }, [])
+  
   const TABS = [
     {
       label: "All",
@@ -26,56 +43,39 @@ const EventManagerEventCalendar = () => {
 
   const TABLE_HEAD = [
     "Customer Name",
-    "Time-slot",
-    "Phone Number",
+    "Date assigned" ,//"Time-slot",
+   "No of Employees",// "Phone Number",
     "Edit",
     "Status",
   ];
 
-  const TABLE_ROWS = [
-    {
-      name: "John Michael",
-      timeSlot: "8.00  AM",
-      phoneNo: "045 2287456",
-      org: "Organization",
-      online: true,
-      date: "23/04/18",
-    },
-    {
-      name: "Alexa Liras",
-      timeSlot: "8.00  AM",
-      phoneNo: "045 2287456",
-      org: "Developer",
-      online: false,
-      date: "23/04/18",
-    },
-    {
-      name: "Laurent Perrier",
-      timeSlot: "8.00  AM",
-      phoneNo: "045 2287456",
-      org: "Projects",
-      online: false,
-      date: "19/09/17",
-    },
-    {
-      name: "Michael Levi",
-      timeSlot: "8.00  AM",
-      phoneNo: "045 2287456",
-      org: "Developer",
-      online: true,
-      date: "24/12/08",
-    },
-    {
-      name: "Richard Gran",
-      timeSlot: "8.00  AM",
-      phoneNo: "045 2287456",
-      org: "Executive",
-      online: false,
-      date: "04/10/21",
-    },
-  ];
+
   return (
     <div>
+
+
+
+
+
+
+<Card className="p-8">
+<FullCalendar className=""
+        defaultView="dayGridMonth"
+        themeSystem="Simplex"
+        header={{
+          left: "prev,next",
+          center: "title",
+          right: "dayGridMonth,timeGridWeek,timeGridDay",
+        }}
+        plugins={[dayGridPlugin]}
+        events={events}
+        displayEventEnd="true"
+        contentHeight= "900px"
+        borderColor="red"
+
+        eventColor={"red"}
+      />
+      </Card>
       <Card className="h-full w-full p-4 pt-2">
         <CardHeader
           floated={false}
@@ -111,18 +111,28 @@ const EventManagerEventCalendar = () => {
               </tr>
             </thead>
             <tbody>
-              {TABLE_ROWS.map(
+              {oneDayEvents.length == 0 ? (
+                <tr>
+                  <td colSpan={TABLE_HEAD.length} className="text-center">
+                    <div className="flex justify-center items-center h-full p-10">
+                      <Spinner color="blue" className="h-12 w-12 mx-auto" />
+                    </div>
+                  </td>
+                </tr>
+              ) : oneDayEvents.map(
                 (
-                  { img, name, timeSlot, phoneNo, org, online, date },
+                  oneDayEvent,
                   index
                 ) => {
-                  const isLast = index === TABLE_ROWS.length - 1;
+                  const isLast = index === oneDayEvents.length - 1;
                   const classes = isLast
                     ? "p-4"
                     : "p-4 border-b border-blue-gray-50";
 
                   return (
-                    <tr key={name}>
+                    <tr 
+                    // key={name}
+                    >
                       <td className={classes}>
                         <div className="flex items-center gap-3">
                           <div className="flex flex-col">
@@ -131,7 +141,7 @@ const EventManagerEventCalendar = () => {
                               color="blue-gray"
                               className="font-normal"
                             >
-                              {name}
+                              {oneDayEvent.serviceType}
                             </Typography>
                           </div>
                         </div>
@@ -143,7 +153,7 @@ const EventManagerEventCalendar = () => {
                             color="blue-gray"
                             className="font-normal"
                           >
-                            {timeSlot}
+                            {oneDayEvent.date.slice(0, 10)}
                           </Typography>
                         </div>
                       </td>
@@ -154,7 +164,9 @@ const EventManagerEventCalendar = () => {
                           color="blue-gray"
                           className="font-normal"
                         >
-                          {phoneNo}
+                          {/* {phoneNo} */}
+
+                          6
                         </Typography>
                       </td>
                       <td className={classes}>
@@ -182,16 +194,17 @@ const EventManagerEventCalendar = () => {
                           <Chip
                             className="w-[80px] "
                             style={{
-                              color: "black",
+                              // color: "black",
                               display: "flex",
                               justifyContent: "center",
-                              background: online ? "#ffb300" : "#1dc560",
+                              // background: online ? "#ffb300" : "#1dc560",
                             }}
-                            variant="filled"
+                            variant="gradient"
                             size="sm"
-                            value={online ? "Active" : "offline"}
-                            color={online ? "yellow" : "blue-gray"}
+                            value={oneDayEvent.status ==  "Active" ? "Active" : "Offline"}
+                            color={oneDayEvent.status ==  "Active" ? "yellow" : "gray"}
                             fontWeight="bold"
+                            fontColor="white"
                           />
                         </div>
                       </td>
@@ -208,3 +221,54 @@ const EventManagerEventCalendar = () => {
 };
 
 export default EventManagerEventCalendar;
+
+
+
+const events = [
+  { title: "All Day Event", start: getDate("YEAR-MONTH-01") },
+  {
+    title: "Long Event",
+    start: getDate("YEAR-MONTH-07"),
+    end: getDate("YEAR-MONTH-10"),
+    backgroundColor: "pink",
+    borderColor:"pink"
+  },
+  {
+    groupId: "999",
+    title: "Repeating Event",
+    start: getDate("YEAR-MONTH-09T16:00:00+00:00"),
+    
+  },
+  // {
+  //   groupId: "999",
+  //   title: "Repeating Event",
+  //   start: getDate("YEAR-MONTH-16T16:00:00+00:00")
+  // },
+  {
+    title: "Conference",
+    start: getDate("YEAR-MONTH-17"),
+    end: getDate("YEAR-MONTH-19")
+  },
+  {
+    title: "Meeting",
+    start: getDate("YEAR-MONTH-18T10:30:00+00:00"),
+    end: getDate("YEAR-MONTH-18T12:30:00+00:00")
+  },
+  // { title: "Lunch", start: getDate("YEAR-MONTH-18T12:00:00+00:00") },
+  // { title: "Birthday Party", start: getDate("YEAR-MONTH-19T07:00:00+00:00") },
+  // { title: "Meeting", start: getDate("YEAR-MONTH-18T14:30:00+00:00") },
+  // { title: "Happy Hour", start: getDate("YEAR-MONTH-18T17:30:00+00:00") },
+  //{ title: "Dinner", start: getDate("YEAR-MONTH-18T20:00:00+00:00") }
+];
+
+function getDate(dayString) {
+  const today = new Date();
+  const year = today.getFullYear().toString();
+  let month = (today.getMonth() + 1).toString();
+
+  if (month.length === 1) {
+    month = "0" + month;
+  }
+
+  return dayString.replace("YEAR", year).replace("MONTH", month);
+}
