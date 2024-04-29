@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardHeader,
@@ -12,9 +12,9 @@ import {
   Option,
   Select,
 } from "@material-tailwind/react";
-import CardEvent from "./cardEvent";
+import CardEvent from "../../components/eventManager/cardEvent";
 import { useNavigate } from "react-router-dom";
-
+import axios from "axios";
 
 const TABS = [
   {
@@ -36,93 +36,63 @@ const TABLE_HEAD = [
   "Service Type",
   "Phone Number",
   "Email",
-  "City",
-  "Status",
+  // "City",
+  // "Status",
 ];
 
-const TABLE_ROWS = [
-  {
-    name: "John Michael",
-    timeSlot: "8.00  AM",
-    phoneNo: "045 2287456",
-    email: "marvin@gmail.com",
-    org: "Organization",
-    online: true,
-    date: "23/04/18",
-  },
-  {
-    name: "Alexa Liras",
-    timeSlot: "8.00  AM",
-    phoneNo: "045 2287456",
-    email: "marvin@gmail.com",
-    org: "Developer",
-    online: false,
-    date: "23/04/18",
-  },
-  {
-    name: "Laurent Perrier",
-    timeSlot: "8.00  AM",
-    phoneNo: "045 2287456",
-    email: "marvin@gmail.com",
-    org: "Projects",
-    online: false,
-    date: "19/09/17",
-  },
-  {
-    name: "Michael Levi",
-    timeSlot: "8.00  AM",
-    phoneNo: "045 2287456",
-    email: "marvin@gmail.com",
-    org: "Developer",
-    online: true,
-    date: "24/12/08",
-  },
-  {
-    name: "Richard Gran",
-    timeSlot: "8.00  AM",
-    phoneNo: "045 2287456",
-    email: "marvin@gmail.com",
-    org: "Executive",
-    online: false,
-    date: "04/10/21",
-  },
-];
 const EventRequests = () => {
+  const [custormerRequestList, setCustormerRequestList] = useState([]);
+  const [custormerRequestCount, setCustormerRequestCount] = useState("");
   const navigate = useNavigate();
- 
-  return (
-    <div className="">
-      <div className="flex space-x-4 justify-between">
-        <CardEvent
-        onTap={() =>{
-          navigate('/eventManager/createEvent')
-        }}
-          title={
-            <>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-8 h-8 inline-block mr-2  font-bold"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 4.5v15m7.5-7.5h-15"
-                />
-              </svg>
-              Create Event
-            </>
-          }
-        />
 
-        {/* <div className="flex justify-center items-center w-[314px] h-[140px] bg-cl-4 rounded font-lato text-xl text-cl-1">
-         <Typography variant="h5" color="blue-gray" className="text-3xl">
-              
-              </Typography>
-    </div> */}
+  useEffect(() => {
+    getEventRequests();
+  }, []);
+
+  const getEventRequests = async (req, res) => {
+    await axios
+      .post("http://localhost:5000/customerManager/customerRequest", {
+        status: "completed",
+        active: 1,
+        limit: 8,
+      })
+      .then((response) => {
+        console.log(response.data);
+        setCustormerRequestList(response.data.rows);
+        setCustormerRequestCount(response.data.count);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  return (
+    <>
+      <div className="flex space-x-4 justify-between"  color="red">
+        <CardEvent width="[324px]" height="[180px]"
+          onTap={() => {
+            navigate("/eventManager/createEvent");
+          }}  
+        >
+          <div className="flex justify-center items-center">
+          
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-8 h-8 inline-block mr-2  font-bold"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 4.5v15m7.5-7.5h-15"
+            />
+          </svg>
+          <span> Create Event</span>
+          </div>
+        </CardEvent>
+
         <div className="flex justify-center items-center w-[628px] h-[140px] bg-cl-4 rounded font-lato text-xl text-cl-1 ml-8 p-4">
           <div className="w-[261px] h-[46px]">
             <Input
@@ -145,20 +115,23 @@ const EventRequests = () => {
               label="Search"
             />
           </div>
-          <div className="relativew-[207.42px] h-[46px] ml-5">
-          <Select label="Select Version" className="relative h-11 w-full min-w-[200px]"> 
-        <Option>Material Tailwind HTML</Option>
-        <Option>Material Tailwind React</Option>
-        <Option>Material Tailwind Vue</Option>
-        <Option>Material Tailwind Angular</Option>
-        <Option>Material Tailwind Svelte</Option>
-      </Select>
-          </div>
+          {/* <div className="relativew-[207.42px] h-[46px] ml-5">
+            <Select
+              label="Select Version"
+              className="relative h-11 w-full min-w-[200px]"
+            >
+              <Option>Material Tailwind HTML</Option>
+              <Option>Material Tailwind React</Option>
+              <Option>Material Tailwind Vue</Option>
+              <Option>Material Tailwind Angular</Option>
+              <Option>Material Tailwind Svelte</Option>
+            </Select>
+          </div> */}
         </div>
       </div>
 
       <div className="h-8"></div>
-      <Card className="h-full w-full p-4 pt-0.5">
+      <Card className="h-2/3 w-full p-4 pt-0.5 ">
         <CardHeader
           floated={false}
           shadow={false}
@@ -193,70 +166,60 @@ const EventRequests = () => {
               </tr>
             </thead>
             <tbody>
-              {TABLE_ROWS.map(
-                ({ name, timeSlot, phoneNo, org, online, email }, index) => {
-                  const isLast = index === TABLE_ROWS.length - 1;
-                  const classes = isLast
-                    ? "p-4"
-                    : "p-4 border-b border-blue-gray-50";
+              {custormerRequestList.map((request, index) => {
+                const isLast = index === custormerRequestList.length - 1;
+                const classes = isLast
+                  ? "p-4"
+                  : "p-4 border-b border-blue-gray-50";
 
-                  return (
-                    <tr key={name}>
-                      <td className={classes}>
-                        <div className="flex items-center gap-3">
-                          <div className="flex flex-col">
-                            <Typography
-                              variant="small"
-                              color="black"
-                              className="font-normal"
-                            >
-                              {name}
-                            </Typography>
-                          </div>
-                        </div>
-                      </td>
-                      <td className={classes}>
+                return (
+                  <tr key={request.id}>
+                    <td className={classes}>
+                      <div className="flex items-center gap-3">
                         <div className="flex flex-col">
                           <Typography
                             variant="small"
-                            color="blue-gray"
+                            color="black"
                             className="font-normal"
                           >
-                            {timeSlot}
+                            {request.firstname + " " + request.lastname}
                           </Typography>
                         </div>
-                      </td>
-
-                      <td className={classes}>
+                      </div>
+                    </td>
+                    <td className={classes}>
+                      <div className="flex flex-col">
                         <Typography
                           variant="small"
                           color="blue-gray"
                           className="font-normal"
                         >
-                          {phoneNo}
+                          {request.serviceType}
                         </Typography>
-                      </td>
+                      </div>
+                    </td>
 
-                      <td className={classes}>
-                        <Typography
-                          variant="small"
-                          color="blue-gray"
-                          className="font-normal"
-                        >
-                          {email}
-                        </Typography>
-                      </td>
+                    <td className={classes}>
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
+                      >
+                        {request.mobilePhone}
+                      </Typography>
+                    </td>
 
-                      <td className={classes}>
-                        <Typography
-                          variant="small"
-                          color="blue-gray"
-                          className="font-normal"
-                        >
-                          {phoneNo}
-                        </Typography>
-                      </td>
-                      {/* <td className={classes}>
+                    <td className={classes}>
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
+                      >
+                        {request.email}
+                      </Typography>
+                    </td>
+
+                    {/* <td className={classes}>
                         <Tooltip content="Edit User">
                           <IconButton variant="text">
                             <svg
@@ -276,7 +239,7 @@ const EventRequests = () => {
                           </IconButton>
                         </Tooltip>
                       </td> */}
-                      <td className={classes}>
+                    {/* <td className={classes}>
                         <div className="w-[80px]  flex items-center font-bold">
                           <Chip
                             className="w-[80px] "
@@ -295,21 +258,20 @@ const EventRequests = () => {
                             variant="filled"
                             size="sm"
                             value={online ? "Active" : "offline"}
-                            color={online ? "yellow" : "btn-success"}
+                            color={online ? "yellow" : "green"}
                             fontWeight="bold"
                           />
                         </div>
-                      </td>
-                    </tr>
-                  );
-                }
-              )}
+                      </td> */}
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </CardBody>
         <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4 pt-0">
           <Typography variant="small" color="#b5b7c0" className="font-normal">
-            Showing data 1 to 6 of 25 entries
+            Showing data of {custormerRequestCount} entries
           </Typography>
           <div className="flex items-center justify-end border-t border-blue-gray-50 p-4">
             <Button variant="outlined" size="sm">
@@ -319,7 +281,7 @@ const EventRequests = () => {
                 viewBox="0 0 24 24"
                 stroke-width="1.5"
                 stroke="currentColor"
-                class="w-6 h-6"
+                className="w-6 h-6"
               >
                 <path
                   stroke-linecap="round"
@@ -351,9 +313,7 @@ const EventRequests = () => {
                 10
               </IconButton>
             </div>
-            <Button variant="outlined" size="sm" onClick={()=>{
-               
-            }}>
+            <Button variant="outlined" size="sm" onClick={() => {}}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -368,12 +328,11 @@ const EventRequests = () => {
                   d="m8.25 4.5 7.5 7.5-7.5 7.5"
                 />
               </svg>
-              
             </Button>
           </div>
         </CardFooter>
       </Card>
-    </div>
+    </>
   );
 };
 
