@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 
 const SearchForm = ({
+  // title,
   eventList,
   eventTypes,
   resultDisplayfield1,
@@ -217,7 +218,7 @@ const SearchForm = ({
                   </h6>
                   <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700">
                     {/* {result.customerId} */}
-                    {resultDisplayfield2=="date" ? result[resultDisplayfield2Val].slice(0, 10) : "tttttttttt"}
+                    {resultDisplayfield2=="date" ? result[resultDisplayfield2Val].slice(0, 10) :  result[resultDisplayfield2Val]}
                     {/* {resultDisplayfield2 == "date" ? result["ggggggggg"] : result["yyyyyyyyyyyyyfgg"]} */}
                   </p>
                 </div>

@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {
   Card,
   CardBody,
@@ -25,6 +28,7 @@ import CardEvent from "../../components/eventManager/cardEvent";
 import axios from "axios";
 import SearchForm from "../../components/eventManager/searchForm";
 import ErrorDisplayWindow from "../../components/eventManager/errorDisplayWindow";
+import EmployeeSearchForm from "../../components/eventManager/employeeSearchForm";
 
 const CreateEvent2 = () => {
   //for modal handling
@@ -127,16 +131,32 @@ const CreateEvent2 = () => {
                 <Typography
                   variant="h5"
                   color="blue-gray"
-                  className="mb-2 text-2xl font-normal "
+                  className="mb-2 text-2xl font-bold "
                 >
-                  Task - Editing
+                  Create Task
                 </Typography>
               </CardBody>
             </Card>
             <form className="">
               <tr></tr>
-              <div className="flex space-x-2 justify-evenly w-11/12">
-                <div className="flex flex-col gap-6 mb-1 p-4 w-2/6">
+              <tr className="flex space-x-2 justify-evenly w-11/12 mt-8">
+                <div className="flex flex-col gap-8 mb-1 p-4 w-2/6">
+                <Typography
+                        variant="h6"
+                        color="blue-gray"
+                        className="-mb-3"
+                        placeholder="Task Name"
+                      >
+                        Task Name
+                      </Typography>
+                      <Input
+                        size="lg"
+                        placeholder="name@mail.com"
+                        className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                        labelProps={{
+                          className: "before:content-none after:content-none",
+                        }}
+                      />
                   <h6 className="block -mb-3 font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-blue-gray-900">
                     Event ID
                   </h6>
@@ -250,18 +270,6 @@ const CreateEvent2 = () => {
                   </div>
 
                   <h6 className="block -mb-3 font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-blue-gray-900">
-                    Employee
-                  </h6>
-                  <div className="  w-full min-w-[200px]">
-                    <Select label="Select Version" className=" h-11">
-                      <Option>Material Tailwind HTML</Option>
-                      <Option>Material Tailwind React</Option>
-                      <Option>Material Tailwind Vue</Option>
-                      <Option>Material Tailwind Angular</Option>
-                      <Option>Material Tailwind Svelte</Option>
-                    </Select>
-                  </div>
-                  <h6 className="block -mb-3 font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-blue-gray-900">
                     Status
                   </h6>
                   <div className="  w-full min-w-[200px]">
@@ -273,103 +281,7 @@ const CreateEvent2 = () => {
                       <Option>Material Tailwind Svelte</Option>
                     </Select>
                   </div>
-                </div>
-
-                <div className="w-1/2 flex justify-end">
-                  <DayPicker
-                    mode="single"
-                    selected={date}
-                    onSelect={setDate}  
-                    className="border-0  max-w-lg " // Increase width here
-                    classNames={{
-                      caption:
-                        "flex justify-center py-4 mb-6 relative items-center text-lg", // Increase padding and font size
-                      caption_label: "text-lg font-medium text-gray-900", // Increase font size
-                      nav: "flex items-center",
-                      nav_button:
-                        "h-8 w-8 bg-transparent hover:bg-blue-gray-50 p-2 rounded-md transition-colors duration-300", // Increase size
-                      nav_button_previous: "absolute left-2",
-                      nav_button_next: "absolute right-2",
-                      table: "w-full border-collapse",
-                      head_row: "flex font-medium text-gray-900",
-                      head_cell: "m-1 w-12 font-normal text-lg", // Increase size and font
-                      row: "flex w-full mt-3", // Increase margin top
-                      cell: "text-gray-600 rounded-md h-12 w-12 text-center text-lg p-0 m-1 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-gray-900/20 [&:has([aria-selected].day-outside)]:text-white [&:has([aria-selected])]:bg-gray-900/50 first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20", // Increase size and font
-                      day: "h-12 w-12 p-0 font-normal", // Increase size
-                      day_range_end: "day-range-end",
-                      day_selected:
-                        "rounded-md bg-gray-900 text-white hover:bg-gray-900 hover:text-white focus:bg-gray-900 focus:text-white",
-                      day_today: "rounded-md bg-gray-200 text-gray-900",
-                      day_outside:
-                        "day-outside text-gray-500 opacity-50 aria-selected:bg-gray-500 aria-selected:text-gray-900 aria-selected:bg-opacity-10",
-                      day_disabled: "text-gray-500 opacity-50",
-                      day_hidden: "invisible",
-                    }}
-                    components={{
-                      IconLeft: ({ ...props }) => (
-                        <ChevronLeftIcon
-                          {...props}
-                          className="h-6 w-6 stroke-2"
-                        /> // Increase size
-                      ),
-                      IconRight: ({ ...props }) => (
-                        <ChevronRightIcon
-                          {...props}
-                          className="h-6 w-6 stroke-2"
-                        /> // Increase size
-                      ),
-                    }}
-                  />
-                </div>
-              </div>
-
-              {/* <Card className="mt-6 w-full bg-gray-400 bold">
-                <CardBody>
-                  <Typography
-                    variant="h5"
-                    color="blue-gray"
-                    className="mb-2 text-2xl font-normal "
-                  >
-                    Task - Photography
-                  </Typography>
-                </CardBody>
-              </Card> */}
-
-              <Card color="transparent" shadow={false} className="w-full">
-                <div className="flex     space-x-2 w-11/12">
-                  {/* <form className="mt-8 mb-2  w-full  flex space-x-2 justify-between"> */}
-
-                  <div className="mt-8 mb-2  w-full  flex space-x-2 justify-between">
-                    <div className="flex flex-col gap-6 mb-1 p-4 w-2/6">
-                      {/* <h6 className="block -mb-3 font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-blue-gray-900">
-                        Event ID
-                      </h6> */}
-                      <div className="relative h-11 w-full min-w-[200px]">
-                        {/* <Select
-                          label="Select Version"
-                          className="relative h-11 w-full min-w-[200px]"
-                          onClick={console.log("Workingg")}
-                          // selected={(element) =>
-                          //   {
-                          //     // console.log("Workingg")
-                          //    if (element) {
-                          //   //    const selectedValue = element.props.value;
-                          //   //    console.log('Selected Value:', selectedValue);
-                          //   //  return element.props.name;
-                          //   // console.log("Workingg")
-                          //    }
-
-                          //  }}
-                        >
-                          <Option>Material Tailwind HTML</Option>
-                          <Option>Material Tailwind React</Option>
-                          <Option>Material Tailwind Vue</Option>
-                          <Option>Material Tailwind Angular</Option>
-                          <Option>Material Tailwind Svelte</Option>
-                        </Select> */}
-                      </div>
-
-                      <h6 className="block -mb-3 font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-blue-gray-900">
+                  <h6 className="block -mb-3 font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-blue-gray-900">
                         Employee
                       </h6>
                       <div className="relative h-11 w-full min-w-[200px]">
@@ -393,12 +305,14 @@ const CreateEvent2 = () => {
                           handler={handleOpenEmpModal}
                           maxWidth="2xl"
                           width="full"
+                          size="xl"
                         >
                           <DialogHeader className="flex justify-center">
-                            Select an Event
+                            Add Employees
                           </DialogHeader>
                           <DialogBody>
-                            <SearchForm
+                            <EmployeeSearchForm
+                            title = "Add Employees"
                               eventList={employeeList}
                               eventTypes={eventTypes}
                               resultDisplayfield1={"empName"}
@@ -449,16 +363,16 @@ const CreateEvent2 = () => {
                               </tr>
                             </table>
 
-                            {/* <div className="flex space-x-4">
-                      <div>
+                              {/* <div className="flex space-x-4">
+                        <div>
+                          
                         
-                      
-                      </div>
-                      <div>
-                      
+                        </div>
+                        <div>
                         
-                      </div>
-                    </div> */}
+                          
+                        </div>
+                        </div> */}
                           </DialogBody>
                           <DialogFooter>
                             <Button
@@ -479,22 +393,110 @@ const CreateEvent2 = () => {
                           </DialogFooter>
                         </Dialog>
                       </div>
+                </div>
 
-                      <Typography
-                        variant="h6"
-                        color="blue-gray"
-                        className="-mb-3"
-                      >
-                        Name
-                      </Typography>
-                      <Input
-                        size="lg"
-                        placeholder="name@mail.com"
-                        className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                        labelProps={{
-                          className: "before:content-none after:content-none",
-                        }}
-                      />
+                <div className="w-1/2 flex justify-end">
+                  <div className="flex flex-col gap-6 mb-1 p-4">
+                    <h6 className="flex justify-center block -mb-3 font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-blue-gray-900 ">
+                      Task date
+                    </h6>
+                    <DayPicker
+                      mode="single"
+                      selected={date}
+                      onSelect={setDate}
+                      className="border-0  max-w-lg " // Increase width here
+                      classNames={{
+                        caption:
+                          "flex justify-center py-4 mb-6 relative items-center text-lg", // Increase padding and font size
+                        caption_label: "text-lg font-medium text-gray-900", // Increase font size
+                        nav: "flex items-center",
+                        nav_button:
+                          "h-8 w-8 bg-transparent hover:bg-blue-gray-50 p-2 rounded-md transition-colors duration-300", // Increase size
+                        nav_button_previous: "absolute left-2",
+                        nav_button_next: "absolute right-2",
+                        table: "w-full border-collapse",
+                        head_row: "flex font-medium text-gray-900",
+                        head_cell: "m-1 w-12 font-normal text-lg", // Increase size and font
+                        row: "flex w-full mt-3", // Increase margin top
+                        cell: "text-gray-600 rounded-md h-12 w-12 text-center text-lg p-0 m-1 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-gray-900/20 [&:has([aria-selected].day-outside)]:text-white [&:has([aria-selected])]:bg-gray-900/50 first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20", // Increase size and font
+                        day: "h-12 w-12 p-0 font-normal", // Increase size
+                        day_range_end: "day-range-end",
+                        day_selected:
+                          "rounded-md bg-gray-900 text-white hover:bg-gray-900 hover:text-white focus:bg-gray-900 focus:text-white",
+                        day_today: "rounded-md bg-gray-200 text-gray-900",
+                        day_outside:
+                          "day-outside text-gray-500 opacity-50 aria-selected:bg-gray-500 aria-selected:text-gray-900 aria-selected:bg-opacity-10",
+                        day_disabled: "text-gray-500 opacity-50",
+                        day_hidden: "invisible",
+                      }}
+                      components={{
+                        IconLeft: ({ ...props }) => (
+                          <ChevronLeftIcon
+                            {...props}
+                            className="h-6 w-6 stroke-2"
+                          /> // Increase size
+                        ),
+                        IconRight: ({ ...props }) => (
+                          <ChevronRightIcon
+                            {...props}
+                            className="h-6 w-6 stroke-2"
+                          /> // Increase size
+                        ),
+                      }}
+                    />
+                  </div>
+                </div>
+              </tr>
+
+              {/* <Card className="mt-6 w-full bg-gray-400 bold">
+                <CardBody>
+                  <Typography
+                    variant="h5"
+                    color="blue-gray"
+                    className="mb-2 text-2xl font-normal "
+                  >
+                    Task - Photography
+                  </Typography>
+                </CardBody>
+              </Card> */}
+
+              <Card color="transparent" shadow={false} className="w-full">
+                <div className="flex     space-x-2 w-11/12">
+                  {/* <form className="mt-8 mb-2  w-full  flex space-x-2 justify-between"> */}
+
+                  <div className="mt-8 mb-2  w-full  flex space-x-2 justify-between">
+                    <div className="flex flex-col gap-6 mb-1 p-4 w-2/6">
+                      {/* <h6 className="block -mb-3 font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-blue-gray-900">
+                        Event ID
+                      </h6> */}
+                      <div className="relative h-11 w-full min-w-[200px]">
+                        {/* <Select
+                          label="Select Version"
+                          className="relative h-11 w-full min-w-[200px]"
+                          onClick={console.log("Workingg")}
+                          // selected={(element) =>
+                          //   {
+                          //     // console.log("Workingg")
+                          //    if (element) {
+                          //   //    const selectedValue = element.props.value;
+                          //   //    console.log('Selected Value:', selectedValue);
+                          //   //  return element.props.name;
+                          //   // console.log("Workingg")
+                          //    }
+
+                          //  }}
+                        >
+                          <Option>Material Tailwind HTML</Option>
+                          <Option>Material Tailwind React</Option>
+                          <Option>Material Tailwind Vue</Option>
+                          <Option>Material Tailwind Angular</Option>
+                          <Option>Material Tailwind Svelte</Option>
+                        </Select> */}
+                      </div>
+
+                     
+
+                     
                     </div>
 
                     <div className="mb-1 flex flex-col gap-6 p-4 w-2/6  ">
