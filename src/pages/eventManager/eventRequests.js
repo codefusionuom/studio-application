@@ -7,7 +7,6 @@ import {
   Chip,
   Input,
   IconButton,
-  Button,
   CardFooter,
   Option,
   Select,
@@ -15,6 +14,7 @@ import {
 import CardEvent from "../../components/eventManager/cardEvent";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Button } from "@material-tailwind/react";
 
 const TABS = [
   {
@@ -68,12 +68,17 @@ const EventRequests = () => {
   return (
     <>
       <div className="flex space-x-4 justify-between"  color="red">
+        
         <CardEvent width="[324px]" height="[180px]"
           onTap={() => {
             navigate("/eventManager/createEvent");
           }}  
         >
-          <div className="flex justify-center items-center">
+              <Button className="font-medium hover:after:bg-none" 
+         variant="text"
+              >
+
+          <div className="flex justify-center items-center font-black">
           
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -89,8 +94,9 @@ const EventRequests = () => {
               d="M12 4.5v15m7.5-7.5h-15"
             />
           </svg>
-          <span> Create Event</span>
+          <span className="font-black"> Create Event</span>
           </div>
+              </Button>
         </CardEvent>
 
         <div className="flex justify-center items-center w-[628px] h-[140px] bg-cl-4 rounded font-lato text-xl text-cl-1 ml-8 p-4">

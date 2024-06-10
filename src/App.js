@@ -44,6 +44,7 @@ import EventManagerEvents from './pages/eventManager/eventManagerEvents';
 import CreateEvent from './pages/eventManager/createEvent';
 import CreateEvent2 from './pages/eventManager/createEvent2';
 import EventManagerEvents2 from './pages/eventManager/eventManagerEvents2';
+import TaskPage from './pages/eventManager/tasksPage';
 
 
 function App() {
@@ -71,6 +72,7 @@ function App() {
         <Route  path='/eventManager/createEvent' element={<CreateEvent />} />
         <Route  path='/eventManager/createEvent2' element={<CreateEvent2/>} />
         <Route path='/eventManager/eventDetails' element = {<EventManagerEvents2/>} />
+        <Route path='/eventManager/Tasks' element = {<TaskPage/>} />
       </Route>
       
       <Route path="/stockManager" element={<StockManager />}>

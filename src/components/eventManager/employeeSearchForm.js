@@ -3,12 +3,15 @@ import React, { useState, useRef, useEffect } from "react";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import DisplayListWithAvatar from "./listDisplayWithAvatar";
 const EmployeeSearchForm = ({
   // title,
   eventList,
   eventTypes,
   resultDisplayfield1,
   resultDisplayfield2,
+ asignedEmployeesList,
+  setAsignedEmployeesList
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All categories");
@@ -16,13 +19,7 @@ const EmployeeSearchForm = ({
   const [resultDisplayfield1Val, setResultDisplayfield1Val] = useState("");
   const [resultDisplayfield2Val, setResultDisplayfield2Val] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const [asignedEmployees, setAsignedEmployees] = useState([
-    { 
-      empId: "", 
-      empName: "",
-      empDepartment  : "",
-    },
-  ]);
+  // const [asignedEmployees, setAsignedEmployees] = useState();
   const [isClickedSearchBar, setIsClickedSearchBar] = useState(false);
   const dropdownRef = useRef(null);
   const searchBarRef = useRef(null);
@@ -74,8 +71,8 @@ const EmployeeSearchForm = ({
   }, [dropdownRef, searchBarRef]);
 
   const handleResultClick = (result) => {
-    if (!asignedEmployees.some(emp => emp.empId === result.empId)) {
-      setAsignedEmployees((prevEmpList) => [
+    if (!asignedEmployeesList.some(emp => emp.empId === result.empId)) {
+      setAsignedEmployeesList((prevEmpList) => [
         ...prevEmpList,
         {
           empId: result["empId"],
@@ -210,88 +207,8 @@ const EmployeeSearchForm = ({
       </form>
    
       <div className="w-full  flex justify-between  max-h-80  mx-auto">
-        <div className=" w-full overflow-y-auto mx-2 mt-8">
-          {asignedEmployees.map(employee =>  
-        //   <ListItem className="my-0.5 mx-4 h-15">
-        //   <ListItemPrefix>
-        //     <Avatar variant="circular" alt="candice" src="https://docs.material-tailwind.com/img/face-1.jpg" />
-        //   </ListItemPrefix>
-        //   <div>
-        //     <Typography variant="h6" color="blue-gray">
-        //       {employee.empName}
-        //     </Typography>
-        //     <Typography variant="small" color="gray" className="font-normal">
-        //       emp @ {employee.empDepartment}
-        //     </Typography>
-        //   </div>
-        // </ListItem>)
-        <ListItem ripple={false} className="py-1 pr-1 pl-4">
-            <ListItemPrefix>
-            <Avatar variant="circular" alt="candice" src="https://docs.material-tailwind.com/img/face-1.jpg" />
-          </ListItemPrefix>
-          <div>
-            <Typography variant="h6" color="blue-gray">
-              {employee.empName}
-            </Typography>
-            <Typography variant="small" color="gray" className="font-normal">
-              emp @ {employee.empDepartment}
-            </Typography>
-          </div>
-          <ListItemSuffix>
-            <IconButton variant="text" color="blue-gray">
-            <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      className="h-5 w-5"
-    >
-      <path
-        fillRule="evenodd"
-        d="M16.5 4.478v.227a48.816 48.816 0 013.878.512.75.75 0 11-.256 1.478l-.209-.035-1.005 13.07a3 3 0 01-2.991 2.77H8.084a3 3 0 01-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 01-.256-1.478A48.567 48.567 0 017.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 013.369 0c1.603.051 2.815 1.387 2.815 2.951zm-6.136-1.452a51.196 51.196 0 013.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 00-6 0v-.113c0-.794.609-1.428 1.364-1.452zm-.355 5.945a.75.75 0 10-1.5.058l.347 9a.75.75 0 101.499-.058l-.346-9zm5.48.058a.75.75 0 10-1.498-.058l-.347 9a.75.75 0 001.5.058l.345-9z"
-        clipRule="evenodd"
-      />
-    </svg>
-            </IconButton>
-          </ListItemSuffix>
-        </ListItem>)
-        }
-                  {/* <ToastContainer
-          position="bottom-left"
-          autoClose={false}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-          // transition: Bounce,
-          /> */}
-          {/* {dropdownOpen && (
-            <div
-              ref={dropdownRef}
-              className="relative top-full left-0 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow mt-1 dark:bg-gray-700 w-2/5"
-            >
-              <ul
-                className="py-2 text-sm text-gray-700 dark:text-gray-200"
-                aria-labelledby="dropdown-button"
-              >
-                {eventTypes.map((category) => (
-                  <li key={category}>
-                    <button
-                      type="button"
-                      className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                      onClick={() => handleCategorySelect(category)}
-                    >
-                      {category}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )} */}
-        </div>
+      <DisplayListWithAvatar itemList={asignedEmployeesList}  displayField1={"empName"} displayField2={"empDepartment"}/>
+        
         <div className="w-full  overflow-y-auto">
           {isClickedSearchBar && (
             <div className="mt-4  justify-start overflow-y-auto">
@@ -302,31 +219,9 @@ const EmployeeSearchForm = ({
                       key={index}
                       className="w-full"
                       onClick={() => {
-                        // console.log(result["empId"]);
-                        // setAsignedEmployees((prevEmpList) => [
-                        //   ...prevEmpList,
-                        //   {
-                        //     empId: result["empId"],
-                        //     empName: result["empName"],
-                        //   },
-                        // ]);
-                        // console.log("clicked");
-                        // console.log(
-                        //   "asignedEmployees :" 
-                        // );
-                        // // asignedEmployees.map( (employee , index) =>toast(employee.empName));
-                        // toast.success(result["empName"], {
-                        //   position: "bottom-left",
-                        //   autoClose: false,
-                        //   hideProgressBar: false,
-                        //   closeOnClick: true,
-                        //   pauseOnHover: true,
-                        //   draggable: true,
-                        //   progress: undefined,
-                        //   theme: "light",
-                        //   // transition: Bounce,
-                        //   });
+                        
                         handleResultClick(result)
+                        console.log("asignedEmployeesList :" +asignedEmployeesList.map((emp) =>emp['empName']));
                       }
                     }
                     >
