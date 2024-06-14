@@ -377,6 +377,7 @@ const SearchForm = ({
                 <div key={index} className="w-full bg-gray-200 my-2 px-2 border-r-10" 
                 onClick={() => {
                   selectedItem(result)
+                  console.log(result)
                   setOpen(false)
                 }}>
                   <h6 className="block font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-blue-gray-900">

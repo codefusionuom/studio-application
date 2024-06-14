@@ -4,12 +4,14 @@ import NotificationCard from '../../components/cards/notificationCard'
 import CardEvent from '../../components/eventManager/cardEvent'
 import { ChevronUpDownIcon } from '@heroicons/react/24/outline';
 import axios from "axios";
+import ErrorDisplayWindow from '../../components/eventManager/errorDisplayWindow';
 
 
-let todayEventsServiceTpes 
+let todayEventsServiceTpes ;
 
 function EventManagerDashboard() {
   const [todayEvents, setTodayEvents] = useState([]);
+  const [existError, setExistError] = useState(null);
   useEffect(() =>{
     
     getTodayEvents();
@@ -23,12 +25,16 @@ function EventManagerDashboard() {
       setTodayEvents(response.data.todayEvents);
       console.log("today events :", todayEvents);
       
+    }).catch( (error) => {
+      setExistError(error.message);
     })
   }
   const TABLE_HEAD = ["Custermer Name", "Service Type", "Phone Number", "Status"];
        
     
-  return (
+  return (existError != null ? (
+    <ErrorDisplayWindow errorMsg={existError} />
+  ) :
   <div>
     <div className="flex space-x-4">
    

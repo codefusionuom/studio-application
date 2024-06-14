@@ -71,11 +71,11 @@ const EmployeeSearchForm = ({
   }, [dropdownRef, searchBarRef]);
 
   const handleResultClick = (result) => {
-    if (!asignedEmployeesList.some(emp => emp.empId === result.empId)) {
+    if (!asignedEmployeesList.some(emp => emp.empId === result.id)) {
       setAsignedEmployeesList((prevEmpList) => [
         ...prevEmpList,
         {
-          empId: result["empId"],
+          empId: result["id"],
           empName: result["empName"],
           empDepartment : result["empDepartment"],
         },
