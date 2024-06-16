@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@material-tailwind/react";
 // const axios = require("axios")
 import axios from "axios";
+import Accordian from "./accordian";
 
 const CreateEvent = () => {
   const [date, setDate] = useState();
@@ -104,6 +105,8 @@ const CreateEvent = () => {
     <div>
       <div className="bg-cl-4 mt-8 ">
         <div className="  text-gray-700 bg-transparent shadow-none rounded-xl bg-clip-border p-4 pl-10 ">
+         <Accordian/>
+         
           <Card className="mt-6 w-full bg-gray-400 bold">
             <CardBody>
               <Typography

@@ -6,10 +6,6 @@ import {
   Typography,
   CardBody,
   Chip,
-  IconButton,
-  Tooltip,
-  Select,
-  Option,
   Input,
   PopoverContent,
   PopoverHandler,
@@ -19,19 +15,17 @@ import {
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
 import { DayPicker } from "react-day-picker";
-import { Spinner } from "@material-tailwind/react";
-import { format } from "date-fns";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ErrorDisplayWindow from "../../components/eventManager/errorDisplayWindow";
 
 
 
 const EventManagerEvents = () => {
-  const [date, setDate] = React.useState();
-  let [eventList, setEventList] = React.useState([]);
-  let [selectedDateEventList, setselectedDateEventList] = React.useState([]);
-  const [existError, setExistError] = React.useState(null);
+  const [date, setDate] = useState();
+  let [eventList, setEventList] = useState([]);
+  let [selectedDateEventList, setselectedDateEventList] = useState([]);
+  const [existError, setExistError] = useState(null);
   const navigate = useNavigate();
   
   useEffect(() => {

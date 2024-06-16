@@ -8,9 +8,7 @@ import {
   CardBody,
   Chip,
   IconButton,
-  Tooltip,
-  Select,
-  Option,
+  Tooltip, 
   Input,
   PopoverContent,
   PopoverHandler,
@@ -27,16 +25,28 @@ import { Link, useNavigate } from "react-router-dom";
 
 const TaskPage = () => {
   const [date, setDate] = React.useState();
-  let [eventList, setEventList] = React.useState([]);
+  let [taskList, setTaskList] = React.useState([]);
   let [selectedDateEventList, setselectedDateEventList] = React.useState([]);
   const navigate = useNavigate();
   useEffect(() => {
     console.log("use effect");
+  getTasks()
     //   getEvents();
   }, []);
+
+  const getTasks = () => {
+    axios.get('http://localhost:5000/eventManager/tasks/all-tasks')
+    .then( (response) => {
+      console.log("tasks -  : " , response)
+    setTaskList(response.data.tasks)
+    })
+    .catch((error) => {
+      console.log("error : " + error)
+    })
+  }
   const TABLE_HEAD = [
-    "Customer Name",
-    "service Type",
+    "Task Name",
+    "Department",
     "date",
     "Mobile No",
     "status",
@@ -136,7 +146,7 @@ const TaskPage = () => {
                     console.log(selectedDate);
                     // Call your function here
                     //   getSelectedDayEvents(selectedDate);
-                    console.log("Updated eventList :", eventList);
+                    console.log("Updated eventList :", taskList);
                     // setEventList()
                   }}
                   showOutsideDays
@@ -288,7 +298,7 @@ const TaskPage = () => {
               </tr>
             </thead>
             <tbody>
-              {eventList.length == 0 ? (
+              {taskList.length == 0 ? (
                 <tr>
                   <td colSpan={TABLE_HEAD.length} className="text-center">
                     <div className="flex justify-center items-center h-full p-10">
@@ -333,19 +343,19 @@ const TaskPage = () => {
                   </td>
                 </tr>
               ) : (
-                eventList.map((oneEvent, index) => {
-                  const isLast = index === eventList.length - 1;
+                taskList.map((oneTask, index) => {
+                  const isLast = index === taskList.length - 1;
                   const classes = isLast
                     ? "p-4"
                     : "p-4 border-b border-blue-gray-50";
 
                   return (
-                    // <Link to={{ pathname: "/eventManager/eventDetails", state: { oneEvent } }}>
+                    // <Link to={{ pathname: "/eventManager/eventDetails", state: { oneTask } }}>
                     <tr
-                      key={oneEvent.eventId}
+                      key={oneTask.id}
                       onClick={() =>
-                        navigate("/eventManager/eventDetails", {
-                          state: { eventId: oneEvent.eventId },
+                        navigate("/eventManager/Tasks/view-Task", {
+                          state: { taskId: oneTask.id },
                         })
                       }
                     >
@@ -357,9 +367,10 @@ const TaskPage = () => {
                               color="blue-gray"
                               className="font-normal"
                             >
-                              {oneEvent.customer.firstname +
+                              {/* {oneTask.customer.firstname +
                                 " " +
-                                oneEvent.customer.lastname}
+                                oneTask.customer.lastname} */}{oneTask.taskName}
+                                
                             </Typography>
                           </div>
                         </div>
@@ -371,8 +382,8 @@ const TaskPage = () => {
                               variant="paragraph"
                               color="blue-gray"
                               className="font-bold"
-                            >
-                              {oneEvent.serviceType}
+                            >{oneTask.department}
+                              
                             </Typography>
                           </div>
                         </div>
@@ -384,7 +395,7 @@ const TaskPage = () => {
                             color="blue-gray"
                             className="font-bold"
                           >
-                            {oneEvent.date.slice(0, 10)}
+                            {oneTask.date.slice(0, 10)}
                           </Typography>
                         </div>
                       </td>
@@ -395,7 +406,25 @@ const TaskPage = () => {
                           color="blue-gray"
                           className="font-bold"
                         >
-                          {oneEvent.customer.mobilePhone}
+                           <Tooltip content="Edit User">
+                        <IconButton variant="text">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={2.5}
+                            stroke="currentColor"
+                            className="w-8 h-8 "
+                            color="#21179F"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                            />
+                          </svg>
+                        </IconButton>
+                      </Tooltip>
                         </Typography>
                       </td>
                       <td className={classes}>
@@ -411,7 +440,7 @@ const TaskPage = () => {
                             variant="filled"
                             size="sm"
                             value={(function () {
-                              switch (oneEvent.status) {
+                              switch (oneTask.status) {
                                 case "Active":
                                   return "Active";
                                 case "Desertion":
@@ -425,7 +454,7 @@ const TaskPage = () => {
                               }
                             })()}
                             color={(function () {
-                              switch (oneEvent.status) {
+                              switch (oneTask.status) {
                                 case "Active":
                                   return "blue";
                                 case "Upcoming":

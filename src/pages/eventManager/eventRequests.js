@@ -36,6 +36,7 @@ const TABLE_HEAD = [
   "Service Type",
   "Phone Number",
   "Email",
+  "",
   // "City",
   // "Status",
 ];
@@ -223,6 +224,9 @@ const EventRequests = () => {
                       >
                         {request.email}
                       </Typography>
+                    </td>
+                    <td className={classes}>
+                    <Button variant="fill" className="rounded-full bg-btn-success" size="sm" color="" >Create Event</Button>
                     </td>
 
                     {/* <td className={classes}>
