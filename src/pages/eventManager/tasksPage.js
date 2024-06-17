@@ -57,7 +57,7 @@ const TaskPage = () => {
     <div>
       <div className="flex  justify-between items-center w-full h-[140px] rounded font-lato text-xl text-cl-1   p-4 pt-2">
       <Button className=" w-3/12 h-[140px] flex justify-center items-center bg-cl-4 rounded font-lato text-xl text-cl-1   p-4 pt-2 mr-4"
-      onClick={()=> navigate('/eventManager/createEvent2')}
+      onClick={()=> navigate('/eventManager/createTask')}
       >
       <svg
             xmlns="http://www.w3.org/2000/svg"

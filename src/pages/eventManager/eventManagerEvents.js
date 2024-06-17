@@ -50,7 +50,7 @@ const EventManagerEvents = () => {
       const events = res.data.events;
       console.log("events: ", events);
       console.log("custormer name :" + events[0].customer.firstname);
-      setEventList(events);
+        setEventList(events);
     })
     .catch((error) => {
       setExistError(error.message);

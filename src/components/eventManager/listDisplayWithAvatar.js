@@ -1,7 +1,12 @@
 import { Avatar, IconButton, ListItem, ListItemPrefix, ListItemSuffix, Typography } from '@material-tailwind/react'
 import React from 'react'
 
-const DisplayListWithAvatar = ({itemList , displayField1 ,displayField2}) => {
+const DisplayListWithAvatar = ({itemList , setAsignedEmployeesList, displayField1 ,displayField2}) => {
+  const handleRemoveItem = (id) => {
+    var updatedEmployeeList = itemList.filter(item => item.empId !== id);
+    setAsignedEmployeesList(updatedEmployeeList)
+}
+
   return (
     <div className=" w-full overflow-y-auto mx-2 mt-8 max-h-80 ">
           {itemList.map(employee =>  
@@ -19,7 +24,7 @@ const DisplayListWithAvatar = ({itemList , displayField1 ,displayField2}) => {
             </Typography>
           </div>
           <ListItemSuffix>
-            <IconButton variant="text" color="blue-gray">
+            <IconButton variant="text" color="blue-gray" onClick={()=>{handleRemoveItem(employee.empId)}}>
                 <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"

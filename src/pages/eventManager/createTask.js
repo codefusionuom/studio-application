@@ -28,7 +28,7 @@ import ErrorDisplayWindow from "../../components/eventManager/errorDisplayWindow
 import EmployeeSearchForm from "../../components/eventManager/employeeSearchForm";
 import DisplayListWithAvatar from "../../components/eventManager/listDisplayWithAvatar";
 
-const CreateEvent2 = () => {
+const CreateTask = () => {
   //for modal handling
   const [open, setOpen] = React.useState(false);
   const [openEmpModal, setOpenEmpModal] = React.useState(false);
@@ -460,6 +460,8 @@ const CreateEvent2 = () => {
               <div className="bg-gray-50 w-full max-h-80 h-80">
                 <DisplayListWithAvatar
                   itemList={asignedEmployeesList}
+                  setAsignedEmployeesList ={setAsignedEmployeesList}
+
                   displayField1={"empName"}
                   displayField2={"empDepartment"}
                 />
@@ -805,4 +807,4 @@ const CreateEvent2 = () => {
   );
 };
 
-export default CreateEvent2;
+export default CreateTask;

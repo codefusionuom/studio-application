@@ -43,6 +43,7 @@ const EmployeeSearchForm = ({
     console.log(`Category: ${selectedCategory}, Search Query: ${searchQuery}`);
   };
 
+  
   useEffect(() => {
     console.log("resultDisplayfield2 :" + resultDisplayfield2);
     setSearchResults(eventList);
@@ -207,7 +208,7 @@ const EmployeeSearchForm = ({
       </form>
    
       <div className="w-full  flex justify-between  max-h-80  mx-auto">
-      <DisplayListWithAvatar itemList={asignedEmployeesList}  displayField1={"empName"} displayField2={"empDepartment"}/>
+      <DisplayListWithAvatar itemList={asignedEmployeesList}  displayField1={"empName"} displayField2={"empDepartment"}   setAsignedEmployeesList={setAsignedEmployeesList} />
         
         <div className="w-full  overflow-y-auto">
           {isClickedSearchBar && (

@@ -14,21 +14,29 @@ import {
   PopoverHandler,
   Popover,
   PopoverContent,
+  CardFooter,
+  CardBody,
+  TabsHeader,
+  Tabs,
+  Tab,
+  CardHeader,
+  Tooltip,
+  IconButton,
+  Avatar,
+  Chip,
 } from "@material-tailwind/react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-import CardEvent from "../../components/eventManager/cardEvent";
-import Eventform from "../../components/eventManager/event_formik_form";
 import { DayPicker } from "react-day-picker";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
-import { format } from "date-fns";
+import { ChevronLeftIcon, ChevronRightIcon, MagnifyingGlassIcon, PencilIcon, UserPlusIcon } from "@heroicons/react/24/outline";
+import { format, t } from "date-fns";
+import ErrorDisplayWindow from "../../components/eventManager/errorDisplayWindow";
 const TaskView = () => {
   const location = useLocation();
   console.log("id : " + location.state.taskId);
   const taskId = location.state.taskId;
 
   const [date, setDate] = React.useState();
-  const [customer, setCustormer] = React.useState({});
   const [taskDetails, setTaskDetails] = React.useState({});
   const [search, setSearch] = useState("");
   const [active, setActive] = useState(1);
@@ -37,37 +45,122 @@ const TaskView = () => {
   const [serviceType, setServiceType] = useState("");
   const [status, setStatus] = useState("");
   const [description, setDescription] = useState("");
+  const [existError, setExistError] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [assignedEmployees, setAsssignedEmployees] = useState([]);
+  
+  const TABS = [
+    {
+      label: "All",
+      value: "all",
+    },
+    {
+      label: "Monitored",
+      value: "monitored",
+    },
+    {
+      label: "Unmonitored",
+      value: "unmonitored",
+    },
+  ];
+   
+  const TABLE_HEAD = ["Employee Name", "Department", "Contact No", "Assigned Date" , "" ];
+   
+  // const TABLE_ROWS = [
+  //   {
+  //     img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg",
+  //     name: "John Michael",
+  //     email: "john@creative-tim.com",
+  //     job: "Manager",
+  //     org: "Organization",
+  //     online: true,
+  //     date: "23/04/18",
+  //   },
+  //   {
+  //     img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-2.jpg",
+  //     name: "Alexa Liras",
+  //     email: "alexa@creative-tim.com",
+  //     job: "Programator",
+  //     org: "Developer",
+  //     online: false,
+  //     date: "23/04/18",
+  //   },
+  //   {
+  //     img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-1.jpg",
+  //     name: "Laurent Perrier",
+  //     email: "laurent@creative-tim.com",
+  //     job: "Executive",
+  //     org: "Projects",
+  //     online: false,
+  //     date: "19/09/17",
+  //   },
+  //   {
+  //     img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-4.jpg",
+  //     name: "Michael Levi",
+  //     email: "michael@creative-tim.com",
+  //     job: "Programator",
+  //     org: "Developer",
+  //     online: true,
+  //     date: "24/12/08",
+  //   },
+  //   {
+  //     img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-5.jpg",
+  //     name: "Richard Gran",
+  //     email: "richard@creative-tim.com",
+  //     job: "Manager",
+  //     org: "Executive",
+  //     online: false,
+  //     date: "04/10/21",
+  //   },
+  // ];
 
-  const [open, setOpen] = React.useState(false);
-
+  
   const handleOpen = () => setOpen(!open);
-  // const [event, setEvent] = useState({
-  //   firstname: "",
-  //   lastname: "",
-  //   email: "",
-  //   mobilePhone: "",
-  //   address: "",
-  // });
 
   useEffect(() => {
     console.log("task details -" , taskDetails)
-    getEventDetail(100);
+    getTaskDetail(taskId);
+    getAssignedEmployees(taskId)
     // if (Object.keys(taskDetails).length === 0) {
     //   console.log("Empty task")
     // }
     console.log("task details -" , taskDetails)
-
   }, []);
 
-  const getEventDetail = async (taskId) => {
+  const getTaskDetail = async (taskId) => {
     const response = await axios.get(
       `http://localhost:5000/eventManager/tasks/task-dettail/${taskId}`
-    );
-    console.log(response.data);
-    setTaskDetails(response.data.task);
-    console.log("date :" , response.data.task.date);
+    ).then((response) => {
+      console.log(response.data);
+      setTaskDetails(response.data.task);
+      console.log("date :" , response.data.task.date);
+    }).catch((error) => {
+      console.log(error)
+      setExistError(error.message);
+      console.log("error :" , error.message)
+    })
+  }
+  const getAssignedEmployees = async (taskId) => {
+    console.log("77777777777777777777777777777777777777777777777777")
+    const response = await axios.get(
+      `http://localhost:5000/eventManager/task/assigned-employees/${taskId}`
+    ).then((response) => {
+      console.log("employees :" ,response.data.assignedTasks);
+      const employees = response.data.assignedTasks.map((assignedTask) => assignedTask.employee)
+      setAsssignedEmployees(employees)
+      console.log("Assigned employees :" , assignedEmployees)
+
+      // setTaskDetails(response.data.task);
+      // console.log("date :" , response.data.task.date);
+    }).catch((error) => {
+      console.log(error)
+      setExistError(error.message);
+      console.log("error :" , error.message)
+    })
     // console.log("event Details :"+eventDetails.serviceType);
   };
+
+  
 
   // const handleOpen = () => setOpen((cur) => !cur);
 
@@ -88,10 +181,12 @@ const TaskView = () => {
 
   return (
     // Object.keys(taskDetails).length === 0 ? 
-     
+    existError != null ? (
+      <ErrorDisplayWindow errorMsg={existError} />
+    ) :
 
     
-    <div>
+    <div className="flex flex-col">
       <div className="flex  justify-evenly items-center w-full h-[140px] bg-cl-4 rounded font-lato text-xl text-cl-1   p-4 pt-2">
         <Typography
           variant="paragraph"
@@ -100,15 +195,7 @@ const TaskView = () => {
         >
           Task
         </Typography>
-
-        {/* <Typography
-          variant="paragraph"
-          color="blue-gray"
-          className="text-3xl mr-80 flex items-center  "
-        >
-          WP-124
-        </Typography> */}
-
+ 
         <Button
           className="flex items-center gap-3 "
           color="blue"
@@ -342,7 +429,7 @@ const TaskView = () => {
       
                  
       <div className="  bg-cl-4  rounded-md">
-        {Object.keys(taskDetails).length === 0 ?
+        {Object.keys(taskDetails).length === 0 && taskDetails.constructor === Object?   //checks for empty object and  display animate pulse untill get an object
          <tr className="flex justify-center items-center min-h-96">
 
             <div className=" animate-pulse  ">
@@ -383,7 +470,7 @@ const TaskView = () => {
             </Typography>
           </div>
         </tr>
-        :
+        : 
       <div className="flex  justify-between ">
         <div className="flex      w-full  p-4">
           <div className="flex flex-col">
@@ -433,9 +520,170 @@ const TaskView = () => {
       
         
       }
+    <Card className="h-full w-full p-4">
+      <CardHeader floated={false} shadow={false} className="rounded-none">
+        {/* <div className="mb-8 flex items-center justify-between gap-8"> */}
+        <div className=" flex items-center justify-between gap-8">
+          <div>
+            <Typography variant="h5" color="blue-gray">
+              Assigned Employees
+            </Typography>
+          
+          </div>
+          {/* <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
+            <Button variant="outlined" size="sm">
+              view all
+            </Button>
+            <Button className="flex items-center gap-3" size="sm">
+              <UserPlusIcon strokeWidth={2} className="h-4 w-4" /> Add member
+            </Button>
+          </div> */}
+        </div>
+        {/* <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+          <Tabs value="all" className="w-full md:w-max">
+            <TabsHeader>
+              {TABS.map(({ label, value }) => (
+                <Tab key={value} value={value}>
+                  &nbsp;&nbsp;{label}&nbsp;&nbsp;
+                </Tab>
+              ))}
+            </TabsHeader>
+          </Tabs>
+          <div className="w-full md:w-72">
+            <Input
+              label="Search"
+              icon={<MagnifyingGlassIcon className="h-5 w-5" />}
+            />
+          </div>
+        </div> */}
+      </CardHeader>
+      <CardBody className="  px-0">
+        <table className="mt-4 w-full min-w-max table-auto text-left ">
+          <thead>
+            <tr>
+              {TABLE_HEAD.map((head) => (
+                <th
+                  key={head}
+                  className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4"
+                >
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="font-normal leading-none opacity-70"
+                  >
+                    {head}
+                  </Typography>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className="  " >
+            {assignedEmployees.map(
+              ({id, empName, empDepartment, empNumber , createdAt}, index) => {
+                const isLast = index === assignedEmployees.length -1 ;
+                const classes = isLast
+                  ? "p-4"
+                  : "p-4 border-b border-blue-gray-50";
+ 
+                return (
+                  <tr key={id} className="" >
+                    <td className={classes}>
+                      <div className="flex items-center gap-3">
+                        <Avatar src={"https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg"} alt={empName} size="sm" />
+                        <div className="flex flex-col">
+                          <Typography
+                            variant="small"
+                            color="blue-gray"
+                            className="font-normal"
+                          >
+                            {empName}
+                          </Typography>
+                          {/* <Typography
+                            variant="small"
+                            color="blue-gray"
+                            className="font-normal opacity-70"
+                          >
+                            {empDepartment}
+                          </Typography> */}
+                        </div>
+                      </div>
+                    </td>
+                    <td className={classes}>
+                      <div className="flex flex-col">
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {empDepartment}
+                        </Typography>
+                        {/* <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal opacity-70"
+                        >
+                          {createdAt}
+                        </Typography> */}
+                      </div>
+                    </td>
+                    {/* <td className={classes}>
+                      <div className="w-max">
+                        <Chip
+                          variant="ghost"
+                          size="sm"
+                          value={online ? "online" : "offline"}
+                          color={online ? "green" : "blue-gray"}
+                        />
+                      </div>
+                    </td> */}
+                    <td className={classes}>
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
+                      >
+                        {empNumber}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
+                      >
+                        {format(new Date(createdAt), "yyyy-MM-dd") }
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Tooltip content="Edit User">
+                        <IconButton variant="text">
+                          <PencilIcon className="h-4 w-4" />
+                        </IconButton>
+                      </Tooltip>
+                    </td>
+                  </tr>
+                );
+              },
+            )}
+          </tbody>
+        </table>
+      </CardBody>
+      {/* <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
+        <Typography variant="small" color="blue-gray" className="font-normal">
+          Page 1 of 10
+        </Typography>
+        <div className="flex gap-2">
+          <Button variant="outlined" size="sm">
+            Previous
+          </Button>
+          <Button variant="outlined" size="sm">
+            Next
+          </Button>
+        </div>
+      </CardFooter> */}
+    </Card>
     </div>
      
-      
     </div>
   );
 };
