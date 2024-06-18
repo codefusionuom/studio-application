@@ -135,7 +135,7 @@ function AttendanceList() {
             </CardBody>
             <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
                 <Typography>
-                    233 results
+                    23 results
                 </Typography>
                 <div className="flex gap-2">
                     <Pagination />

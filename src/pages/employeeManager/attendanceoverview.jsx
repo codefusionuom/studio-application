@@ -44,7 +44,7 @@ function AttendanceOverviewList() {
                                     <Typography
                                         variant="small"
                                         color="blue-gray"
-                                        className="flex items-center justify-between gap-2 font-normal leading-none opacity-70 justify-center items-center align-middle"
+                                        className="flex  gap-2 font-normal leading-none opacity-70 justify-center items-center align-middle"
                                     >
                                         {head}
                                     </Typography>
@@ -143,7 +143,7 @@ function AttendanceOverviewList() {
             </CardBody>
             <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
                 <Typography>
-                    233 results
+                    23 results
                 </Typography>
                 <div className="flex gap-2">
                     <Pagination />

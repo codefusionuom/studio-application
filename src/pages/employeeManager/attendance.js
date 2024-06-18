@@ -12,6 +12,8 @@ import {
 import { DayPicker } from "react-day-picker";
 import { ChevronRightIcon, ChevronLeftIcon } from "@heroicons/react/24/outline";
 
+// import TimePicker from 'react-time-picker';
+
 
 function Attendance() {
 
@@ -28,6 +30,8 @@ function Attendance() {
     const [leaveType, setLeaveType] = useState()
     const [id, setid] = useState()
     const [date, setDate] = useState()
+    const [timein, setTimein] = useState()
+
 
     useEffect(() => {
         axios.get('http://localhost:5000/employeeManager/getEmployees')
@@ -215,14 +219,23 @@ function Attendance() {
                                 </div>
                             </div>
                             <div>
+
                                 <p>Leaving Type :</p>
                                 <div className="w-80 pt-1 pb-10">
-                                    <Select label='Leave Type' onChange={(item) => setLeaveType(item)} error={errorLeaveType ? "true" : null}>
+
+                                {/* <TimePicker onChange={setTimein} value={timein} /> */}
+
+
+                                    {/* <Select label='Leave Type' onChange={(item) => setLeaveType(item)} error={errorLeaveType ? "true" : null}>
                                         <Option value='HalfDay'>Half-Day</Option>
                                         <Option value='Later Arival'>Late Arival</Option>
                                         <Option value='Absent'>Absent</Option>
-                                    </Select>
+                                    </Select> */}
                                 </div>
+
+                                
+
+
                             </div>
                         </div>
                     </div>

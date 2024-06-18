@@ -9,6 +9,7 @@ import ViewEmployeePaymentDetails from './payment/viewemployeePaymentDetails';
 import axios from "axios";
 import { Select } from "@material-tailwind/react";
 import SelectOption from "@material-tailwind/react/components/Select/SelectOption";
+import CreateAllowancesDeductions from './payment/createAllowancesDeductions';
 
 
 
@@ -67,22 +68,16 @@ function EmployeePayment() {
 
     return (
         <div>
-
             <div>
-
-
-            <div className='flex justify-evenly pb-5'>
-                <EmployeePaymentDetails></EmployeePaymentDetails>
-                <ViewSalary></ViewSalary>
+                <div className='flex justify-evenly pb-5'>
+                    <EmployeePaymentDetails></EmployeePaymentDetails>
+                    <ViewSalary></ViewSalary>
                 
-            </div>
-            <div className='flex justify-evenly pb-5'>
-                <ViewEmployeePaymentDetails></ViewEmployeePaymentDetails>
-            </div>
-
-
-
-            
+                </div>
+                <div className='flex justify-evenly pb-5'>
+                    <ViewEmployeePaymentDetails></ViewEmployeePaymentDetails>
+                    <CreateAllowancesDeductions></CreateAllowancesDeductions>
+                </div>
             </div>
 
 

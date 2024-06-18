@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 function RegisterEmployee() {
 
   const [empName, setEmpName] = useState()
-  const [empId, setEmpId] = useState()
+  // const [empId, setEmpId] = useState()
   const [empAdd, setEmpAdd] = useState()
   const [empType, setEmpType] = useState()
   const [empSalary, setEmpSalary] = useState()
@@ -25,7 +25,7 @@ function RegisterEmployee() {
   const navigate = useNavigate()
   const [errorAdd, setErrorAdd] = useState()
   const [errorDepartment, setErrorDepartment] = useState()
-  const [errorId, setErrorId] = useState()
+  // const [errorId, setErrorId] = useState()
   const [errorName, setErrorName] = useState()
   const [errorNumber, setErrorNumber] = useState()
   const [errorSalary, setErrorSalary] = useState()
@@ -35,17 +35,17 @@ function RegisterEmployee() {
     e.preventDefault()
 
     // Basic validation
-    if (!empId) {
-      setErrorId(true);
-      alert("Please fill in employee ID");
-      return;
-    }
-    if (isNaN(empId)) {
-      setErrorId(true);
-      alert("Employee ID must be numeric");
-      return;
-    }
-    setErrorId(false);
+    // if (!empId) {
+    //   setErrorId(true);
+    //   alert("Please fill in employee ID");
+    //   return;
+    // }
+    // if (isNaN(empId)) {
+    //   setErrorId(true);
+    //   alert("Employee ID must be numeric");
+    //   return;
+    // }
+    // setErrorId(false);
     if (!empName) {
       setErrorName(true);
       alert("Please fill in employee name");
@@ -101,7 +101,7 @@ function RegisterEmployee() {
     }
     setErrorNumber(false);
 
-    axios.post("http://localhost:5000/employeeManager/registerEmployee", { empName, empAdd, empDepartment, empId, empNumber, empSalary, empType })
+    axios.post("http://localhost:5000/employeeManager/registerEmployee", { empName, empAdd, empDepartment, empNumber, empSalary, empType })
       .then(result => {
         console.log(result)
         window.location.reload()
@@ -128,12 +128,12 @@ function RegisterEmployee() {
                 Register new employee
               </Typography>
               <div className=" flex flex-row justify-between ">
-                <div className="flex flex-col justify-between">
+                {/* <div className="flex flex-col justify-between">
                   <Typography className="mb-2" variant="h6">
                     Employee ID :
                   </Typography>
                   <Input label="Employee ID" size="lg" onChange={(e) => setEmpId(e.target.value)} error={errorId ? "true" : null} />
-                </div>
+                </div> */}
                 <div className="flex flex-col justify-between">
                   <Typography className="mb-2" variant="h6">
                     Employee Name :
