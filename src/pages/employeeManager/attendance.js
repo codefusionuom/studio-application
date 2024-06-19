@@ -12,7 +12,9 @@ import {
 import { DayPicker } from "react-day-picker";
 import { ChevronRightIcon, ChevronLeftIcon } from "@heroicons/react/24/outline";
 
-// import TimePicker from 'react-time-picker';
+import TimePicker from 'react-time-picker';
+import 'react-time-picker/dist/TimePicker.css';
+import 'react-clock/dist/Clock.css';
 
 
 function Attendance() {
@@ -59,22 +61,22 @@ function Attendance() {
             alert("Please fill in Check-In time");
             return;
         }
-        if (isNaN(checkIn)) {
-            setErrorCheckIn(true);
-            alert("Time must be numeric");
-            return;
-        }
+        // if (isNaN(checkIn)) {
+        //     setErrorCheckIn(true);
+        //     alert("Time must be numeric");
+        //     return;
+        // }
         setErrorCheckIn(false);
         if (!checkOut) {
             setErrorCheckOut(true);
             alert("Please fill in Check-out time");
             return;
         }
-        if (isNaN(checkOut)) {
-            setErrorCheckOut(true);
-            alert("Time must be numeric");
-            return;
-        }
+        // if (isNaN(checkOut)) {
+        //     setErrorCheckOut(true);
+        //     alert("Time must be numeric");
+        //     return;
+        // }
         setErrorCheckOut(false);
         if (!dayType) {
             setErrorDayType(true);
@@ -192,8 +194,8 @@ function Attendance() {
                             <div>
                                 <p>Check In Time :</p>
                                 <div className="w-80  pt-1 pb-10">
-                                    <Input onChange={(e) => setCheckIn(e.target.value)} error={errorCheckIn ? "true" : null}
-                                    />
+                                    {/* <Input onChange={(e) => setCheckIn(e.target.value)} error={errorCheckIn ? "true" : null}/> */}
+                                    <TimePicker  onChange={setCheckIn} disableClock={true} value={checkIn} />
                                 </div>
                             </div>
                             <div>
@@ -215,7 +217,8 @@ function Attendance() {
                             <div>
                                 <p>Check Out Time :</p>
                                 <div className="w-80 pt-1 pb-1-">
-                                    <Input onChange={(e) => setCheckOut(e.target.value)} error={errorCheckOut ? "true" : null} />
+                                    {/* <Input onChange={(e) => setCheckOut(e.target.value)} error={errorCheckOut ? "true" : null} /> */}
+                                    <TimePicker  onChange={setCheckOut} disableClock={true} value={checkOut} />
                                 </div>
                             </div>
                             <div>
@@ -223,14 +226,14 @@ function Attendance() {
                                 <p>Leaving Type :</p>
                                 <div className="w-80 pt-1 pb-10">
 
-                                {/* <TimePicker onChange={setTimein} value={timein} /> */}
+                                {/* <TimePicker  onChange={setTimein} disableClock={true} value={timein} /> */}
 
 
-                                    {/* <Select label='Leave Type' onChange={(item) => setLeaveType(item)} error={errorLeaveType ? "true" : null}>
+                                    <Select label='Leave Type' onChange={(item) => setLeaveType(item)} error={errorLeaveType ? "true" : null}>
                                         <Option value='HalfDay'>Half-Day</Option>
                                         <Option value='Later Arival'>Late Arival</Option>
                                         <Option value='Absent'>Absent</Option>
-                                    </Select> */}
+                                    </Select>
                                 </div>
 
                                 

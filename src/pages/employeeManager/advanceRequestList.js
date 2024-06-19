@@ -1,11 +1,35 @@
 import { MagnifyingGlassIcon, ChevronUpDownIcon, } from "@heroicons/react/24/outline";
-import { PencilIcon, UserPlusIcon } from "@heroicons/react/24/solid";
 import { Card, CardHeader, Input, Typography, Button, CardBody, Chip, CardFooter, Tabs, TabsHeader, Tab, Avatar, IconButton, Tooltip, Select, Option, } from "@material-tailwind/react";
-import Datepicker from "../../components/datePicker/Datepicker";
 import { Pagination } from "../../components/pagination/pagination";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import UpdateAdvance from "./payment/editadvance";
 import UpdateEmployee from "./empForms/updateEmployee";
 
 function AdvanceRequestList() {
+
+    const [id,setid] = useState()
+    const [empId,setEmpId] = useState()
+    const [empName,setEmpName] = useState()
+    const [advanceAmount,setAdvanceAmount] = useState()
+    const [advancePaidAmount,setAdvencePaidAmount] = useState()
+    const [advanceremaining,setAdvanceRemaining] = useState()
+    const [users,setUser] = useState([])
+
+    
+
+
+    useEffect(() => {
+        axios.get('http://localhost:5000/employeeManager/getAdvance')
+          .then(result => setUser(result.data))
+          .catch(err => console.log(err))
+        console.log(users)
+      }, [])
+
+
+
+
+
     return (
         <Card className=" w-full border-2 ">
             <CardHeader floated={false} shadow={false} className="rounded-none">
@@ -51,16 +75,15 @@ function AdvanceRequestList() {
                         </tr>
                     </thead>
                     <tbody>
-                        {TABLE_ROWS.map(
-                            ({ img, name, email, designation, advance, phoneNumber, employeeId, online, date }, index) => {
-                                const isLast = index === TABLE_ROWS.length - 1;
-                                const classes = isLast
-                                    ? "p-4"
-                                    : "p-4 border-b border-blue-gray-50";
+                        {users.map(  (user) => {
+                                // const isLast = index === TABLE_ROWS.length - 1;
+                                // const classes = isLast
+                                //     ? "p-4"
+                                //     : "p-4 border-b border-blue-gray-50";
 
                                 return (
-                                    <tr key={name}>
-                                        <td className={classes}>
+                                    <tr key={user.id}>
+                                        <td className={"p-4 border-b border-blue-gray-50"}>
                                             <div className="flex items-center gap-3">
                                                 <div className="flex flex-col pl-8">
                                                     <Typography
@@ -68,42 +91,58 @@ function AdvanceRequestList() {
                                                         color="blue-gray"
                                                         className="font-normal"
                                                     >
-                                                        {name}
+                                                        {user.empId}
                                                     </Typography>
                                                     
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className={classes}>
+                                        <td className={"p-4 border-b border-blue-gray-50"}>
                                             <div className="flex flex-col">
                                                 <Typography
                                                     variant="small"
                                                     color="blue-gray"
                                                     className="font-normal"
                                                 >
-                                                    {employeeId}
+                                                    {user.advanceAmount}
                                                 </Typography>
                                                 
                                             </div>
                                         </td>
-                                        <td className={classes}>
-                                            <Typography
-                                                variant="small"
-                                                color="blue-gray"
-                                                className="font-normal"
-                                            >
-                                                {advance}
-                                            </Typography>
+                                        <td className={"p-4 border-b border-blue-gray-50"}>
+                                            <div className="flex flex-col">
+                                                <Typography
+                                                    variant="small"
+                                                    color="blue-gray"
+                                                    className="font-normal"
+                                                >
+                                                    {user.advancePaidAmount}
+                                                </Typography>
+                                                
+                                            </div>
+                                        </td>
+                                        <td className={"p-4 border-b border-blue-gray-50"}>
+                                            <div className="flex flex-col">
+                                                <Typography
+                                                    variant="small"
+                                                    color="blue-gray"
+                                                    className="font-normal"
+                                                >
+                                                    {user.advanceAmount-user.advancePaidAmount}
+                                                </Typography>
+                                                
+                                            </div>
                                         </td>
                                         
                                         
                                         
-                                        <td className={classes}>
-                                            <Tooltip content="Remove User">
-                                                <IconButton variant="text">
+                                        <td className={"p-4 border-b border-blue-gray-50"}>
+                                            <Tooltip content="Edit User">
+                                                <UpdateAdvance idx={user.id}/>
+                                                {/* <UpdateEmployee idx={user.id}/> */}
+                                                {/* <IconButton variant="text">
                                                     <PencilIcon className="h-4 w-4" />
-                                                </IconButton>
-                                                {/* <UpdateEmployee/> */}
+                                                </IconButton> */}
                                             </Tooltip>
                                         </td>
                                     </tr>
@@ -142,7 +181,7 @@ export default AdvanceRequestList
 //     },
 // ];
 
-const TABLE_HEAD = ["Employee Name", "Employee ID", "Advance", "Remove"];
+const TABLE_HEAD = ["Employee Name", "Advance", "Paid", "Remaining", "Make Payment"];
 
 const TABLE_ROWS = [
     {

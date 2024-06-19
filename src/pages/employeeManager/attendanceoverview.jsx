@@ -18,6 +18,22 @@ function AttendanceOverviewList() {
         console.log(users);
     }, [])
 
+    const DayOfWeek = ({ dateString }) => {
+        // Parse the date string into a Date object
+        const date = new Date(dateString);
+      
+        // Array of day names
+        const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      
+        // Get the day of the week as an integer (0 = Sunday, 1 = Monday, etc.)
+        const dayIndex = date.getDay();
+      
+        // Get the name of the day from the array
+        const dayName = daysOfWeek[dayIndex];
+      
+        return <div>{dayName}</div>;
+      };
+
     return (
         <Card className=" w-full border-2 ">
             <CardHeader floated={false} shadow={false} className="rounded-none">
@@ -91,6 +107,7 @@ function AttendanceOverviewList() {
                                                     className="font-normal"
                                                 >
                                                     {user.dayType}
+                                                    <DayOfWeek dateString={user.date} />
                                                 </Typography>
                                             </div>
                                         </div>
@@ -103,7 +120,7 @@ function AttendanceOverviewList() {
                                                     color="blue-gray"
                                                     className="font-normal"
                                                 >
-                                                    {user.checkIn}
+                                                    {user.checkIn.slice(12, 16)}
                                                 </Typography>
                                             </div>
                                         </div>
@@ -116,7 +133,7 @@ function AttendanceOverviewList() {
                                                     color="blue-gray"
                                                     className="font-normal"
                                                 >
-                                                    {user.checkOut}
+                                                    {user.checkOut.slice(12, 16)}
                                                 </Typography>
                                             </div>
                                         </div>
