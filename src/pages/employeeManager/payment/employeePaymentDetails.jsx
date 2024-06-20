@@ -11,7 +11,7 @@ import {
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import DashCard2 from "../dashButtonCard copy";
-import { Select } from "@material-tailwind/react";
+import { Select, Option } from "@material-tailwind/react";
 import SelectOption from '@material-tailwind/react/components/Select/SelectOption';
 
 function EmployeePaymentDetails() {
@@ -154,7 +154,7 @@ function EmployeePaymentDetails() {
                       <Select label='Select Name' onChange={OpenSelectHandle} error={errorid ? "true" : null}>
                         {users.map((user) => {
                           return (
-                            <SelectOption key={user.id} value={user.id}>{user.empName} </SelectOption>
+                            <Option key={user.id} value={user.id}>{user.empName} </Option>
                           );
                         },
                         )}
