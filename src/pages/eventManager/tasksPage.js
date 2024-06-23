@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { useEffect, useState } from "react";
 
 import {
   Card,
@@ -6,6 +7,8 @@ import {
   Typography,
   CardBody,
   Chip,
+  IconButton,
+  Tooltip, 
   Input,
   PopoverContent,
   PopoverHandler,
@@ -15,105 +18,68 @@ import {
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
 import { DayPicker } from "react-day-picker";
+import { Spinner } from "@material-tailwind/react";
+import { format } from "date-fns";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import ErrorDisplayWindow from "../../components/eventManager/errorDisplayWindow";
+import { Link, useNavigate } from "react-router-dom";
 
-
-
-const EventManagerEvents = () => {
-  const [date, setDate] = useState();
-  let [eventList, setEventList] = useState([]);
-  let [selectedDateEventList, setselectedDateEventList] = useState([]);
-  const [existError, setExistError] = useState(null);
+const TaskPage = () => {
+  const [date, setDate] = React.useState();
+  let [taskList, setTaskList] = React.useState([]);
+  let [selectedDateEventList, setselectedDateEventList] = React.useState([]);
   const navigate = useNavigate();
-  
   useEffect(() => {
-    console.log('date----:' + date)
     console.log("use effect");
-    getEvents();
+  getTasks()
+    //   getEvents();
   }, []);
+
+  const getTasks = () => {
+    axios.get('http://localhost:5000/eventManager/tasks/all-tasks')
+    .then( (response) => {
+      console.log("tasks -  : " , response)
+    setTaskList(response.data.tasks)
+    })
+    .catch((error) => {
+      console.log("error : " + error)
+    })
+  }
   const TABLE_HEAD = [
-    "Customer Name",
-    "service Type",
+    "Task Name",
+    "Department",
     "date",
     "Mobile No",
     "status",
   ];
-  // const statusTypes = ["Active", "Paused", "Upcoming", "Done", "Offline"];
-  const statusTypes = ["Upcoming","Paused",  "Done"];
-  // const statusTypes = ["Upcoming","Paused",  "Done"];
-  
-  const getEvents = () => {
-    console.log("kkkkkkkkkkkkkkkkkkkk");
-    const response = axios
-    .get("http://localhost:5000/eventManager/all-events")
-    .then((res) => {
-      const events = res.data.events;
-      console.log("events: ", events);
-      console.log("custormer name :" + events[0].customer.firstname);
-        setEventList(events);
-    })
-    .catch((error) => {
-      setExistError(error.message);
-      console.log(error);
-    });
-    // console.log("response: ", response);
-    // console.log(response.events);
-  };
-  // if (date == null) {
-  //   getEvents();
-  // }
-  const getSelectedDayEvents = (date) => {
-    console.log("kkkkkkkkkkkkkkkkkkkk");
-    axios
-      .post("http://localhost:5000/eventManager/selectedDayEvents", {
-        date: date,
-      })
-      .then((res) => {
-        // const events = res.data.events;
-        // console.log("event 0: " , events[0]);
-        // setEventList(res.data)
 
-        console.log(res.data.todayEvents);
-        // setselectedDateEventList(res.data.todayEvents)
-        setEventList(res.data.todayEvents);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    // console.log("response: ", response);
-    // console.log(response.events);
-  };
-  const clearDateFilter = () => {
-    // console.log('date----:' + date)
-    setDate(null)
-    getEvents()
-  }
-
-  return existError != null ? (
-    <ErrorDisplayWindow errorMsg={existError} />
-  ) : (
+  // const statusTypes = ["Active", "Desertion", "Upcoming", "Done", "Offline"];
+  const statusTypes = ["Active", "Upcoming", "Done"];
+  return (
     <div>
-      <div className="flex  justify-between items-center w-full h-[140px] bg-cl-4 rounded font-lato text-xl text-cl-1   p-4 pt-2">
-        <Typography
-          variant="h5"
-          color="blue-gray"
-          className="text-3xl mr-80 flex items-center p-4"
-        >
-          Event
-        </Typography>
-        {/* <IconButton
-          onClick={(e) => {
-            // console.log("eveent list :" , eventList);
-            console.log("date :", date);
-            getSelectedDayEvents();
-          }}
-        >
-          click
-        </IconButton> */}
+      <div className="flex  justify-between items-center w-full h-[140px] rounded font-lato text-xl text-cl-1   p-4 pt-2">
+      <Button className=" w-3/12 h-[140px] flex justify-center items-center bg-cl-4 rounded font-lato text-xl text-cl-1   p-4 pt-2 mr-4"
+      onClick={()=> navigate('/eventManager/createTask')}
+      >
+      <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-8 h-8 inline-block mr-2  font-semibold"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 4.5v15m7.5-7.5h-15"
+            />
+          </svg>
+          <span className="font-semibold"> Create Task</span>
+      </Button>
+    
+        <div className="flex  justify-end items-center w-full h-[140px] bg-cl-4 rounded font-lato text-xl text-cl-1   p-4 pt-2">
 
-        <div className="flex  space-x-4 justify-evenly">
+        <div className="flex  space-x-4 justify-evenly ">
           <div className="w-1/2 h-[46px]">
             <Input
               icon={
@@ -135,7 +101,7 @@ const EventManagerEvents = () => {
               label="Search"
             />
           </div>
-          <div className="flex-col">
+          <div>
             <Popover placement="bottom">
               <PopoverHandler>
                 <Input
@@ -180,8 +146,8 @@ const EventManagerEvents = () => {
                     setDate(selectedDate);
                     console.log(selectedDate);
                     // Call your function here
-                    getSelectedDayEvents(selectedDate);
-                    console.log("Updated eventList :", eventList);
+                    //   getSelectedDayEvents(selectedDate);
+                    console.log("Updated eventList :", taskList);
                     // setEventList()
                   }}
                   showOutsideDays
@@ -210,7 +176,6 @@ const EventManagerEvents = () => {
                     day_disabled: "text-gray-500 opacity-50",
                     day_hidden: "invisible",
                   }}
-                
                   components={{
                     IconLeft: ({ ...props }) => (
                       <ChevronLeftIcon
@@ -228,9 +193,16 @@ const EventManagerEvents = () => {
                 />
               </PopoverContent>
             </Popover>
-            {/* <Button variant="outlined" className="flex rounded-full justify-end" size="sm" onClick={clearDateFilter}>Clear</Button> */}
+            {/* <Button variant="outlined" className="rounded-full" size="sm" onClick={
+             useEffect(() => {
+               setDate(null)
+               getEvents()
+             },[])
+             
+             }>Clear</Button> */}
           </div>
         </div>
+</div>
       </div>
       <div className="h-8"></div>
 
@@ -245,7 +217,7 @@ const EventManagerEvents = () => {
                     color="blue-gray"
                     className="text-3xl flex justify-center items-center  "
                   >
-                    Event
+                    Task
                   </Typography>
                 </td>
                 <td>
@@ -270,8 +242,8 @@ const EventManagerEvents = () => {
                             switch (statusT) {
                               case "Active":
                                 return "Active";
-                              case "Paused":
-                                return "Paused";
+                              case "Desertion":
+                                return "Desertion";
                               case "Done":
                                 return "Done";
                               case "Upcoming":
@@ -288,7 +260,7 @@ const EventManagerEvents = () => {
                                 return "blue";
                               case "Upcoming":
                                 return "green";
-                              case "Paused":
+                              case "Desertion":
                                 return "red";
                               case "Done":
                                 return "amber";
@@ -327,7 +299,7 @@ const EventManagerEvents = () => {
               </tr>
             </thead>
             <tbody>
-              {eventList.length == 0 ? (
+              {taskList.length == 0 ? (
                 <tr>
                   <td colSpan={TABLE_HEAD.length} className="text-center">
                     <div className="flex justify-center items-center h-full p-10">
@@ -372,19 +344,19 @@ const EventManagerEvents = () => {
                   </td>
                 </tr>
               ) : (
-                eventList.map((oneEvent, index) => {
-                  const isLast = index === eventList.length - 1;
+                taskList.map((oneTask, index) => {
+                  const isLast = index === taskList.length - 1;
                   const classes = isLast
                     ? "p-4"
                     : "p-4 border-b border-blue-gray-50";
 
                   return (
-                    // <Link to={{ pathname: "/eventManager/eventDetails", state: { oneEvent } }}>
+                    // <Link to={{ pathname: "/eventManager/eventDetails", state: { oneTask } }}>
                     <tr
-                      key={oneEvent.eventId}
+                      key={oneTask.id}
                       onClick={() =>
-                        navigate("/eventManager/eventDetails", {
-                          state: { eventId: oneEvent.eventId },
+                        navigate("/eventManager/Tasks/view-Task", {
+                          state: { taskId: oneTask.id },
                         })
                       }
                     >
@@ -396,9 +368,10 @@ const EventManagerEvents = () => {
                               color="blue-gray"
                               className="font-normal"
                             >
-                              {oneEvent.customer.firstname +
+                              {/* {oneTask.customer.firstname +
                                 " " +
-                                oneEvent.customer.lastname}
+                                oneTask.customer.lastname} */}{oneTask.taskName}
+                                
                             </Typography>
                           </div>
                         </div>
@@ -410,8 +383,8 @@ const EventManagerEvents = () => {
                               variant="paragraph"
                               color="blue-gray"
                               className="font-bold"
-                            >
-                              {oneEvent.serviceType}
+                            >{oneTask.department}
+                              
                             </Typography>
                           </div>
                         </div>
@@ -423,7 +396,7 @@ const EventManagerEvents = () => {
                             color="blue-gray"
                             className="font-bold"
                           >
-                            {oneEvent.date.slice(0, 10)}
+                            {oneTask.date.slice(0, 10)}
                           </Typography>
                         </div>
                       </td>
@@ -434,7 +407,25 @@ const EventManagerEvents = () => {
                           color="blue-gray"
                           className="font-bold"
                         >
-                          {oneEvent.customer.mobilePhone}
+                           <Tooltip content="Edit User">
+                        <IconButton variant="text">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={2.5}
+                            stroke="currentColor"
+                            className="w-8 h-8 "
+                            color="#21179F"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                            />
+                          </svg>
+                        </IconButton>
+                      </Tooltip>
                         </Typography>
                       </td>
                       <td className={classes}>
@@ -450,11 +441,11 @@ const EventManagerEvents = () => {
                             variant="filled"
                             size="sm"
                             value={(function () {
-                              switch (oneEvent.status) {
+                              switch (oneTask.status) {
                                 case "Active":
                                   return "Active";
-                                case "Paused":
-                                  return "Paused";
+                                case "Desertion":
+                                  return "Desertion";
                                 case "Done":
                                   return "Done";
                                 case "Upcoming":
@@ -464,12 +455,12 @@ const EventManagerEvents = () => {
                               }
                             })()}
                             color={(function () {
-                              switch (oneEvent.status) {
+                              switch (oneTask.status) {
                                 case "Active":
                                   return "blue";
                                 case "Upcoming":
                                   return "green";
-                                case "Paused":
+                                case "Desertion":
                                   return "red";
                                 case "Done":
                                   return "amber";
@@ -495,4 +486,4 @@ const EventManagerEvents = () => {
   );
 };
 
-export default EventManagerEvents;
+export default TaskPage;

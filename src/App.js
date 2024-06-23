@@ -41,6 +41,11 @@ import EventManagerDashboard from './pages/eventManager/EventManagerdashboard';
 import EventRequests from './pages/eventManager/eventRequests';
 import EventManagerEventCalendar from './pages/eventManager/eventManagerEventCalendar';
 import EventManagerEvents from './pages/eventManager/eventManagerEvents';
+import CreateEvent from './pages/eventManager/createEvent'; 
+import EventManagerEvents2 from './pages/eventManager/eventManagerEvents2';
+import TaskPage from './pages/eventManager/tasksPage';
+import TaskView from './pages/eventManager/taskView';
+import CreateTask from './pages/eventManager/createTask';
 import CustomerServices from './pages/customerManager/CustomerServices';
 
 
@@ -67,6 +72,11 @@ function App() {
         <Route path="/eventManager/eventRequests" element={<EventRequests />}/>
         <Route path="/eventManager/eventCalandar" element={<EventManagerEventCalendar/>} />
         <Route path="/eventManager/Events" element={<EventManagerEvents/>} />
+        <Route  path='/eventManager/createEvent' element={<CreateEvent />} />
+        <Route  path='/eventManager/createTask' element={<CreateTask/>} />
+        <Route path='/eventManager/eventDetails' element = {<EventManagerEvents2/>} />
+        <Route path='/eventManager/Tasks' element = {<TaskPage/>} />
+        <Route path='/eventManager/Tasks/view-Task' element = {<TaskView/>} />
       </Route>
       
       <Route path="/stockManager" element={<StockManager />}>
