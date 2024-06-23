@@ -1,156 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import {
-  Card,
-  Input,
-  Typography,
-  Button,
-  Dialog,
-} from "@material-tailwind/react";
-import SmallCard from "../../components/cards/card";
-import "react-toastify/dist/ReactToastify.css";
-import axiosInstance from "../../config/axios.config";
-import Customerform from "./Components/customerform";
-import {initialvalues} from "./initialValues/customer"
-import TableOfCustomers from "./tableContents/TableOfCustomers"
-import { ToastError } from "./ToastAlert";
+import React from 'react'
+import {Card,Input,Typography,Button,Dialog,CardBody,CardFooter} from "@material-tailwind/react";
+import EditRecordButton from '../../../components/buttons/EditRecordButton';
+import DeleteRecordButton from '../../../components/buttons/DeleteRecordButton';
+import { Pagination } from '../../../components/pagination/pagination';
+import { TABLE_HEAD } from '../initialValues/customer';
 
-function Customers() {
-  const [open, setOpen] = useState(false);
-  const [active, setActive] = useState(1);
-  const [results, setResults] = useState(0);
-  const [mode, setMode] = useState(false);
-
-  const [customerList, setCustomerList] = useState([]); //customerlist
-  const [selectedCustomer, setSelectedCustomer] = useState(initialvalues);
-  const [search, setSearch] = useState(""); // search customer
-
- 
-
-  const handleOpen = () => setOpen((cur) => !cur);
-
-  // add customer  handler
-  const handleAdd = () => {
-    console.log(selectedCustomer, "add");
-    setSelectedCustomer(initialvalues);
-    setMode(false);
-    setOpen(true);
-  };
-
-  //edit customer handler
-  const handleEdit = () => {
-    console.log(selectedCustomer, "edit");
-    setMode(true);
-    setOpen(true);
-  };
-
-// search customer
-  const handleSearch = async () => {
-    console.log("searching begin");
-    try {
-      const { data } = await axiosInstance.get(
-        `/customerManager/customer/?mobilePhone=${search}&page=${active}&limit=8`
-      );
-      if (!data) {
-        ToastError("no customer exist")
-      }
-      console.log(data);
-      setCustomerList(data.rows);
-      setResults(data.count)
-      setMode(false);
-    } catch (error) {
-      console.log(error);
-      ToastError(error)
-    }
-  };
-
-  useEffect(() => {
-    console.log("search when page change");
-    handleSearch();
-    
-  }, [active]);
-
-  useEffect(() => {
-    if (search !== "") {
-      handleSearch();
-      console.log("search when number change");
-    }
-  }, [search]);
-
-  return (
-    <div className="flex flex-col gap-10">
-      <div className="flex gap-10">
-        <SmallCard
-          className=" w-full"
-          title="Create Customer "
-          onClick={handleAdd}
-        />
-        <Card className="w-full rounded flex justify-center px-4">
-          <div className="flex flex-col items-center justify-between gap-4   md:flex-row ">
-            <Typography className="text-2xl">Customer</Typography>
-            <div className="relative flex w-full max-w-[24rem] ">
-              <Input
-                type="number"
-                label=" Mobile"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="pr-20"
-                containerProps={{
-                  className: "min-w-0",
-                }}
-              />
-              <Button
-                size="sm"
-                color={search ? "gray" : "blue-gray"}
-                disabled={!search}
-                className="!absolute right-0 bottom-0 rounded"
-                onClick={handleSearch}
-              >
-                <MagnifyingGlassIcon className="h-6 w-5" />
-              </Button>
-            </div>
-          </div>
-        </Card>
-      </div>
-      <TableOfCustomers 
-      setActive={setActive}
-      active={active}
-      results={results}
-      customerList={customerList}
-      handleEdit={handleEdit}
-      setSelectedCustomer={setSelectedCustomer}
-      />
-      <div>
-        {/* below commented one for customer table */}
-        <Dialog
-          size="lg"
-          open={open}
-          handler={handleOpen}
-          className="bg-transparent shadow-none"
-        >
-          <Customerform
-            handleOpen={handleOpen}
-            initialvalues={selectedCustomer}
-            setCustomer={setSelectedCustomer}
-            mode={mode}
-            setSearch={setSearch}
-            customers={customerList}
-            setCustomers={setCustomerList}
-            componentType={1}
-          />
-        </Dialog>
-        
-      </div>
-    </div>
-  );
-}
-
-export default Customers;
-
-
-
-
- {/* <Card className=" w-full border-2 rounded p-4">
+export default function TableOfCustomers({customerList,handleEdit,setSelectedCustomer,active,setActive,results}) {
+    return (
+      <div>  
+        <Card className=" w-full border-2 rounded p-4">
           <CardBody className="overflow-scroll px-0 z-10">
             <table className="mt-4 w-full min-w-max table-auto text-left">
               <thead>
@@ -309,4 +167,9 @@ export default Customers;
               <Pagination active={active} setActive={setActive} />
             </div>
           </CardFooter>
-        </Card> */}
+        </Card>
+      </div>
+    )
+  }
+  
+

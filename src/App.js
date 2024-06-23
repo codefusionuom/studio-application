@@ -41,6 +41,7 @@ import EventManagerDashboard from './pages/eventManager/EventManagerdashboard';
 import EventRequests from './pages/eventManager/eventRequests';
 import EventManagerEventCalendar from './pages/eventManager/eventManagerEventCalendar';
 import EventManagerEvents from './pages/eventManager/eventManagerEvents';
+import CustomerServices from './pages/customerManager/CustomerServices';
 
 
 function App() {
@@ -58,6 +59,7 @@ function App() {
         <Route   path="/customerManager/createCustomerRequest" element={<CreateCustomerRequest />} />
         <Route   path="/customerManager/paymentList" element={<PaymentList />} />
         <Route  path="/customerManager/customerRequest" element={<CustomerRequests />} />
+        <Route  path="/customerManager/customerServices" element={<CustomerServices />} />
       </Route>
 
       <Route path="/eventManager" element={<EventManager/>}>
@@ -101,15 +103,9 @@ function App() {
   
   
     </>
-    // another way
-    // <Routes>
-    //   <Route exact path="cm" >
-    //     <Route exact path="/cm/pl" element={<PaymentList/>} />
-    //     <Route  path="/cm/ch" element={<CustomerRequests/>} />
-    //   </Route>
-    // </Routes>
+
     
   );
 }
-{/* <Layout sections={customerList}/>  */ }
+
 export default App;
