@@ -1,64 +1,44 @@
-import {    Button, Card, CardBody , CardFooter, CardHeader, Chip, IconButton,  Tooltip, Typography ,} from '@material-tailwind/react'
-import React from 'react'
+import {    Button, Card, CardBody , CardFooter, CardHeader, Chip, IconButton,  Spinner,  Tooltip, Typography ,} from '@material-tailwind/react'
+import React, { useEffect, useState } from 'react'
 import NotificationCard from '../../components/cards/notificationCard'
-import CardEvent from './cardEvent'
+import CardEvent from '../../components/eventManager/cardEvent'
 import { ChevronUpDownIcon } from '@heroicons/react/24/outline';
+import axios from "axios";
+import ErrorDisplayWindow from '../../components/eventManager/errorDisplayWindow';
+
+
+let todayEventsServiceTpes ;
 
 function EventManagerDashboard() {
-   
+  const [todayEvents, setTodayEvents] = useState([]);
+  const [existError, setExistError] = useState(null);
+  useEffect(() =>{
+    
+    getTodayEvents();
+  } ,[])
+  
+  
+  const getTodayEvents = () =>{
+    console.log("getTodayEvents call");
+    axios.get('http://localhost:5000/eventManager/todayEvent' ).then( (response) => {
+      console.log(response);
+      setTodayEvents(response.data.todayEvents);
+      console.log("today events :", todayEvents);
+      
+    }).catch( (error) => {
+      setExistError(error.message);
+    })
+  }
+  const TABLE_HEAD = ["Custermer Name", "Service Type", "Phone Number", "Status"];
        
-      const TABLE_HEAD = ["Custermer Name", "Service Type", "Phone Number", "Status"];
-       
-      const TABLE_ROWS = [
-        {
-          name: "John Michael",
-          serviceType: "Mug printing",
-          job: "Manager",
-          org: "Organization",
-          online: true,
-          phoneNo: "0775588693",
-        },
-        {
-          name: "Alexa Liras",
-          serviceType: "Birthday shoot",
-          job: "Programator",
-          org: "Developer",
-          online: true,
-          phoneNo: "0775588693",
-        },
-        {
-          name: "Laurent Perrier",
-          serviceType: "Mug printing",
-          job: "Executive",
-          org: "Projects",
-          online: true,
-          phoneNo: "0775588693",
-        },
-        {
-          name: "Michael Levi",
-          serviceType: "Mug printing",
-          job: "Programator",
-          org: "Developer",
-          online: true,
-          phoneNo: "0775588693",
-        },
-        {
-          name: "Richard Gran",
-          serviceType: "Mug printing",
-          job: "Manager",
-          org: "Executive",
-          online: true,
-          phoneNo: "0775588693",
-        },
-      ];
-  return (
+    
+  return (existError != null ? (
+    <ErrorDisplayWindow errorMsg={existError} />
+  ) :
   <div>
     <div className="flex space-x-4">
    
-   <NotificationCard title={" Event Requests"} notificationNumber={5}/>2
-   <CardEvent title={"Add new Event"}/>
-   <CardEvent title={"Add new Event"}/>
-
+   <NotificationCard title={" Event Requests"} notificationNumber={5}/>
 
 
    
@@ -100,15 +80,27 @@ function EventManagerDashboard() {
             </tr>
           </thead>
           <tbody>
-            {TABLE_ROWS.map(
-              ({ name, serviceType, job, org, online, phoneNo }, index) => {
-                const isLast = index === TABLE_ROWS.length - 1;
+            {todayEvents.length  == 0 ? (
+                <tr>
+                  <td colSpan={TABLE_HEAD.length} className="text-center">
+                    <div className="flex justify-center items-center h-full p-10">
+                      <Spinner
+                       color="blue" className="h-12 w-12 mx-auto" />
+                    </div>
+                  </td>
+                </tr>
+              ) :todayEvents.map(
+              ( todaySingleEvent, index) => {
+                
+                const isLast = index === todayEvents.length - 1;
                 const classes = isLast
                   ? "p-4"
                   : "p-4 border-b border-blue-gray-50";
- 
+                // {todayEvents.map(( todayEvent) =>{})}
                 return (
-                  <tr key={name}>
+                  <tr 
+                  // key={name}
+                  >
                     <td className={classes}>
                       <div className="flex items-center gap-3">
                        
@@ -118,7 +110,8 @@ function EventManagerDashboard() {
                             color="blue-gray"
                             className="font-normal"
                           >
-                            {name}
+                            {/* {name} */}
+                            {todaySingleEvent.serviceType}
                           </Typography>
                        
                         </div>
@@ -131,7 +124,7 @@ function EventManagerDashboard() {
                           color="blue-gray"
                           className="font-normal"
                         >
-                          {serviceType}
+                          {todaySingleEvent.date.slice(0, 10)}
                         </Typography>
                        
                       </div>
@@ -143,7 +136,8 @@ function EventManagerDashboard() {
                         color="blue-gray"
                         className="font-normal"
                       >
-                        {phoneNo}
+                        {/* {phoneNo} */}
+                        {todaySingleEvent.status}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -153,8 +147,8 @@ function EventManagerDashboard() {
                         style={{ color: 'black' ,display: 'flex' , justifyContent: 'center'  }}
                           variant="filled"
                           size="sm"
-                          value={online ? "Active" : "offline"}
-                          color={online ? "blue" : "blue-gray"}
+                          value={todaySingleEvent.status == "Active" ? "Active" : "offline"}
+                          color={todaySingleEvent.status == "Active"? "blue" : "blue-gray"}
                           fontWeight="bold"
                         />
                       </div>

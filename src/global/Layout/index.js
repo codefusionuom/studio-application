@@ -6,7 +6,7 @@ function Layout({ children,sections }) {
     return (
         
             <div className="flex bg-bg  "  >
-                <div className='bg-primary'>
+                <div className='bg-primary w-[30%]'>
                     {/* <SidebarNim>
                     </SidebarNim> */}
                     <DefaultSidebar sections={sections}/>
