@@ -5,7 +5,6 @@ import App from './App';
 import { store } from './app/store'
 import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom';
-// import { CssBaseline, createTheme, StyledEngineProvider, ThemeProvider } from '@mui/material';
 
 
 const rootElement = document.getElementById('root');
@@ -17,14 +16,14 @@ const root = ReactDOM.createRoot(rootElement);
 root.render(
 
    <React.StrictMode>
-    {/* <Provider store={store}>  */}
+    <Provider store={store}> 
       <BrowserRouter> 
 
 
         <App />
       </BrowserRouter>
       
-    {/* </Provider> */}
+    </Provider>
   </React.StrictMode>
 );
 

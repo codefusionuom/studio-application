@@ -1,14 +1,11 @@
 import { QuickAvatar } from "./quickviewAvatar";
 
-
-export function QuickView(){
-
-    return(
-
-<div className='flex justify-evenly pb-10'>
+export function QuickView1() {
+    return (
+        <div className='flex justify-evenly pb-10'>
             <div className='flex justify-evenly'>
                 <div className='img'>
-                    <QuickAvatar/>
+                    <QuickAvatar />
                 </div>
                 <div>
                     <div>
@@ -18,11 +15,10 @@ export function QuickView(){
                         <p className="text-3xl">18</p>
                     </div>
                 </div>
-
             </div>
             <div className='flex justify-evenly'>
                 <div className='img'>
-                <QuickAvatar/>
+                    <QuickAvatar />
                 </div>
                 <div>
                     <div>
@@ -35,7 +31,7 @@ export function QuickView(){
             </div>
             <div className='flex justify-evenly'>
                 <div className='img'>
-                <QuickAvatar/>
+                    <QuickAvatar />
                 </div>
                 <div>
                     <div>
@@ -46,8 +42,6 @@ export function QuickView(){
                     </div>
                 </div>
             </div>
-            
-            
         </div>
     )
-    }
+}

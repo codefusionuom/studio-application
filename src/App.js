@@ -46,6 +46,7 @@ import EventManagerEvents2 from './pages/eventManager/eventManagerEvents2';
 import TaskPage from './pages/eventManager/tasksPage';
 import TaskView from './pages/eventManager/taskView';
 import CreateTask from './pages/eventManager/createTask';
+import CustomerServices from './pages/customerManager/CustomerServices';
 
 
 function App() {
@@ -63,6 +64,7 @@ function App() {
         <Route   path="/customerManager/createCustomerRequest" element={<CreateCustomerRequest />} />
         <Route   path="/customerManager/paymentList" element={<PaymentList />} />
         <Route  path="/customerManager/customerRequest" element={<CustomerRequests />} />
+        <Route  path="/customerManager/customerServices" element={<CustomerServices />} />
       </Route>
 
       <Route path="/eventManager" element={<EventManager/>}>
@@ -111,15 +113,9 @@ function App() {
   
   
     </>
-    // another way
-    // <Routes>
-    //   <Route exact path="cm" >
-    //     <Route exact path="/cm/pl" element={<PaymentList/>} />
-    //     <Route  path="/cm/ch" element={<CustomerRequests/>} />
-    //   </Route>
-    // </Routes>
+
     
   );
 }
-{/* <Layout sections={customerList}/>  */ }
+
 export default App;
