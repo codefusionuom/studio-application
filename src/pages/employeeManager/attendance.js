@@ -28,11 +28,36 @@ function Attendance() {
     const [errorLeaveType, setErrorLeaveType] = useState(false)
     const [checkIn, setCheckIn] = useState()
     const [checkOut, setCheckOut] = useState()
-    const [dayType, setDayType] = useState()
-    const [leaveType, setLeaveType] = useState()
+    // const [dayType, setDayType] = useState()
+    // const [leaveType, setLeaveType] = useState()
     const [id, setid] = useState()
     const [date, setDate] = useState()
     const [timein, setTimein] = useState()
+    // const [checkInSeconds,setCheckInSeconds] = useState()
+    // const [checkOutSeconds,setCheckOutSeconds] = useState()
+
+    function convertTimeToSeconds(timeString) {
+        console.log("input:"+timeString);
+        // Split the time string into hours, minutes, and seconds
+        const [hoursStr, minutesStr] = timeString.split(':');
+
+        // Convert string parts to numbers
+        const hours = parseInt(hoursStr, 10);
+        const minutes = parseInt(minutesStr, 10);
+        // console.log("hours:"+hours);
+        // console.log(typeof hours);
+        // console.log("min:"+minutes);
+        // console.log(typeof minutes);
+
+
+      
+        // Calculate total seconds
+        const totalSeconds = hours * 3600 + minutes * 60;
+        // console.log("total"+totalSeconds);
+        // console.log(typeof totalSeconds);
+      
+        return totalSeconds;
+      }
 
 
     useEffect(() => {
@@ -78,20 +103,30 @@ function Attendance() {
         //     return;
         // }
         setErrorCheckOut(false);
-        if (!dayType) {
-            setErrorDayType(true);
-            alert("Please select day type");
-            return;
-        }
-        setErrorDayType(false);
-        if (!leaveType) {
-            setErrorLeaveType(true);
-            alert("Please select leave type");
-            return;
-        }
-        setErrorLeaveType(false);
+        
 
-        axios.post("http://localhost:5000/employeeManager/createAttendance", { id, date, checkIn, checkOut, dayType, leaveType })
+        const checkInSeconds = convertTimeToSeconds(checkIn);
+        const checkOutSeconds = convertTimeToSeconds(checkOut);
+
+        // const checkintemp = convertTimeToSeconds(checkIn);
+        // const checkouttemp = convertTimeToSeconds(checkOut);
+
+        // console.log(checkintemp);
+        // console.log(checkouttemp);
+
+        // setCheckOutSeconds(checkintemp);
+        // setCheckInSeconds(checkouttemp);
+        
+        console.log(checkInSeconds);
+        console.log(checkOutSeconds);
+
+        const newDate = new Date(date); // Create a new Date object based on the current date
+        newDate.setDate(date.getDate() + 1);
+
+        const dateString = newDate.toISOString().replace('Z', '+00:00');
+        console.log(dateString);
+
+        axios.post("http://localhost:5000/employeeManager/createAttendance", { id, dateString, checkIn, checkOut, checkInSeconds, checkOutSeconds })
             .then(result => {
                 console.log(result)
                 window.location.reload()
@@ -201,7 +236,7 @@ function Attendance() {
                             <div>
                                 <p>Day Type :</p>
                                 <div className="w-80 pt-1 pb-10">
-                                    <Select label='Day Type' onChange={item => { setDayType(item) }} error={errorDayType ? "true" : null}>
+                                    {/* <Select label='Day Type' onChange={item => { setDayType(item) }} error={errorDayType ? "true" : null}>
                                         <Option value='Monday'>Moday</Option>
                                         <Option value='Tuesday'>Tuesday</Option>
                                         <Option value='Wednesday'>Wednesday</Option>
@@ -209,7 +244,7 @@ function Attendance() {
                                         <Option value='Friday'>Friday</Option>
                                         <Option value='Saturday'>Saturday</Option>
                                         <Option value='Sunday'>Sunday</Option>
-                                    </Select>
+                                    </Select> */}
                                 </div>
                             </div>
                         </div>
@@ -229,11 +264,11 @@ function Attendance() {
                                 {/* <TimePicker  onChange={setTimein} disableClock={true} value={timein} /> */}
 
 
-                                    <Select label='Leave Type' onChange={(item) => setLeaveType(item)} error={errorLeaveType ? "true" : null}>
+                                    {/* <Select label='Leave Type' onChange={(item) => setLeaveType(item)} error={errorLeaveType ? "true" : null}>
                                         <Option value='HalfDay'>Half-Day</Option>
                                         <Option value='Later Arival'>Late Arival</Option>
                                         <Option value='Absent'>Absent</Option>
-                                    </Select>
+                                    </Select> */}
                                 </div>
 
                                 

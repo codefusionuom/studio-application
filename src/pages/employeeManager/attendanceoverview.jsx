@@ -106,7 +106,6 @@ function AttendanceOverviewList() {
                                                     color="blue-gray"
                                                     className="font-normal"
                                                 >
-                                                    {user.dayType}
                                                     <DayOfWeek dateString={user.date} />
                                                 </Typography>
                                             </div>
