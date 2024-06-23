@@ -1,0 +1,204 @@
+{
+  "users": [
+    {
+      "id": "75d7",
+      "employeeId": "sdas",
+      "employeeName": "asd",
+      "privileges": "employee_manager",
+      "telephone": "asd",
+      "address": "sda"
+    },
+    {
+      "id": "c393",
+      "employeeId": "sqws",
+      "employeeName": "sqw",
+      "privileges": "employee_manager",
+      "telephone": "dq",
+      "address": "asd"
+    },
+    {
+      "id": "4b07",
+      "employeeId": "cC",
+      "employeeName": "Zc",
+      "privileges": "customer_manager",
+      "telephone": "scasa",
+      "address": "sacscac"
+    },
+    {
+      "id": "1eae",
+      "employeeId": "dsd",
+      "employeeName": "xcvb",
+      "privileges": "stock_manager",
+      "telephone": "567",
+      "address": " vbnh"
+    },
+    {
+      "id": "a479",
+      "employeeId": "564",
+      "employeeName": "sdfg",
+      "privileges": "event_manager",
+      "telephone": "84653",
+      "address": "cvbcg"
+    },
+    {
+      "id": "7dd6",
+      "employeeId": "dzvb",
+      "employeeName": "try",
+      "privileges": "employee_manager",
+      "telephone": "524",
+      "address": "xz"
+    },
+    {
+      "id": "a8f4",
+      "employeeId": "wefwe",
+      "employeeName": "aggre",
+      "privileges": "stock_manager",
+      "telephone": "54354",
+      "address": "rthbrt"
+    },
+    {
+      "id": "f46d",
+      "employeeId": "wef",
+      "employeeName": "srfea",
+      "privileges": "event_manager",
+      "telephone": "64",
+      "address": "vzsd"
+    },
+    {
+      "id": "5f5f",
+      "employeeId": "wfe",
+      "employeeName": "a3",
+      "privileges": "customer_manager",
+      "telephone": "3",
+      "address": "s"
+    },
+    {
+      "id": "23ed",
+      "employeeId": "19",
+      "employeeName": "hiripitiya",
+      "privileges": "customer_manager",
+      "telephone": "0714445152",
+      "address": "getahetta"
+    },
+    {
+      "id": "3a55",
+      "employeeId": "asd",
+      "employeeName": "asdwf",
+      "privileges": "employee_manager",
+      "telephone": "44154",
+      "address": "sdcds"
+    },
+    {
+      "id": "da18",
+      "employeeId": "fSDF",
+      "employeeName": "sdff",
+      "privileges": "employee_manager",
+      "telephone": "856",
+      "address": "svd"
+    },
+    {
+      "id": "43cc",
+      "employeeId": "7ikk",
+      "employeeName": "ugkuil",
+      "privileges": "customer_manager",
+      "telephone": "53853",
+      "address": "yjyjy"
+    },
+    {
+      "id": "4728",
+      "employeeId": "7ikk",
+      "employeeName": "ugkuil",
+      "privileges": "customer_manager",
+      "telephone": "53853",
+      "address": "yjyjy"
+    },
+    {
+      "id": "1afd",
+      "employeeId": "7ikk",
+      "employeeName": "ugkuil",
+      "privileges": "customer_manager",
+      "telephone": "53853",
+      "address": "yjyjy"
+    },
+    {
+      "id": "d46f",
+      "employeeId": "7ikk",
+      "employeeName": "ugkuil",
+      "privileges": "customer_manager",
+      "telephone": "53853",
+      "address": "yjyjy"
+    },
+    {
+      "id": "e40e",
+      "employeeId": "7ikk",
+      "employeeName": "ugkuil",
+      "privileges": "customer_manager",
+      "telephone": "53853",
+      "address": "yjyjy"
+    },
+    {
+      "id": "4f48",
+      "employeeId": "fsgg",
+      "employeeName": "asgr",
+      "privileges": "employee_manager",
+      "telephone": "6",
+      "address": "dsag"
+    },
+    {
+      "id": "51d1",
+      "employeeId": "fsgg",
+      "employeeName": "asgr",
+      "privileges": "employee_manager",
+      "telephone": "6",
+      "address": "dsag"
+    },
+    {
+      "id": "45f9",
+      "employeeId": "fsgg",
+      "employeeName": "asgr",
+      "privileges": "stock_manager",
+      "telephone": "6",
+      "address": "dsag"
+    },
+    {
+      "id": "7324",
+      "employeeId": "adadede",
+      "employeeName": "dce",
+      "privileges": "event_manager",
+      "telephone": "8456",
+      "address": "vad"
+    }
+  ],
+  "department": [
+    {
+      "id": "7c18",
+      "departmentId": "#567",
+      "departmentName": "editorial",
+      "departmentHead": "sunil perera",
+      "departmentEmp": "amal silva",
+      "departmentItem": "laptop",
+      "departmentTask": "edit wedding photos",
+      "description": ""
+    },
+    {
+      "id": "91a1",
+      "departmentId": "sa",
+      "departmentName": "sa",
+      "departmentHead": "sax",
+      "departmentEmp": "sx",
+      "departmentItem": "sa",
+      "departmentTask": "sx",
+      "description": "sax"
+    },
+    {
+      "id": "6876",
+      "departmentId": "84",
+      "departmentName": "fvssvdz",
+      "departmentHead": "cds",
+      "departmentEmp": "dcs",
+      "departmentItem": "cd",
+      "departmentTask": "cds",
+      "description": "scd"
+    }
+  ]
+}
