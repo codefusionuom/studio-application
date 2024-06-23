@@ -14,7 +14,7 @@ const EmployeeSearchForm = ({
   setAsignedEmployeesList
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("All categories");
+  const [selectedCategory, setSelectedCategory] = useState("All Deaprtments");
   const [searchQuery, setSearchQuery] = useState("");
   const [resultDisplayfield1Val, setResultDisplayfield1Val] = useState("");
   const [resultDisplayfield2Val, setResultDisplayfield2Val] = useState("");

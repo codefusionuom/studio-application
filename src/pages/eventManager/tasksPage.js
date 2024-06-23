@@ -52,7 +52,8 @@ const TaskPage = () => {
     "status",
   ];
 
-  const statusTypes = ["Active", "Desertion", "Upcoming", "Done", "Offline"];
+  // const statusTypes = ["Active", "Desertion", "Upcoming", "Done", "Offline"];
+  const statusTypes = ["Active", "Upcoming", "Done"];
   return (
     <div>
       <div className="flex  justify-between items-center w-full h-[140px] rounded font-lato text-xl text-cl-1   p-4 pt-2">

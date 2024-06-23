@@ -141,12 +141,11 @@ const TaskView = () => {
     })
   }
   const getAssignedEmployees = async (taskId) => {
-    console.log("77777777777777777777777777777777777777777777777777")
     const response = await axios.get(
       `http://localhost:5000/eventManager/task/assigned-employees/${taskId}`
     ).then((response) => {
-      console.log("employees :" ,response.data.assignedTasks);
-      const employees = response.data.assignedTasks.map((assignedTask) => assignedTask.employee)
+      console.log("employees :" ,response);
+      const employees = response.data.assignedTasks === "undefined" ?"" : response.data.assignedTasks.map((assignedTask) => assignedTask.employee)
       setAsssignedEmployees(employees)
       console.log("Assigned employees :" , assignedEmployees)
 
@@ -469,8 +468,11 @@ const TaskView = () => {
               &nbsp;
             </Typography>
           </div>
+
         </tr>
         : 
+        <div>
+
       <div className="flex  justify-between ">
         <div className="flex      w-full  p-4">
           <div className="flex flex-col">
@@ -518,8 +520,7 @@ const TaskView = () => {
         </div>
       </div>
       
-        
-      }
+   
     <Card className="h-full w-full p-4">
       <CardHeader floated={false} shadow={false} className="rounded-none">
         {/* <div className="mb-8 flex items-center justify-between gap-8"> */}
@@ -557,6 +558,17 @@ const TaskView = () => {
           </div>
         </div> */}
       </CardHeader>
+      {
+    assignedEmployees.length === 0 ?
+     <tr className="flex justify-center items-center p-8 bg-blue-gray-50 m-4">
+        <td className="">
+          <Typography variant="h3">No employees assigned !  </Typography> 
+
+         
+          <Typography variant="h6" className="flex justify-center mt-4" color="green"> <Button variant="outlined" className="flex justify-center rounded-full"  color="green">Assign Now !  </Button>  </Typography> 
+        
+        </td>
+    </tr> :  
       <CardBody className="  px-0">
         <table className="mt-4 w-full min-w-max table-auto text-left ">
           <thead>
@@ -668,6 +680,7 @@ const TaskView = () => {
           </tbody>
         </table>
       </CardBody>
+}
       {/* <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
         <Typography variant="small" color="blue-gray" className="font-normal">
           Page 1 of 10
@@ -682,6 +695,9 @@ const TaskView = () => {
         </div>
       </CardFooter> */}
     </Card>
+    
+        </div>
+      }
     </div>
      
     </div>

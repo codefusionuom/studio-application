@@ -105,7 +105,7 @@ const CreateEvent = () => {
     <div>
       <div className="bg-cl-4 mt-8 ">
         <div className="  text-gray-700 bg-transparent shadow-none rounded-xl bg-clip-border p-4 pl-10 ">
-         <Accordian/>
+         {/* <Accordian/> */}
          
           <Card className="mt-6 w-full bg-gray-400 bold">
             <CardBody>

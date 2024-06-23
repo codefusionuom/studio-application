@@ -206,7 +206,7 @@ const CreateTask = () => {
                 onChange={(e) => setTaskName(e.target.value)}
               />
               <h6 className="block -mb-3 font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-blue-gray-900">
-                Event ID
+                Select Event
               </h6>
               <div className="relative h-11 w-full min-w-[200px]">
                 <Select

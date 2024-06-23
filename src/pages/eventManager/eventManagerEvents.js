@@ -40,7 +40,9 @@ const EventManagerEvents = () => {
     "Mobile No",
     "status",
   ];
-  const statusTypes = ["Active", "Desertion", "Upcoming", "Done", "Offline"];
+  // const statusTypes = ["Active", "Paused", "Upcoming", "Done", "Offline"];
+  const statusTypes = ["Upcoming","Paused",  "Done"];
+  // const statusTypes = ["Upcoming","Paused",  "Done"];
   
   const getEvents = () => {
     console.log("kkkkkkkkkkkkkkkkkkkk");
@@ -226,7 +228,7 @@ const EventManagerEvents = () => {
                 />
               </PopoverContent>
             </Popover>
-            <Button variant="outlined" className="flex rounded-full justify-end" size="sm" onClick={clearDateFilter}>Clear</Button>
+            {/* <Button variant="outlined" className="flex rounded-full justify-end" size="sm" onClick={clearDateFilter}>Clear</Button> */}
           </div>
         </div>
       </div>
@@ -268,8 +270,8 @@ const EventManagerEvents = () => {
                             switch (statusT) {
                               case "Active":
                                 return "Active";
-                              case "Desertion":
-                                return "Desertion";
+                              case "Paused":
+                                return "Paused";
                               case "Done":
                                 return "Done";
                               case "Upcoming":
@@ -286,7 +288,7 @@ const EventManagerEvents = () => {
                                 return "blue";
                               case "Upcoming":
                                 return "green";
-                              case "Desertion":
+                              case "Paused":
                                 return "red";
                               case "Done":
                                 return "amber";
@@ -451,8 +453,8 @@ const EventManagerEvents = () => {
                               switch (oneEvent.status) {
                                 case "Active":
                                   return "Active";
-                                case "Desertion":
-                                  return "Desertion";
+                                case "Paused":
+                                  return "Paused";
                                 case "Done":
                                   return "Done";
                                 case "Upcoming":
@@ -467,7 +469,7 @@ const EventManagerEvents = () => {
                                   return "blue";
                                 case "Upcoming":
                                   return "green";
-                                case "Desertion":
+                                case "Paused":
                                   return "red";
                                 case "Done":
                                   return "amber";
