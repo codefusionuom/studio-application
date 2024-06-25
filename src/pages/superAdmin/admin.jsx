@@ -17,13 +17,13 @@ function Admin() {
   useEffect(() => {
     setIsLoading(true); 
     axios
-      .get("http://localhost:5000/superAdmin/admin/:page")
+      .get("http://localhost:5000/superAdmin/admin/")
       .then((res) => {
-        setRecords(res.data.rows); //set data
+        setRecords(res.data);
         setIsLoading(false);
       })
       .catch((err) => {
-        console.log(err); 
+        console.log(err);
       });
   }, []);
 
