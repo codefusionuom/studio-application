@@ -141,12 +141,12 @@ function RegisterEmployee() {
           </CardBody>
           <CardFooter className="pt-0">
             <div className=" flex flex-row justify-between">
-              <Button className=" bg-yellow-800" onClick={handleOpen}>
+              {/* <Button className=" bg-yellow-800" onClick={handleOpen}>
                 Clear
               </Button>
               <Button className=" bg-green-600" onClick={handleOpen}>
                 Create
-              </Button>
+              </Button> */}
             </div>
           </CardFooter>
         </Card>

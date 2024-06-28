@@ -1,12 +1,13 @@
 import { MagnifyingGlassIcon, ChevronUpDownIcon, } from "@heroicons/react/24/outline";
 import { Card, CardHeader, Input, Typography, Button, CardBody, Chip, CardFooter, Tabs, TabsHeader, Tab, Avatar, IconButton, Tooltip, Select, Option, } from "@material-tailwind/react";
-import { Pagination } from "../../components/pagination/pagination";
+import { Pagination } from "../../../components/pagination/pagination";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import UpdateAdvance from "./payment/editadvance";
-import UpdateEmployee from "./empForms/updateEmployee";
+import UpdateAdvance from "../payment/editadvance";
+import UpdateEmployee from "../empForms/updateEmployee";
+import EditRecordButton from "../../../components/buttons/EditRecordButton";
 
-function AdvanceRequestList() {
+function ViewAllowance() {
 
     const [id,setid] = useState()
     const [empId,setEmpId] = useState()
@@ -20,11 +21,21 @@ function AdvanceRequestList() {
 
 
     useEffect(() => {
-        axios.get('http://localhost:5000/employeeManager/getAdvance')
+        axios.get('http://localhost:5000/employeeManager/getAllowance')
           .then(result => setUser(result.data))
           .catch(err => console.log(err))
         console.log(users)
       }, [])
+
+      const handleDelete = (id) => {
+        axios.delete('http://localhost:5000/employeeManager/deleteAllowance/' + id)
+          .then(res => {
+            console.log(res)
+            window.location.reload()
+          })
+          .catch(err => console.log(err))
+    
+      }
 
 
 
@@ -91,7 +102,7 @@ function AdvanceRequestList() {
                                                         color="blue-gray"
                                                         className="font-normal"
                                                     >
-                                                        {user.empId}
+                                                        {user.allowanceDeductionName}
                                                     </Typography>
                                                     
                                                 </div>
@@ -104,45 +115,19 @@ function AdvanceRequestList() {
                                                     color="blue-gray"
                                                     className="font-normal"
                                                 >
-                                                    {user.advanceAmount}
+                                                    {user.allowanceDeduction}
                                                 </Typography>
                                                 
                                             </div>
                                         </td>
-                                        <td className={"p-4 border-b border-blue-gray-50"}>
-                                            <div className="flex flex-col">
-                                                <Typography
-                                                    variant="small"
-                                                    color="blue-gray"
-                                                    className="font-normal"
-                                                >
-                                                    {user.advancePaidAmount}
-                                                </Typography>
-                                                
-                                            </div>
-                                        </td>
-                                        <td className={"p-4 border-b border-blue-gray-50"}>
-                                            <div className="flex flex-col">
-                                                <Typography
-                                                    variant="small"
-                                                    color="blue-gray"
-                                                    className="font-normal"
-                                                >
-                                                    {user.advanceAmount-user.advancePaidAmount}
-                                                </Typography>
-                                                
-                                            </div>
-                                        </td>
+                                        
+                                        
                                         
                                         
                                         
                                         <td className={"p-4 border-b border-blue-gray-50"}>
                                             <Tooltip content="Edit User">
-                                                <UpdateAdvance idx={user.id}/>
-                                                {/* <UpdateEmployee idx={user.id}/> */}
-                                                {/* <IconButton variant="text">
-                                                    <PencilIcon className="h-4 w-4" />
-                                                </IconButton> */}
+                                                <EditRecordButton onClick={() => handleDelete(user.id)}></EditRecordButton>
                                             </Tooltip>
                                         </td>
                                     </tr>
@@ -163,9 +148,9 @@ function AdvanceRequestList() {
         </Card>
     );
 }
-export default AdvanceRequestList
+export default ViewAllowance
 
 
 
-const TABLE_HEAD = ["Employee Name", "Advance", "Paid", "Remaining", "Make Payment"];
+const TABLE_HEAD = ["Name", "Allowance/Deduction", "Delete"];
 

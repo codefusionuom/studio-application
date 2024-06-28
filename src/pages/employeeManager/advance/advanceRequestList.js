@@ -3,11 +3,10 @@ import { Card, CardHeader, Input, Typography, Button, CardBody, Chip, CardFooter
 import { Pagination } from "../../../components/pagination/pagination";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import UpdateAdvance from "./editadvance";
+import UpdateAdvance from "../payment/editadvance";
 import UpdateEmployee from "../empForms/updateEmployee";
-import EditRecordButton from "../../../components/buttons/EditRecordButton";
 
-function ViewAllowance() {
+function AdvanceRequestList() {
 
     const [id,setid] = useState()
     const [empId,setEmpId] = useState()
@@ -21,21 +20,11 @@ function ViewAllowance() {
 
 
     useEffect(() => {
-        axios.get('http://localhost:5000/employeeManager/getAllowance')
+        axios.get('http://localhost:5000/employeeManager/getAdvance')
           .then(result => setUser(result.data))
           .catch(err => console.log(err))
         console.log(users)
       }, [])
-
-      const handleDelete = (id) => {
-        axios.delete('http://localhost:5000/employeeManager/deleteAllowance/' + id)
-          .then(res => {
-            console.log(res)
-            window.location.reload()
-          })
-          .catch(err => console.log(err))
-    
-      }
 
 
 
@@ -102,7 +91,7 @@ function ViewAllowance() {
                                                         color="blue-gray"
                                                         className="font-normal"
                                                     >
-                                                        {user.allowanceDeductionName}
+                                                        {user.empId}
                                                     </Typography>
                                                     
                                                 </div>
@@ -115,7 +104,31 @@ function ViewAllowance() {
                                                     color="blue-gray"
                                                     className="font-normal"
                                                 >
-                                                    {user.allowanceDeduction}
+                                                    {user.advanceAmount}
+                                                </Typography>
+                                                
+                                            </div>
+                                        </td>
+                                        <td className={"p-4 border-b border-blue-gray-50"}>
+                                            <div className="flex flex-col">
+                                                <Typography
+                                                    variant="small"
+                                                    color="blue-gray"
+                                                    className="font-normal"
+                                                >
+                                                    {user.advancePaidAmount}
+                                                </Typography>
+                                                
+                                            </div>
+                                        </td>
+                                        <td className={"p-4 border-b border-blue-gray-50"}>
+                                            <div className="flex flex-col">
+                                                <Typography
+                                                    variant="small"
+                                                    color="blue-gray"
+                                                    className="font-normal"
+                                                >
+                                                    {user.advanceAmount-user.advancePaidAmount}
                                                 </Typography>
                                                 
                                             </div>
@@ -123,11 +136,13 @@ function ViewAllowance() {
                                         
                                         
                                         
-                                        
-                                        
                                         <td className={"p-4 border-b border-blue-gray-50"}>
                                             <Tooltip content="Edit User">
-                                                <EditRecordButton onClick={() => handleDelete(user.id)}></EditRecordButton>
+                                                <UpdateAdvance idx={user.id}/>
+                                                {/* <UpdateEmployee idx={user.id}/> */}
+                                                {/* <IconButton variant="text">
+                                                    <PencilIcon className="h-4 w-4" />
+                                                </IconButton> */}
                                             </Tooltip>
                                         </td>
                                     </tr>
@@ -148,9 +163,9 @@ function ViewAllowance() {
         </Card>
     );
 }
-export default ViewAllowance
+export default AdvanceRequestList
 
 
 
-const TABLE_HEAD = ["Name", "Allowance/Deduction", "Delete"];
+const TABLE_HEAD = ["Employee Name", "Advance", "Paid", "Remaining", "Make Payment"];
 

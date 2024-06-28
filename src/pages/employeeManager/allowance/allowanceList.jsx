@@ -1,17 +1,17 @@
 import { MagnifyingGlassIcon, } from "@heroicons/react/24/outline";
 import { Card, CardHeader, Input, Typography, CardBody, CardFooter, Tooltip, Select, Option, } from "@material-tailwind/react";
-import { Pagination } from "../../components/pagination/pagination";
-import UpdateEmployee from "./empForms/updateEmployee";
+import { Pagination } from "../../../components/pagination/pagination";
+import UpdateEmployee from "../empForms/updateEmployee";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import axiosInstance from "../../config/axios.config";
-import { ToastError } from "../customerManager/ToastAlert";
+import axiosInstance from "../../../config/axios.config";
+import { ToastError } from "../../customerManager/ToastAlert";
 import React from "react";
-import EditRecordButton from "../../components/buttons/EditRecordButton";
+import EditRecordButton from "../../../components/buttons/EditRecordButton";
 import { Dialog } from "@material-tailwind/react";
 
 
-function EmployeeList() {
+function AllowanceList() {
 
     const [users, setUser] = useState([])
     const [search, setSearch] = useState("")
@@ -230,6 +230,6 @@ function EmployeeList() {
         
     );
 }
-export default EmployeeList
+export default AllowanceList
 
-const TABLE_HEAD = ["Employee Name", "Department", "Phone Number", "Employee Email", "Address", "Employed", "Edit"];
+const TABLE_HEAD = ["Employee Name", "Type", "Allowance/Deduction Name", "Month", "AMmount"];

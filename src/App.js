@@ -31,7 +31,9 @@ import FormComp from './pages/stockManager/Stk_components/FormComp';
 
 import EmployeeManagerDashboard from './pages/employeeManager/dashboard';
 import EmployeePayment from './pages/employeeManager/payment';
-import Attendance from './pages/employeeManager/attendance';
+import Attendance from './pages/employeeManager/attendance/attendance';
+import AllowancePage from './pages/employeeManager/allowance/allowancepage';
+
 import SuperAdminDashboard from './pages/superAdmin/Dashboard';
 import SuperAdminAdmins from './pages/superAdmin/admin';
 import SuperAdminEventCalandar from './pages/superAdmin/EventCalander';
@@ -95,6 +97,7 @@ function App() {
         <Route  path="/employeeManager/" element={<EmployeeManagerDashboard />} />
         <Route  path="/employeeManager/payment" element={<EmployeePayment />} />
         <Route  path='/employeeManager/attendance' element={<Attendance />} />
+        <Route path='/employeeManager/allowance' element={<AllowancePage/>}/>
         
         
       </Route>

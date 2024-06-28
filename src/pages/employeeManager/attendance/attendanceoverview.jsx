@@ -1,7 +1,7 @@
 import { Card, CardHeader, Typography, CardBody, CardFooter } from "@material-tailwind/react";
-import { Pagination } from "../../components/pagination/pagination";
-import { RadioHorizontalList } from "./attendanceradio";
-import ViewAttendance from "./attendance/viewattendancebutton";
+import { Pagination } from "../../../components/pagination/pagination";
+import { RadioHorizontalList } from "../attendanceradio";
+import ViewAttendance from "./viewattendancebutton";
 import { useState, useEffect } from "react";
 import axios from "axios";
 

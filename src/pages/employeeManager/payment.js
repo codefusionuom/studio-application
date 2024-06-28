@@ -9,9 +9,8 @@ import ViewEmployeePaymentDetails from './payment/viewemployeePaymentDetails';
 import axios from "axios";
 import { Select } from "@material-tailwind/react";
 import SelectOption from "@material-tailwind/react/components/Select/SelectOption";
-import CreateAllowancesDeductions from './payment/createAllowancesDeductions';
-import CreateAdvance from './payment/createadvance';
-import ButtomViewAllowance from './payment/buttonViewAllowance';
+// import CreateAdvance from './payment/createadvance';
+import CreateAdvance from './advance/createadvance'
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -172,11 +171,9 @@ function EmployeePayment() {
                 </div>
                 <div className='flex justify-evenly pb-5'>
                     <ViewEmployeePaymentDetails></ViewEmployeePaymentDetails>
-                    <CreateAllowancesDeductions></CreateAllowancesDeductions>
                 </div>
                 <div className='flex justify-evenly pb-5'>
                     <CreateAdvance></CreateAdvance>
-                    <ButtomViewAllowance></ButtomViewAllowance>
                     
                 </div>
             </div>

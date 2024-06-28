@@ -7,16 +7,20 @@ import {
   CardFooter,
   Typography,
   Input,
+  Option,
 } from "@material-tailwind/react";
 import DashCard from "../dashButtonCard";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { Select, SelectOption } from "@material-tailwind/react";
+import axiosInstance from "../../../config/axios.config";
 
 
 function RegisterEmployee() {
 
   const [empName, setEmpName] = useState()
-  // const [empId, setEmpId] = useState()
+  const [empEmail, setEmpEmail] = useState()
   const [empAdd, setEmpAdd] = useState()
   const [empType, setEmpType] = useState()
   const [empSalary, setEmpSalary] = useState()
@@ -25,27 +29,41 @@ function RegisterEmployee() {
   const navigate = useNavigate()
   const [errorAdd, setErrorAdd] = useState()
   const [errorDepartment, setErrorDepartment] = useState()
-  // const [errorId, setErrorId] = useState()
+  const [errorEmail, setErrorEmail] = useState()
   const [errorName, setErrorName] = useState()
   const [errorNumber, setErrorNumber] = useState()
   const [errorSalary, setErrorSalary] = useState()
   const [errorType, setErrorType] = useState()
+  // const [departments, setDepartment] = useState([])
+  const [departments, setDepartments] = useState([]);
+  const [ToastError, setToastError] = useState()
+
+  // const [depId, setDepID] = useState()
+
+  useEffect(() => {
+    axios.get('http://localhost:5000/superAdmin/getDepartment')
+      .then(result => setDepartments(result.data.rows))
+      .catch(err => console.log(err))
+    console.log(departments)
+  }, [])
+
 
   const Submit = (e) => {
     e.preventDefault()
 
     // Basic validation
-    // if (!empId) {
-    //   setErrorId(true);
-    //   alert("Please fill in employee ID");
-    //   return;
-    // }
-    // if (isNaN(empId)) {
-    //   setErrorId(true);
-    //   alert("Employee ID must be numeric");
-    //   return;
-    // }
-    // setErrorId(false);
+    const Emailregex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!empEmail) {
+      setErrorEmail(true);
+      alert("Please fill in email");
+      return;
+    }
+    if (!Emailregex.test(empEmail)) {
+      setErrorEmail(true);
+      alert("Email must follow email format");
+      return;
+    }
+    setErrorEmail(false);
     if (!empName) {
       setErrorName(true);
       alert("Please fill in employee name");
@@ -71,17 +89,17 @@ function RegisterEmployee() {
       return;
     }
     setErrorType(false);
-    if (!empSalary) {
-      setErrorSalary(true);
-      alert("Please fill in basic salary");
-      return;
-    }
-    if (isNaN(empSalary)) {
-      setErrorSalary(true);
-      alert("Salary must be numeric");
-      return;
-    }
-    setErrorSalary(false);
+    // if (!empSalary) {
+    //   setErrorSalary(true);
+    //   alert("Please fill in basic salary");
+    //   return;
+    // }
+    // if (isNaN(empSalary)) {
+    //   setErrorSalary(true);
+    //   alert("Salary must be numeric");
+    //   return;
+    // }
+    // setErrorSalary(false);
     if (!empDepartment) {
       alert("Please select department");
       return;
@@ -101,7 +119,7 @@ function RegisterEmployee() {
     }
     setErrorNumber(false);
 
-    axios.post("http://localhost:5000/employeeManager/registerEmployee", { empName, empAdd, empDepartment, empNumber, empSalary, empType })
+    axios.post("http://localhost:5000/employeeManager/registerEmployee", { empName, empAdd, empDepartment, empNumber, empType, empEmail })
       .then(result => {
         console.log(result)
         window.location.reload()
@@ -110,17 +128,13 @@ function RegisterEmployee() {
       .catch(err => console.log(err))
   }
 
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen((cur) => !cur);
+  
+  // const [open, setOpen] = React.useState(false);
+  // const handleOpen = () => setOpen((cur) => !cur);
 
   return (
     <>
-      <DashCard className="cursor-pointer" title2={"Register Employee"} title3={"Add Personal Here"} onClick={handleOpen} />
-      <Dialog
-        open={open}
-        handler={handleOpen}
-        className="bg-transparent shadow-none w-fit"
-      >
+      
         <Card className="mx-auto w-full ">
           <CardBody className="flex flex-col gap-4">
             <form onSubmit={Submit}>
@@ -128,17 +142,18 @@ function RegisterEmployee() {
                 Register new employee
               </Typography>
               <div className=" flex flex-row justify-between ">
-                {/* <div className="flex flex-col justify-between">
-                  <Typography className="mb-2" variant="h6">
-                    Employee ID :
-                  </Typography>
-                  <Input label="Employee ID" size="lg" onChange={(e) => setEmpId(e.target.value)} error={errorId ? "true" : null} />
-                </div> */}
                 <div className="flex flex-col justify-between">
-                  <Typography className="mb-2" variant="h6">
+                <Typography className="mb-2" variant="h6">
                     Employee Name :
                   </Typography>
                   <Input label="Employee Name" size="lg" onChange={(e) => setEmpName(e.target.value)} error={errorName ? "true" : null} />
+                </div>
+                <div className="flex flex-col justify-between">
+                <Typography className="mb-2" variant="h6">
+                    Employee Email :
+                  </Typography>
+                  <Input label="Employee Email" size="lg" onChange={(e) => setEmpEmail(e.target.value)} error={errorEmail ? "true" : null} />
+                  
                 </div>
               </div>
               <div className=" flex flex-row justify-between ">
@@ -152,21 +167,11 @@ function RegisterEmployee() {
                   <Typography className="mb-2" variant="h6">
                     Type:
                   </Typography>
-                  <Input label="Type" size="lg" onChange={(e) => setEmpType(e.target.value)} error={errorType ? "true" : null} />
-                </div>
-              </div>
-              <div className=" flex flex-row justify-between ">
-                <div className=" flex flex-col justify-between">
-                  <Typography className="mb-2" variant="h6">
-                    Basic Salary:
-                  </Typography>
-                  <Input label="Basic Salary" size="lg" onChange={(e) => setEmpSalary(e.target.value)} error={errorSalary ? "true" : null} />
-                </div>
-                <div className=" flex flex-col justify-between">
-                  <Typography className="mb-2" variant="h6">
-                    Select Deoartment :
-                  </Typography>
-                  <Input label="Select Department" size="lg" onChange={(e) => setEmpDepartment(e.target.value)} error={errorDepartment ? "true" : null} />
+                  {/* <Input label="Type" size="lg" onChange={(e) => setEmpType(e.target.value)} error={errorType ? "true" : null} /> */}
+                  <Select label="Select Type" size="lg"  onChange={(e) => setEmpType(e)} error={errorType ? "true" : null}>
+                    <Option value="Part-Time">Part-Time</Option>
+                    <Option value="Full-Time">Full-Time</Option>
+                  </Select>
                 </div>
               </div>
               <div className=" flex flex-row justify-between ">
@@ -178,6 +183,27 @@ function RegisterEmployee() {
                 </div>
                 <div className=" flex flex-col justify-between">
                   <Typography className="mb-2" variant="h6">
+                    Select Deoartment :
+                  </Typography>
+                  <Select label='Select Name' onChange={(e) => setEmpDepartment(e)}>
+                      {departments.map((department) => {
+                      return (
+                        <Option   key={department.id} value={department.id}>{department.departmentName}  </Option>
+                          );},
+                          )}
+                        </Select>
+                        {/* <Input label="Department" size="lg" onChange={(e) => setEmpDepartment(e.target.value)} /> */}
+                </div>
+              </div>
+              <div className=" flex flex-row justify-between ">
+                <div className=" flex flex-col justify-between">
+                  {/* <Typography className="mb-2" variant="h6">
+                    Contact number :
+                  </Typography>
+                  <Input label="Contact Number" size="lg" onChange={(e) => setEmpNumber(e.target.value)} error={errorNumber ? "true" : null} /> */}
+                </div>
+                <div className=" flex flex-col justify-between">
+                  <Typography className="mb-2" variant="h6">
                   </Typography>
                 </div>
               </div>
@@ -185,16 +211,16 @@ function RegisterEmployee() {
           </CardBody>
           <CardFooter className="pt-0">
             <div className=" flex flex-row justify-between">
-              <Button className=" bg-yellow-800" onClick={handleOpen}>
+              {/* <Button className=" bg-yellow-800" onClick={handleOpen}>
                 Clear
-              </Button>
+              </Button> */}
               <Button className=" bg-green-600" onClick={Submit}>
                 Create
               </Button>
             </div>
           </CardFooter>
         </Card>
-      </Dialog>
+      
     </>
   );
 }

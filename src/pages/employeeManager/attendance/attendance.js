@@ -15,7 +15,9 @@ import { ChevronRightIcon, ChevronLeftIcon } from "@heroicons/react/24/outline";
 import TimePicker from 'react-time-picker';
 import 'react-time-picker/dist/TimePicker.css';
 import 'react-clock/dist/Clock.css';
-
+import axiosInstance from '../../../config/axios.config';
+import { Card } from '@material-tailwind/react';
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
 function Attendance() {
 
@@ -35,6 +37,13 @@ function Attendance() {
     const [timein, setTimein] = useState()
     // const [checkInSeconds,setCheckInSeconds] = useState()
     // const [checkOutSeconds,setCheckOutSeconds] = useState()
+    // const [todayDate, setTodayDate] = useState(new Date()); // Initialize date with today's date
+    const [resultVisible, setResultVisible] = useState(false)
+    const [search, setSearch] = useState()
+    const [searchvalue, setSearchValue] = useState()
+    const [ToastError, setToastError] = useState()
+    const [empId, setEmpId] = useState()
+    const [empName, setEmpName] = useState()
 
     function convertTimeToSeconds(timeString) {
         console.log("input:"+timeString);
@@ -60,12 +69,12 @@ function Attendance() {
       }
 
 
-    useEffect(() => {
-        axios.get('http://localhost:5000/employeeManager/getEmployees')
-            .then(result => setUser(result.data))
-            .catch(err => console.log(err))
-        console.log(users)
-    }, [])
+    // useEffect(() => {
+    //     axios.get('http://localhost:5000/employeeManager/getEmployees')
+    //         .then(result => setUser(result.data))
+    //         .catch(err => console.log(err))
+    //     console.log(users)
+    // }, [])
 
     const Submit = (e) => {
         e.preventDefault()
@@ -135,6 +144,33 @@ function Attendance() {
             .catch(err => console.log(err))
     }
 
+    // Search Employee
+  const handleSearch = async () => {
+    setResultVisible(true)
+    console.log("searching begin");
+    try {
+    const { data } = await axiosInstance.get(`/employeeManager/getEmployeeSearch/?empName=${search}`)
+    if (!data) {
+        ToastError("no employee exist")
+    }
+    console.log(data);
+    setUser(data);
+    // setResults(data.count)
+    } catch (error) {
+    console.log(error);
+    ToastError(error)
+    }
+};
+
+
+useEffect(() => {
+    if (search !== "") {
+    handleSearch();
+    console.log(search);
+    console.log("search when name change");
+    }
+  }, [search]);
+
     return (
         <div>
             <div className='bg-cl-4 rounded'>
@@ -155,14 +191,55 @@ function Attendance() {
                             <div>
                                 <p className='pt-5'>Employee Name :</p>
                                 <div className="w-80 pt-1 pb-10">
-                                    <Select label='Select Name' onChange={item => { setid(item) }} error={errorName ? "true" : null}>
+                                    {/* <Select label='Select Name' onChange={item => { setid(item) }} error={errorName ? "true" : null}>
                                         {users.map((user) => {
                                             return (
                                                 <SelectOption key={user.id} value={user.id}>{user.empName}</SelectOption>
                                             );
                                         },
                                         )}
-                                    </Select>
+                                    </Select> */}
+                                    <div className="relative ">
+                                    <div className="relative flex w-full max-w-[24rem] ">
+                                    <Input
+                                        label="Enter Name"
+                                        value={empName}
+                                        onChange={(e) => {setSearch(e.target.value)}}
+                                        className="pr-20"
+                                        containerProps={{
+                                        className: "min-w-0",
+                                        }}
+                                    />
+                                    <Button
+                                        size="sm"
+                                        color={search ? "gray" : "blue-gray"}
+                                        disabled={!search}
+                                        className="!absolute right-0 bottom-0 rounded "
+                                        onClick={handleSearch}
+                                    >
+                                        <MagnifyingGlassIcon className="h-6 w-5" />
+                                    </Button>
+                                    </div>
+
+                                    {resultVisible ? (
+                                    <div>
+                        
+                    
+                                    {users && users.map((user)=>{
+                                    return (
+                                        <Card className="p-2 rounded-md absolute top-10 w-full max-h-36 overflow-scroll z-[999]">
+                                        <div className="" onClick={()=>{setid(user.id); setEmpName(user.empName); setSearchValue(""); setResultVisible(false)}}>
+                                        <div className="text-"> 
+                                        {user.empName}
+                                        </div>
+                                        </div>
+                                        </Card>
+                                    )
+                                    })}
+                                    </div>
+                                    ) : null}
+                        
+                                </div>
                                 </div>
                             </div>
                             <div className='pt-5'>
@@ -234,48 +311,14 @@ function Attendance() {
                                 </div>
                             </div>
                             <div>
-                                <p>Day Type :</p>
-                                <div className="w-80 pt-1 pb-10">
-                                    {/* <Select label='Day Type' onChange={item => { setDayType(item) }} error={errorDayType ? "true" : null}>
-                                        <Option value='Monday'>Moday</Option>
-                                        <Option value='Tuesday'>Tuesday</Option>
-                                        <Option value='Wednesday'>Wednesday</Option>
-                                        <Option value='Thursday'>Thursday</Option>
-                                        <Option value='Friday'>Friday</Option>
-                                        <Option value='Saturday'>Saturday</Option>
-                                        <Option value='Sunday'>Sunday</Option>
-                                    </Select> */}
-                                </div>
-                            </div>
-                        </div>
-                        <div className='flex justify-evenly'>
-                            <div>
-                                <p>Check Out Time :</p>
+                            <p>Check Out Time :</p>
                                 <div className="w-80 pt-1 pb-1-">
                                     {/* <Input onChange={(e) => setCheckOut(e.target.value)} error={errorCheckOut ? "true" : null} /> */}
                                     <TimePicker  onChange={setCheckOut} disableClock={true} value={checkOut} />
                                 </div>
                             </div>
-                            <div>
-
-                                <p>Leaving Type :</p>
-                                <div className="w-80 pt-1 pb-10">
-
-                                {/* <TimePicker  onChange={setTimein} disableClock={true} value={timein} /> */}
-
-
-                                    {/* <Select label='Leave Type' onChange={(item) => setLeaveType(item)} error={errorLeaveType ? "true" : null}>
-                                        <Option value='HalfDay'>Half-Day</Option>
-                                        <Option value='Later Arival'>Late Arival</Option>
-                                        <Option value='Absent'>Absent</Option>
-                                    </Select> */}
-                                </div>
-
-                                
-
-
-                            </div>
                         </div>
+                        
                     </div>
                     <div className='flex justify-evenly pb-10 pt-10'>
                         <div>
