@@ -4,6 +4,7 @@ import { login, loadUser, clearAuthState } from '../../app/authSlice';
 import { Typography, Input, Button } from '@material-tailwind/react';
 import { EyeSlashIcon, EyeIcon } from '@heroicons/react/24/solid';
 import { useNavigate } from 'react-router-dom';
+import {Loading} from '../Loading';
 
 export function LoginForm() {
   const [passwordShown, setPasswordShown] = useState(false);
@@ -38,24 +39,6 @@ export function LoginForm() {
   const FoggotPasswordPage = () => {
     navigate('/foggotPassword');
   };
-
-  useEffect(() => {
-    if (admin) {
-      if (admin.privileges === 'super_admin') {
-        navigate('/superAdmin');
-      } else if (admin.privileges === 'customer_manager') {
-        navigate('/customerManager');
-      } else if (admin.privileges === 'event_manager') {
-        navigate('/eventManager');
-      } else if (admin.privileges === 'stock_manager') {
-        navigate('/stockManager');
-      } else if (admin.privileges === 'employee_manager') {
-        navigate('/employeeManager');
-      } else {
-        console.log('user not have privilage');
-      }
-    }
-  }, [admin]);
 
   return (
     <section className='grid text-center items-center p-8'>

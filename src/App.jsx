@@ -22,7 +22,7 @@ import Suppliers from './pages/stockManager/Stk_supplier';
 import ReturnedStock from './pages/stockManager/Stk_returnedStock';
 import FormComp from './pages/stockManager/Stk_components/FormComp';
 
-import { useDispatch } from 'react-redux';
+import { Provider, useDispatch } from 'react-redux';
 import { loadUser } from './app/authSlice';
 
 import Welcome from './pages/common/Welcome';
@@ -42,6 +42,7 @@ import EventRequests from './pages/eventManager/eventRequests';
 import EventManagerEventCalendar from './pages/eventManager/eventManagerEventCalendar';
 import EventManagerEvents from './pages/eventManager/eventManagerEvents';
 import PrivateRoute from './components/routing/PrivateRoute';
+import { store } from './app/store';
 
 
 function App() {
@@ -53,7 +54,7 @@ function App() {
   }, []);
 
   return (
-    <>
+    // <Provider store={store}> 
       <Routes>
         <Route path='/' element={<Welcome />}></Route>
         <Route path='/login' element={<Login />}></Route>
@@ -209,10 +210,9 @@ function App() {
           />
         </Route>
       </Routes>
-    </>
+      // <Provider />
+
   );
 }
-{
-  /* <Layout sections={customerList}/>  */
-}
+
 export default App;

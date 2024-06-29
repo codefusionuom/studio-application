@@ -11,10 +11,10 @@ import {
 } from "@material-tailwind/react";
 import axios from "axios";
 import EditButton from "../../../components/cards/buttons/EditButton";
+import axiosInstance from "../../../config/axios.config";
 
 function AddAdminEdit(props) {
   const { passId } = props; 
-
   const [data, setData] = useState({
     employeeId: "",
     employeeName: "",
@@ -28,8 +28,8 @@ const [formErrors, setFormError] = useState({});
 
   useEffect(() => {
     setIsLoading(true);
-    axios
-      .get("http://localhost:5000/superAdmin/adminId/" + passId)
+    axiosInstance
+      .get("superAdmin/admin/" + passId)
       .then((res) => {
         setData(res.data);
         setIsLoading(false);
@@ -50,7 +50,7 @@ const [formErrors, setFormError] = useState({});
     console.log(validate(data).iserror, "is error");
     if (!error.iserror) {
       axios
-        .put("http://localhost:5000/superAdmin/admin/" + passId, data)
+        .put("superAdmin/admin/" + passId, data)
         .then((res) => {
           alert("data update successfully");
           window.location.replace("/superAdmin/admin");
