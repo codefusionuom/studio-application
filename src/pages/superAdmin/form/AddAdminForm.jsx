@@ -11,9 +11,14 @@ import {
 // import Card2 from "../../../components/cards/Card2";
 import axiosInstance from "../../../config/axios.config";
 
-function AddAdminForm({ prop }) {
+function AddAdminForm() {
   // const [open, setOpen] = useState(prop);
   const [formErrors, setFormError] = useState({});
+  const [search, setSearch] = useState({});
+  const [empId, setEmpId] = useState();
+  const [empName, setEmpName] = useState();
+  const [user, setUser] = useState([]);
+  const [resultVisible, setResultVisible] = useState({});
   const [formData, setFormData] = useState({
     privileges: [],
     employee:{
@@ -25,7 +30,6 @@ function AddAdminForm({ prop }) {
       empEmail: "",
     }
   });
-  const [empData, setEmpData] = useState({});
 
 
 
@@ -35,16 +39,18 @@ function AddAdminForm({ prop }) {
     // setFormError(error);
     // console.log(validate(formData).iserror, "is error");
     // if (!error.iserror) {
-    //   axiosInstance
-    //     .post("http://localhost:5000/superAdmin/admin", formData)
-    //     .then((res) => {
-    //       alert("data added successfully");
-    //       window.location.replace("/superAdmin/admin");
-    //     })
-    //     .catch((err) => {
-    //       console.log(err.response.data.message);
-    //       console.log("data enter error");
-    //     });
+      console.log("in post",formData);
+      axiosInstance
+        .post("superAdmin/admin", formData)
+        .then((res) => {
+          alert("data added successfully");
+          console.log(formData);  
+          window.location.replace("/superAdmin/admin");
+        })
+        .catch((err) => {
+          console.log(err.response.data.message);
+          console.log("data enter error");
+        });
     // }
     console.log(formData);
   }
@@ -119,20 +125,76 @@ function AddAdminForm({ prop }) {
     });
   };
 
+   const handleSearch = async () => {
+    setResultVisible(true)
+    console.log("searching begin");
+    try {
+    const { data } = await axiosInstance.get(`employeeManager/getEmployeeSearch/?empName=${search}`)
+    // if (!data) {
+    //     ToastError("no employee exist")
+    // }
+    console.log("loaded data in handle search",data);
+    setUser(data);
+    // setResults(data.count)
+    } catch (error) {
+    console.log(error);
+    console.log(error.response.data.message);
+    // ToastError(error)
+    }
+};
+
   const err = "text-red-500 w-60";
 
-  useEffect(() => {
-    axiosInstance
-      .get('employeeManager/getEmployeeByid/' + 6)
-      .then((res) => {
-        console.log('data',res.data);
-        setEmpData(res.data);
-        console.log('empdata',empData);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+    // useEffect(() => {
+    //   axiosInstance
+    //     .get('employeeManager/getEmployeeByid/' + 3)
+    //     .then((res) => {
+
+          // console.log('data', res.data);
+          // const {empAdd,empType,empDepartment,empEmail,empName,empNumber} = res.data
+          // setFormData((prevData) => ({
+          //   ...prevData,
+          //   employee: {
+          //     ...prevData.employee,
+          //     empName: empName,
+          //     empNumber: empNumber,
+          //     empAdd: empAdd,
+          //     empType: empType,
+          //     empDepartment: empDepartment,
+          //     empEmail: empEmail,
+          //   },
+          // }));
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    // }, []);
+
+    const handleSelectUser = (user) => {
+      setEmpId(user.id);
+      setEmpName(user.empName);
+      setFormData((prevData) => ({
+        ...prevData,
+        employee: {
+          empName: user.empName,
+          empNumber: user.empNumber,
+          empAdd: user.empAdd,
+          empType: user.empType,
+          empDepartment: user.empDepartment,
+          empEmail: user.empEmail,
+        },
+      }));
+      setResultVisible(false);
+    };
+
+    useEffect(() => {
+      if (search !== '') {
+        handleSearch();
+        // console.log(search);
+        // console.log('search when name change');
+      }
+    }, [search]);
+
 
   return (
     <>
@@ -143,18 +205,42 @@ function AddAdminForm({ prop }) {
           </Typography>
 
           <div className=' flex flex-row justify-between pt-20'>
-            <div className='flex flex-col justify-between pl-20 '>
-              <Typography className='mb-2' variant='h6'>
-                Employee Name :
-              </Typography>
-              <Input
-                label='employee name'
-                size='lg'
-                name='empName'
-                value={formData.employee.empName}
-                onChange={onChange}
-              />
-              <p className={err}>{formErrors.employeeId}</p>
+            <div className='relative flex-column w-full max-w-[24rem]'>
+              <div className='flex flex-col justify-between pl-20'>
+                <Typography className='mb-2' variant='h6'>
+                  Employee Name :
+                </Typography>
+                <Input
+                  label='employee name'
+                  size='lg'
+                  name='empName'
+                  value={empName}
+                  // onChange={onChange}
+                  onChange={(e) => {
+                    setSearch(e.target.value);
+                    setEmpName(e.target.value)
+                  }}
+                />
+                <p className={err}>{formErrors.employeeId}</p>
+              </div>
+              <div className=''>
+                {resultVisible && (
+                  <div>
+                    {Array.isArray(user) &&
+                      user.map((user) => (
+                        <Card
+                          key={user.id}
+                          className='mt-8 ml-20 p-2 rounded-md absolute top-10 w-80 max-h-36 overflow-scroll z-[999]'
+                          onClick={() => handleSelectUser(user)}
+                        >
+                          <div>
+                            <div>{user.empName}</div>
+                          </div>
+                        </Card>
+                      ))}
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className='flex flex-col justify-between pr-20'>

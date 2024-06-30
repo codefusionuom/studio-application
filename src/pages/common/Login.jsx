@@ -14,15 +14,16 @@ function Login() {
 
   
 if (admin) {
-  if (admin.privileges === 'super_admin') {
+  // console.log(admin);
+  if (admin.privilege === 'super_admin') {
     navigate('/superAdmin');
-  } else if (admin.privileges === 'customer_manager') {
+  } else if (admin.privilege === 'customer_manager') {
     navigate('/customerManager');
-  } else if (admin.privileges === 'event_manager') {
+  } else if (admin.privilege === 'event_manager') {
     navigate('/eventManager');
-  } else if (admin.privileges === 'stock_manager') {
+  } else if (admin.privilege === 'stock_manager') {
     navigate('/stockManager');
-  } else if (admin.privileges === 'employee_manager') {
+  } else if (admin.privilege === 'employee_manager') {
     navigate('/employeeManager');
   } else {
     console.log('user not have privilage');

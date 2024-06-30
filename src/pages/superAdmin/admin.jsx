@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Card,
   CardHeader,
@@ -6,29 +6,42 @@ import {
   CardBody,
   Dialog,
 } from '@material-tailwind/react';
-import AddAdminForm from "./form/AddAdminForm";
-import AddAdminEdit from "./form/AddAdminEdit";
-import axios from "axios";
-import DeleteButton from "../../components/cards/buttons/DeleteButton";
-import axiosInstance from "../../config/axios.config";
-import Card2 from "../../components/cards/Card2";
-import {handleOpen} from './form/AddAdminForm'
+import AddAdminForm from './form/AddAdminForm';
+import AddAdminEdit from './form/AddAdminEdit';
+import axios from 'axios';
+import DeleteButton from '../../components/cards/buttons/DeleteButton';
+import axiosInstance from '../../config/axios.config';
+import Card2 from '../../components/cards/Card2';
+import EditButton from '../../components/cards/buttons/EditButton';
+// import {handleOpen} from './form/AddAdminForm'
 
 function Admin() {
   const [records, setRecords] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [selectedRecord, setSelectedRecord] = useState(null);
 
   const handleOpen = () => setOpen(!open);
+  const handleEditOpen = (record) => {
+    setSelectedRecord(record);
+    // console.log('edit open clicked',editOpen);
+    // console.log('select record', selectedRecord);
+    // console.log('record',record);
+    setEditOpen(!editOpen);
+  };
+
+  useEffect(()=>{
+    console.log('select record',selectedRecord);
+  },[selectedRecord])
 
   useEffect(() => {
-    setIsLoading(true); 
+    setIsLoading(true);
     axiosInstance
       .get('superAdmin/admin')
       .then((res) => {
-        // console.log(req);
         setRecords(res.data);
-        setIsLoading(false);
+        // console.log('records', records);
       })
       .catch((err) => {
         console.log(err);
@@ -43,7 +56,7 @@ function Admin() {
         title2={'Make new admin account'}
         onClick={handleOpen}
       />
-       <Dialog
+      <Dialog
         open={open}
         handler={handleOpen}
         className='bg-transparent shadow-none w-fit '
@@ -65,7 +78,7 @@ function Admin() {
                 <tr>
                   {TABLE_HEAD.map((head, index) => (
                     <th
-                      key={head}
+                      key={index}
                       className='cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50'
                     >
                       <Typography
@@ -89,7 +102,7 @@ function Admin() {
                       : 'p-4 border-b border-blue-gray-50';
 
                     return (
-                      <tr key={records.telephone}>
+                      <tr key={records.empId}>
                         <td className={classes}>
                           <div className='flex items-center gap-3'>
                             <div className='flex flex-col'>
@@ -99,7 +112,7 @@ function Admin() {
                                 color='blue-gray'
                                 className='font-normal'
                               >
-                                {records.employeeName}
+                                {records.employee.empName}
                               </Typography>
 
                               <Typography
@@ -107,7 +120,7 @@ function Admin() {
                                 color='blue-gray'
                                 className='font-normal opacity-70'
                               >
-                                {records.privileges}
+                                {records.privilege}
                               </Typography>
                             </div>
                           </div>
@@ -121,7 +134,7 @@ function Admin() {
                               color='blue-gray'
                               className='font-normal'
                             >
-                              {records.employeeId}
+                              {records.employee.empEmail}
                             </Typography>
                           </div>
                         </td>
@@ -133,19 +146,32 @@ function Admin() {
                             color='blue-gray'
                             className='font-normal'
                           >
-                            {records.telephone}
+                            {records.employee.empNumber}
+                          </Typography>
+                        </td>
+
+                        {/* department */}
+                        <td className={classes}>
+                          <Typography
+                            variant='small'
+                            color='blue-gray'
+                            className='font-normal'
+                          >
+                            {records.employee.empDepartment}
                           </Typography>
                         </td>
 
                         {/* edit button */}
                         <td className={classes}>
+                          <EditButton onClick={() => handleEditOpen(records)} />
+
                           {/* <AddAdminEdit passId={records.id} />  */}
                         </td>
 
                         {/* delete button  */}
                         <td className={classes}>
                           <DeleteButton
-                            onClick={() => handleSubmit(records.id)}
+                            onClick={() => handleSubmit(records.empId)}
                           />
                         </td>
                       </tr>
@@ -156,24 +182,44 @@ function Admin() {
           </CardBody>
         </Card>
       </div>
+
+      {/* Edit Dialog */}
+      <Dialog
+        open={editOpen}
+        handler={handleEditOpen}
+        className='bg-transparent shadow-none w-fit '
+      >
+        {selectedRecord && <AddAdminEdit passId={selectedRecord.empId} />}
+      </Dialog>
     </div>
   );
 
   // delete
   function handleSubmit(id) {
-    const conf = window.confirm("do you wnat to delete");
+    const conf = window.confirm('do you wnat to delete');
     if (conf) {
-      axios
-        .delete("http://localhost:5000/superAdmin/admin/" + id)
+      console.log(id);
+      axiosInstance
+        .delete('superAdmin/admin/' + id)
         .then((res) => {
-          alert("record deleted");
-          window.location.replace("/superAdmin/admin");
+          alert('record deleted');
+          window.location.replace('/superAdmin/admin');
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err);
+        console.log(err.response.data.message);
+      });
     }
   }
 }
 
 export default Admin;
 
-const TABLE_HEAD = ["Name", "Employee ID", "Phone Number", "", ""];
+const TABLE_HEAD = [
+  'Name',
+  'Employee ID',
+  'Phone Number',
+  'Department',
+  '',
+  '',
+];

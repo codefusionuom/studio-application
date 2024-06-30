@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Button,
   Dialog,
@@ -8,234 +8,291 @@ import {
   Typography,
   Input,
   Checkbox,
-} from "@material-tailwind/react";
-import axios from "axios";
-import EditButton from "../../../components/cards/buttons/EditButton";
-import axiosInstance from "../../../config/axios.config";
+} from '@material-tailwind/react';
+import axios from 'axios';
+import EditButton from '../../../components/cards/buttons/EditButton';
+import axiosInstance from '../../../config/axios.config';
 
-function AddAdminEdit(props) {
-  const { passId } = props; 
-  const [data, setData] = useState({
-    employeeId: "",
-    employeeName: "",
-    privileges: [],
-    telephone: "",
-    address: "",
+function AddAdminEdit({passId}) {
+
+  const [formData, setFormData] = useState({
+    privileges: '',
+    employee: {
+      empName: '',
+      empNumber: '',
+      empAdd: '',
+      empType: '',
+      empDepartment: '',
+      empEmail: '',
+    },
   });
   const [isLoading, setIsLoading] = useState(false);
-const [formErrors, setFormError] = useState({});
-  const [openEdit, setOpenEdit] = useState(false);
+  const [formErrors, setFormError] = useState({});
+  // const [openEdit, setOpenEdit] = useState(false);
 
   useEffect(() => {
-    setIsLoading(true);
     axiosInstance
       .get("superAdmin/admin/" + passId)
       .then((res) => {
-        setData(res.data);
-        setIsLoading(false);
+        console.log('response data', res.data);
+        console.log('passId to put',passId);
+        const {
+          privilege,employee: {
+            empAdd,
+            empType,
+            empDepartment,
+            empEmail,
+            empName,
+            empNumber,
+          },
+        } = res.data;
+        
+        setFormData((prevData) => ({
+          ...prevData,
+          privileges:privilege,
+          employee: {
+            ...prevData.employee,
+            empName: empName,
+            empNumber: empNumber,
+            empAdd: empAdd,
+            empType: empType,
+            empDepartment: empDepartment,
+            empEmail: empEmail,
+          },
+          
+        }))
+        // console.log('form data', formData);
       })
       .catch((err) => {
         console.log(err);
+        console.log(err.response.data.message);
       });
   }, []);
 
-  const handleEditClick = () => {
-    setOpenEdit(!openEdit);
-  };
+  useEffect(()=>{
+    console.log('formdata',formData);
+  },[formData])
 
   function handleSubmit(event) {
     event.preventDefault();
-    let error = validate(data);
-    setFormError(error);
-    console.log(validate(data).iserror, "is error");
-    if (!error.iserror) {
-      axios
-        .put("superAdmin/admin/" + passId, data)
+    // let error = validate(data);
+    // setFormError(error);
+    // console.log(validate(data).iserror, "is error");
+    // if (!error.iserror) {
+      axiosInstance
+        .put("superAdmin/admin/" + passId, formData)
         .then((res) => {
+          console.log('res in put',res);
+          console.log('form in put',formData);
           alert("data update successfully");
           window.location.replace("/superAdmin/admin");
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err);
+        console.log(err.response.data.message);});
     }
-  }
+  // }
 
-  const validate = (values) => {
-    const errors = {};
-    errors.iserror = false;
-    console.log(values);
-    if (!values.employeeId) {
-      errors.employeeId = "employeeId is required!";
-      errors.iserror = true;
-    } else if (!/^e-\d{3}$/.test(values.employeeId)) {
-      errors.employeeId =
-        "Employee ID should start with 'e-' followed by exactly three digits.";
-      errors.iserror = true;
-    }
-    if (!values.employeeName) {
-      errors.employeeName = "employee Name is required!";
-      errors.iserror = true;
-    }
-    if (!values.privileges[0]) {
-      errors.privileges = "privileges is required!";
-      errors.iserror = true;
-    }
-    if (!values.telephone) {
-      errors.telephone = "telephone is required!";
-      errors.iserror = true;
-    } else if (!/^\d{10}$/.test(values.telephone)) {
-      errors.telephone = "Telephone should be a 10-digit number.";
-      errors.iserror = true;
-    }
-    if (!values.address) {
-      errors.address = "address is required!";
-      errors.iserror = true;
-    }
+  // const validate = (values) => {
+  //   const errors = {};
+  //   errors.iserror = false;
+  //   console.log(values);
+  //   if (!values.employeeId) {
+  //     errors.employeeId = "employeeId is required!";
+  //     errors.iserror = true;
+  //   } else if (!/^e-\d{3}$/.test(values.employeeId)) {
+  //     errors.employeeId =
+  //       "Employee ID should start with 'e-' followed by exactly three digits.";
+  //     errors.iserror = true;
+  //   }
+  //   if (!values.employeeName) {
+  //     errors.employeeName = "employee Name is required!";
+  //     errors.iserror = true;
+  //   }
+  //   if (!values.privileges[0]) {
+  //     errors.privileges = "privileges is required!";
+  //     errors.iserror = true;
+  //   }
+  //   if (!values.telephone) {
+  //     errors.telephone = "telephone is required!";
+  //     errors.iserror = true;
+  //   } else if (!/^\d{10}$/.test(values.telephone)) {
+  //     errors.telephone = "Telephone should be a 10-digit number.";
+  //     errors.iserror = true;
+  //   }
+  //   if (!values.address) {
+  //     errors.address = "address is required!";
+  //     errors.iserror = true;
+  //   }
 
-    return errors;
+  //   return errors;
+  // };
+
+  const onChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    if (type === 'checkbox') {
+      setFormData((prevData) => ({
+        ...prevData,
+        privileges: checked
+          ? [value]
+          : prevData.privileges.filter((privilege) => privilege !== value),
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        employee: {
+          ...prevData.employee,
+          [name]: value,
+        },
+      }));
+    }
   };
 
-  const err = "text-red-500 w-60";
+  // useEffect(() => {
+  //   axiosInstance
+  //     .get('employeeManager/getEmployeeByid/' + 3)
+  //     .then((res) => {
+  //       // console.log('data', res.data);
+  //       const { empAdd, empType, empDepartment, empEmail, empName, empNumber } =
+  //         res.data;
+  //       setFormData((prevData) => ({
+  //         ...prevData,
+  //         employee: {
+  //           ...prevData.employee,
+  //           empName: empName,
+  //           empNumber: empNumber,
+  //           empAdd: empAdd,
+  //           empType: empType,
+  //           empDepartment: empDepartment,
+  //           empEmail: empEmail,
+  //         },
+  //       }));
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, []);
+
+  const err = 'text-red-500 w-60';
   return (
     <>
-      <EditButton onClick={handleEditClick} />
+      <Card className='mx-auto w-full '>
+        <CardBody className='flex flex-col gap-4 pb-20'>
+          <Typography variant='h4' color='blue-gray' className='text-center'>
+            Make New Admin Account
+          </Typography>
 
-      <Dialog
-        open={openEdit}
-        handler={handleEditClick}
-        className="bg-transparent shadow-none w-fit "
-      >
-        <Card className="mx-auto w-full ">
-          <CardBody className="flex flex-col gap-4 pb-20">
-            <Typography variant="h4" color="blue-gray" className="text-center">
-              Edit Admin Account
-            </Typography>
+          <div className=' flex flex-row justify-between pt-20'>
+            <div className='flex flex-col justify-between pl-20 '>
+              <Typography className='mb-2' variant='h6'>
+                Employee Name :
+              </Typography>
+              <Input
+                label='employee name'
+                size='lg'
+                name='empName'
+                value={formData.employee.empName}
+                onChange={onChange}
+              />
+              <p className={err}>{formErrors.employeeId}</p>
+            </div>
 
-            <div className=" flex flex-row justify-between pt-20">
-              <div className="flex flex-col justify-between pl-20">
-                <Typography className="mb-2" variant="h6">
-                  Employee ID :
-                </Typography>
-                <Input
-                  label="employee id"
-                  size="lg"
-                  value={data.employeeId}
-                  onChange={(e) =>
-                    setData({ ...data, employeeId: e.target.value })
-                  }
+            <div className='flex flex-col justify-between pr-20'>
+              <Typography className='mb-2' variant='h6'>
+                Employee Email :
+              </Typography>
+              <Input
+                label='employee email'
+                size='lg'
+                name='empEmail'
+                value={formData.employee.empEmail}
+                onChange={onChange}
+              />
+              <p className={err}>{formErrors.employeeName}</p>
+            </div>
+          </div>
+
+          <div className=' flex flex-row justify-between'>
+            <div className=' flex flex-col pl-20'>
+              <Typography className='mb-2' variant='h6'>
+                Privilage :
+              </Typography>
+
+              <div className='flex flex-col space-y-2'>
+                <Checkbox
+                  label='Employee Manager'
+                  name='privileges'
+                  value='employee_manager'
+                  checked={formData.privileges.includes('employee_manager')}
+                  onChange={onChange}
                 />
-                <p className={err}>{formErrors.employeeId}</p>
-              </div>
-
-              <div className="flex flex-col justify-between pr-20">
-                <Typography className="mb-2" variant="h6">
-                  Employee Name :
-                </Typography>
-                <Input
-                  label="employee name"
-                  size="lg"
-                  value={data.employeeName}
-                  onChange={(e) =>
-                    setData({ ...data, employeeName: e.target.value })
-                  }
+                <Checkbox
+                  label='Customer Manager'
+                  name='privileges'
+                  value='customer_manager'
+                  checked={formData.privileges.includes('customer_manager')}
+                  onChange={onChange}
                 />
-                <p className={err}>{formErrors.employeeName}</p>
+                <Checkbox
+                  label='Event Manager'
+                  name='privileges'
+                  value='event_manager'
+                  checked={formData.privileges.includes('event_manager')}
+                  onChange={onChange}
+                />
+                <Checkbox
+                  label='Stock Manager'
+                  name='privileges'
+                  value='stock_manager'
+                  checked={formData.privileges.includes('stock_manager')}
+                  onChange={onChange}
+                />
+                <p className={err}>{formErrors.privileges}</p>
               </div>
             </div>
 
-            <div className=" flex flex-row justify-between">
-              <div className=" flex flex-col pl-20">
-                <Typography className="mb-2" variant="h6">
-                  Privilage :
-                </Typography>
+            <div className=' flex flex-col justify-between pr-20'>
+              <Typography className='mb-2' variant='h6'>
+                Telephone :
+              </Typography>
 
-                <div className="flex flex-col space-y-2">
-                  <Checkbox
-                    label="Employee Manager"
-                    name="privileges"
-                    value="employee_manager"
-                    checked={data.privileges.includes("employee_manager")}
-                    onChange={(e) =>
-                      setData({ ...data, privileges: e.target.value })
-                    }
-                  />
-                  <Checkbox
-                    label="Customer Manager"
-                    name="privileges"
-                    value="customer_manager"
-                    checked={data.privileges.includes("customer_manager")}
-                    onChange={(e) =>
-                      setData({ ...data, privileges: e.target.value })
-                    }
-                  />
-                  <Checkbox
-                    label="Event Manager"
-                    name="privileges"
-                    value="event_manager"
-                    checked={data.privileges.includes("event_manager")}
-                    onChange={(e) =>
-                      setData({ ...data, privileges: e.target.value })
-                    }
-                  />
-                  <Checkbox
-                    label="Stock Manager"
-                    name="privileges"
-                    value="stock_manager"
-                    checked={data.privileges.includes("stock_manager")}
-                    onChange={(e) =>
-                      setData({ ...data, privileges: e.target.value })
-                    }
-                  />
-                  <p className={err}>{formErrors.privileges}</p>
-                </div>
-              </div>
+              <Input
+                label='phone number'
+                size='lg'
+                name='empNumber'
+                value={formData.employee.empNumber}
+                onChange={onChange}
+              />
+              <p className={err}>{formErrors.telephone}</p>
 
-              <div className=" flex flex-col justify-between pr-20">
-                <Typography className="mb-2" variant="h6">
-                  Telephone :
-                </Typography>
+              <Typography className='mb-2' variant='h6'>
+                Address :
+              </Typography>
 
-                <Input
-                  label="phone number"
-                  size="lg"
-                  value={data.telephone}
-                  onChange={(e) =>
-                    setData({ ...data, telephone: e.target.value })
-                  }
-                />
-                <p className={err}>{formErrors.telephone}</p>
-
-                <Typography className="mb-2" variant="h6">
-                  Address :
-                </Typography>
-
-                <Input
-                  label="address"
-                  size="lg"
-                  value={data.address}
-                  onChange={(e) =>
-                    setData({ ...data, address: e.target.value })
-                  }
-                />
-                <p className={err}>{formErrors.address}</p>
-              </div>
+              <Input
+                label='address'
+                size='lg'
+                name='empAdd'
+                value={formData.employee.empAdd}
+                onChange={onChange}
+              />
+              <p className={err}>{formErrors.address}</p>
             </div>
-          </CardBody>
-          <CardFooter className="pt-0">
-            <div className="flex flex-row justify-around">
-              <Button className=" bg-yellow-800" onClick={handleEditClick}>
-                Cancel
-              </Button>
-              <Button
-                className=" bg-green-600"
-                type="submit"
-                onClick={handleSubmit}
-              >
-                Update
-              </Button>
-            </div>
-          </CardFooter>
-        </Card>
-      </Dialog>
+          </div>
+        </CardBody>
+        <CardFooter className='pt-0'>
+          <div className='flex flex-row justify-around'>
+            <Button className=' bg-yellow-800'>Cancel</Button>
+            <Button
+              className=' bg-green-600'
+              type='submit'
+              onClick={handleSubmit}
+            >
+              Update
+            </Button>
+          </div>
+        </CardFooter>
+      </Card>
     </>
   );
 }
