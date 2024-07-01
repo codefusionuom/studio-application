@@ -18,10 +18,10 @@ import axiosInstance from "../../../config/axios.config";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
 
-function AddAllowance() {
+function EditEmpAllowance({idx}) {
 
   const [empName, setEmpName] = useState()
-  const [empId, setEmpId] = useState()
+  const [empId, setEmpId] = useState(idx)
   const [empAdd, setEmpAdd] = useState()
   const [empType, setEmpType] = useState()
   const [empSalary, setEmpSalary] = useState()
@@ -44,6 +44,27 @@ function AddAllowance() {
   const [resultVisible, setResultVisible] = useState(false)
   const [searchvalue, setSearchValue] = useState()
   const [errorAllowance, setErrorAllowance] = useState()
+  const [recId, setRecId] = useState()
+
+
+  useEffect(() => {
+    axios.get(`http://localhost:5000/employeeManager/getEmpAllowanceByid/?id=${empId}`)
+      .then(result => {
+        console.log(result)
+        setEmpName(result.data.employee.empName)
+        setAllowanceorDeduction(result.data.paymentAllowanceDeduction.allowanceDeduction)
+        setType(result.data.paymentAllowanceDeduction.allowanceDeduction)
+        setAllowanceDeductionName(result.data.paymentAllowanceDeduction.allowanceDeductionName)
+        setId(result.data.allowanceid)
+        setAmount(result.data.Amount)
+        setRecId(result.data.id)
+        // setEmpNumber(result.data.empNumber)
+        // setEmpEmail(result.data.empEmail)
+        // setEmpEmail(result.date.empEmail)
+      })
+      .catch(err => console.log(err))
+      console.log("helllllo");
+  }, [])
 
 
   //Get Allowance use effect
@@ -55,13 +76,13 @@ function AddAllowance() {
     }
 }, [type]);
 
-useEffect(() => {
-  if (search !== "") {
-  handleSearch();
-  console.log(search);
-  console.log("search when name change");
-  }
-}, [search]);
+// useEffect(() => {
+//   if (search !== "") {
+//   handleSearch();
+//   console.log(search);
+//   console.log("search when name change");
+//   }
+// }, [search]);
 
 
 
@@ -84,22 +105,29 @@ useEffect(() => {
 
 
   // Search Employee
-  const handleSearch = async () => {
-    setResultVisible(true)
-    console.log("searching begin");
-    try {
-    const { data } = await axiosInstance.get(`/employeeManager/getEmployeeSearch/?empName=${search}`)
-    if (!data) {
-        ToastError("no employee exist")
-    }
-    console.log(data);
-    setUser(data);
-    // setResults(data.count)
-    } catch (error) {
-    console.log(error);
-    ToastError(error)
-    }
-};
+//   const handleSearch = async () => {
+//     setResultVisible(true)
+//     console.log("searching begin");
+//     try {
+    // const { data } = await axiosInstance.get(`/employeeManager/getEmployeeSearch/?empName=${search}`)
+//     if (!data) {
+//         ToastError("no employee exist")
+//     }
+//     console.log(data);
+//     setUser(data);
+//     // setResults(data.count)
+//     } catch (error) {
+//     console.log(error);
+//     ToastError(error)
+//     }
+// };
+
+const handleTest = () => {
+    console.log(empId);
+    console.log(id);
+    console.log(amount);
+    console.log(recId);
+} 
 
   const Submit = (e) => {
     e.preventDefault()
@@ -117,7 +145,7 @@ useEffect(() => {
     }
     setErrorAllowance(false);
 
-    axios.post("http://localhost:5000/employeeManager/createEmpAllowance", { id, empId, amount })
+    axios.put(`http://localhost:5000/employeeManager/updateEmpAllowance/?empId=${empId}&id=${id}&amount=${amount}`)
       .then(result => {
         console.log(result)
         window.location.reload()
@@ -142,54 +170,17 @@ useEffect(() => {
                   <Typography className="mb-2" variant="h6">
                    Select Employee
                   </Typography>
-                  <div className="relative ">
-                    <div className="relative flex w-full max-w-[24rem] ">
                       <Input
                         error={errorName ? "true" : null}
-                        label="Enter Name"
+                        disabled
                         value={empName}
-                        onChange={(e) => {setSearch(e.target.value)}}
-                        className="pr-20"
-                        containerProps={{
-                          className: "min-w-0",
-                        }}
                       />
-                      <Button
-                        size="sm"
-                        color={search ? "gray" : "blue-gray"}
-                        disabled={!search}
-                        className="!absolute right-0 bottom-0 rounded "
-                        onClick={handleSearch}
-                      >
-                        <MagnifyingGlassIcon className="h-6 w-5" />
-                      </Button>
-                    </div>
-
-                    {resultVisible ? (
-                    <div>
-        
-      
-                    {users && users.map((user)=>{
-                      return (
-                        <Card className="p-2 rounded-md absolute top-10 w-full max-h-36 overflow-scroll z-[999]">
-                        <div className="" onClick={()=>{setEmpId(user.id); setEmpName(user.empName); setSearchValue(""); setResultVisible(false)}}>
-                          <div className="text-"> 
-                          {user.empName}
-                          </div>
-                        </div>
-                        </Card>
-                      )
-                    })}
-                    </div>
-                    ) : null}
-         
-                  </div>
                 </div>
                 <div className="flex flex-col justify-between">
                 <Typography className="mb-2" variant="h6">
                    Select Type
                   </Typography>
-                  <Select label="Select Type"  onChange={(e) => { setType(e) }} >
+                  <Select label="Select Type" value={allowanceorDeduction}  onChange={(e) => { setType(e) }} >
                     <Option value="Allowance">Allowance</Option>
                     <Option value="Deduction">Deduction</Option>
                   </Select>
@@ -200,7 +191,7 @@ useEffect(() => {
                 <Typography className="mb-2" variant="h6">
                    Select Allowance/Deduction
                   </Typography>
-                  <Select label={'Select ' + type} onChange={item => { setId(item) }} error={errorAllowance ? "true" : null} disabled={type !== "Allowance" && type !== "Deduction" ? "true" : null}>
+                  <Select label={allowanceDeductionName} value={allowanceDeductionName} onChange={item => { setId(item) }} error={errorAllowance ? "true" : null} >
                         {allowances.map((allowance) => {
                             return (
                                      <Option key={allowance.id} value={allowance.id}>{allowance.allowanceDeductionName}</Option>
@@ -214,16 +205,16 @@ useEffect(() => {
                 <Typography className="mb-2" variant="h6">
                     Enter Amount
                   </Typography>
-                  <Input label="Enter Amount" size="lg" onChange={(e) => setAmount(e.target.value)} error={errorAdd ? "true" : null} />
+                  <Input value={amount} size="lg" onChange={(e) => setAmount(e.target.value)} error={errorAdd ? "true" : null} />
                 </div>
               </div>
             </form>
           </CardBody>
           <CardFooter className="pt-0">
             <div className=" flex flex-row justify-between">
-              {/* <Button className=" bg-yellow-800" onClick={handleOpen}>
+              <Button className=" bg-yellow-800" onClick={handleTest}>
                 Clear
-              </Button> */}
+              </Button>
               <Button className=" bg-green-600" onClick={Submit}>
                 Create
               </Button>
@@ -234,4 +225,4 @@ useEffect(() => {
     </>
   );
 }
-export default AddAllowance
+export default EditEmpAllowance

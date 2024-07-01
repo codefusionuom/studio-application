@@ -33,6 +33,7 @@ import EmployeeManagerDashboard from './pages/employeeManager/dashboard';
 import EmployeePayment from './pages/employeeManager/payment';
 import Attendance from './pages/employeeManager/attendance/attendance';
 import AllowancePage from './pages/employeeManager/allowance/allowancepage';
+import AdvancePage from './pages/employeeManager/advance/advancePage';
 
 import SuperAdminDashboard from './pages/superAdmin/Dashboard';
 import SuperAdminAdmins from './pages/superAdmin/admin';
@@ -98,6 +99,7 @@ function App() {
         <Route  path="/employeeManager/payment" element={<EmployeePayment />} />
         <Route  path='/employeeManager/attendance' element={<Attendance />} />
         <Route path='/employeeManager/allowance' element={<AllowancePage/>}/>
+        <Route path='/employeeManager/advance' element={<AdvancePage/>}/>
         
         
       </Route>

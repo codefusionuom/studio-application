@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import DashCard2 from "../dashButtonCard copy";
 import { Select } from "@material-tailwind/react";
 import SelectOption from "@material-tailwind/react/components/Select/SelectOption";
+import axiosInstance from "../../../config/axios.config";
 
 
 function ViewEmployeePaymentDetails() {
@@ -33,6 +34,13 @@ function ViewEmployeePaymentDetails() {
   const [erroraccoutNumber,setErrorAccountNumber] = useState()
   const [errorovertimeRate,setErrorOvertimeRate] = useState()
   const [errordoubleovertimeRate,setErrorDoubleovertimeRate] = useState()
+  const [empSalary, setEmpSalary] = useState()
+  const [resultVisible, setResultVisible] = useState()
+  const [search, setSearch] = useState()
+  const [searchvalue, setSearchValue] = useState()
+  const [empName, setEmpName] = useState()
+  const [ToastError,setToastError] = useState()
+  const [empId, setEmpId] = useState()
 
 
   const Submit = (e) => {
@@ -85,20 +93,20 @@ function ViewEmployeePaymentDetails() {
       return;
     }
     setErrorOvertimeRate(false);
-    if (!doubleovertimeRate) {
+    if (!empSalary) {
       setErrorDoubleovertimeRate(true);
-      alert("Please fill in doubleovertime rate");
+      alert("Please fill in salary");
       return;
     }
-    if (isNaN(doubleovertimeRate)) {
+    if (isNaN(empSalary)) {
       setErrorDoubleovertimeRate(true);
-      alert("doubleovertime rate must be numeric");
+      alert("salary must be numeric");
       return;
     }
     setErrorDoubleovertimeRate(false);
 
     ////// Update database
-    axios.put("http://localhost:5000/employeeManager/updateEmployeePaymentDatails/" + id, { bank, epfNumber, accountNumber, overtimeRate, doubleovertimeRate })
+    axios.put("http://localhost:5000/employeeManager/updateEmployeePaymentDatails/" + id, { bank, epfNumber, accountNumber, overtimeRate, empSalary })
       .then(result => {
         console.log(result)
         window.location.reload()
@@ -107,11 +115,37 @@ function ViewEmployeePaymentDetails() {
   }
 
   useEffect(() => {
-    axios.get('http://localhost:5000/employeeManager/getEmployees')
-      .then(result => setUser(result.data))
-      .catch(err => console.log(err))
-    console.log(users)
-  }, [])
+    if (search !== "") {
+    handleEmpSearch();
+    console.log(search);
+    console.log("search when name change");
+    }
+  }, [search]);
+
+
+const handleEmpSearch = async () => {
+    setResultVisible(true)
+    console.log("searching begin");
+    try {
+    const { data } = await axiosInstance.get(`/employeeManager/getEmployeeSearch/?empName=${search}`)
+    if (!data) {
+        ToastError("no employee exist")
+    }
+    console.log(data);
+    setUser(data);
+    // setResults(data.count)
+    } catch (error) {
+    console.log(error);
+    ToastError(error)
+    }
+};
+
+  // useEffect(() => {
+  //   axios.get('http://localhost:5000/employeeManager/getEmployees')
+  //     .then(result => setUser(result.data))
+  //     .catch(err => console.log(err))
+  //   console.log(users)
+  // }, [])
 
   const OpenSelectHandle = async (e) => {
     axios.get('http://localhost:5000/employeeManager/getEmployeeByid/' + e)
@@ -130,7 +164,7 @@ function ViewEmployeePaymentDetails() {
         setEpfNumber(result.data.epfNumber)
         setAccountNumber(result.data.accountNumber)
         setOvertimeRate(result.data.overtimeRate)
-        setDoubleovertimeRate(result.data.doubleovertimeRate)
+        setEmpSalary(result.data.empSalary)
       })
       .catch(err => console.log(err))
   }
@@ -140,12 +174,7 @@ function ViewEmployeePaymentDetails() {
 
   return (
 <>
-      <DashCard2 title2={"View Employee Payment Details"} title3={""} onClick={handleOpen} />
-      <Dialog
-        open={open}
-        handler={handleOpen}
-        className="bg-transparent shadow-none w-fit"
-      >
+      
         <Card className="mx-auto w-full ">
           <CardBody className="flex flex-col gap-4">
             <form onSubmit={Submit}>
@@ -165,14 +194,36 @@ function ViewEmployeePaymentDetails() {
                   <div className='pt-5'>
                     <p>Employee Name :</p>
                     <div className="w-80 pt-1 pb-10">
-                      <Select label='Select Name' onChange={OpenSelectHandle} error={errorid ? "true": null}>
-                        {users.map((user) => {
-                          return (
-                            <SelectOption key={user.id} value={user.id}>{user.empName} </SelectOption>
-                          );
-                        },
-                        )}
-                      </Select>
+                    <div className="relative ">
+                            <div className="relative flex w-full max-w-[24rem] ">
+                                <Input
+                                    label="Enter Name"
+                                    value={empName}
+                                    onChange={(e) => {setSearch(e.target.value); setEmpName(e.target.value)}}
+                                    className="pr-20"
+                                    containerProps={{
+                                    className: "min-w-0",
+                                    }}
+                                />
+                            </div>
+
+                            {resultVisible ? (
+                                <div>
+                                {users && users.map((user)=>{
+                                return (
+                                    <Card className="p-2 rounded-md absolute top-10 w-full max-h-36 overflow-scroll z-[999]">
+                                    <div className="" onClick={()=>{setEmpId(user.id); setEmpName(user.empName); setSearchValue(""); setResultVisible(false);OpenSelectHandle(user.id)}}>
+                                    <div className="text-"> 
+                                    {user.empName}
+                                    </div>
+                                    </div>
+                                    </Card>
+                                )
+                                })}
+                                </div>
+                            ) : null}
+                
+                        </div>
                     </div>
                   </div>
                   <div>
@@ -220,7 +271,7 @@ function ViewEmployeePaymentDetails() {
                   <div>
                     <p>Double Overtime Rate :</p>
                     <div className="w-80 pt-1 pb-10">
-                      <Input label="Double Overtime Rate" value={doubleovertimeRate} onChange={(e) => setDoubleovertimeRate(e.target.value)} error={errordoubleovertimeRate ? "true": null}/>
+                      <Input label="Salary" value={empSalary} onChange={(e) => setEmpSalary(e.target.value)} error={errordoubleovertimeRate ? "true": null}/>
                     </div>
                   </div>
                 </div>
@@ -238,7 +289,6 @@ function ViewEmployeePaymentDetails() {
             </div>
           </CardFooter>
         </Card>
-      </Dialog>
     </>
   );
 }

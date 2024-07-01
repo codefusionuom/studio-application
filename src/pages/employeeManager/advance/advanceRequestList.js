@@ -5,6 +5,9 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import UpdateAdvance from "../payment/editadvance";
 import UpdateEmployee from "../empForms/updateEmployee";
+import React from "react";
+import { Dialog } from "@material-tailwind/react";
+import EditRecordButton from "../../../components/buttons/EditRecordButton";
 
 function AdvanceRequestList() {
 
@@ -15,16 +18,68 @@ function AdvanceRequestList() {
     const [advancePaidAmount,setAdvencePaidAmount] = useState()
     const [advanceremaining,setAdvanceRemaining] = useState()
     const [users,setUser] = useState([])
+    const [open, setOpen] = React.useState(false);
+    const [result, setResult] = useState()
+    const [active, setActive] = useState(1)
+    const [advancerequest, setAdvanceRequest] = useState()
+    const [reject, setReject] = useState()
+
+
+
+    const handleEdit = (id) => {
+        setOpen((cur) => !cur) 
+        setid(id)
+        console.log(id);
+    };
+
+
+
+    const handleAccept = (id) => {
+
+
+        axios.put("http://localhost:5000/employeeManager/acceptAdvance/" + id)
+      .then(result => {
+        console.log(result)
+        // window.location.reload()
+        // navigate('/')
+      })
+      .catch(err => console.log(err))
+      }
+
+      const SetAccept = (id) => {
+        setAdvanceRequest(false);
+        handleAccept(id);
+    };
+    const SetReject = (id) => {
+        setAdvanceRequest(false);
+        setReject(true);
+        handleReject(id);
+    };
+
+
+      const handleReject = (id) => {
+
+        axios.put("http://localhost:5000/employeeManager/rejectAdvance/" + id)
+      .then(result => {
+        console.log(result)
+        // window.location.reload()
+        // navigate('/')
+      })
+      .catch(err => console.log(err))
+      }
 
     
 
 
     useEffect(() => {
-        axios.get('http://localhost:5000/employeeManager/getAdvance')
-          .then(result => setUser(result.data))
+        axios.get(`http://localhost:5000/employeeManager/getAdvance/?page=${active}`)
+          .then(result => {
+            setUser(result.data.rows)
+            setResult(result.data.count)
+        })
           .catch(err => console.log(err))
         console.log(users)
-      }, [])
+      }, [active])
 
 
 
@@ -116,12 +171,12 @@ function AdvanceRequestList() {
                                                     color="blue-gray"
                                                     className="font-normal"
                                                 >
-                                                    {user.advancePaidAmount}
+                                                    {user.description}
                                                 </Typography>
                                                 
                                             </div>
                                         </td>
-                                        <td className={"p-4 border-b border-blue-gray-50"}>
+                                        {/* <td className={"p-4 border-b border-blue-gray-50"}>
                                             <div className="flex flex-col">
                                                 <Typography
                                                     variant="small"
@@ -132,13 +187,35 @@ function AdvanceRequestList() {
                                                 </Typography>
                                                 
                                             </div>
-                                        </td>
+                                        </td> */}
                                         
                                         
                                         
                                         <td className={"p-4 border-b border-blue-gray-50"}>
                                             <Tooltip content="Edit User">
-                                                <UpdateAdvance idx={user.id}/>
+
+
+
+                                            {user.advancerequest ? (
+                                                <div className="flex">
+                                                    <div>
+                                                    <EditRecordButton onClick={() => SetAccept(user.id,)}></EditRecordButton>
+                                                    </div>
+                                                    <div>
+                                                    <EditRecordButton onClick={() => SetReject(user.id,)}></EditRecordButton>
+                                                    </div>
+                                                </div>
+                                                ) : (
+                                                    <div>
+                                                        <EditRecordButton onClick={() => handleEdit(user.id,)}></EditRecordButton>
+                                                    </div>
+                                                    )}
+                                    
+
+
+
+
+                                                {/* <EditRecordButton onClick={() => handleEdit(user.id,)}></EditRecordButton> */}
                                                 {/* <UpdateEmployee idx={user.id}/> */}
                                                 {/* <IconButton variant="text">
                                                     <PencilIcon className="h-4 w-4" />
@@ -151,13 +228,21 @@ function AdvanceRequestList() {
                         )}
                     </tbody>
                 </table>
+                
+                    <Dialog
+                        open={open}
+                        handler={handleEdit}
+                        className="bg-transparent shadow-none w-fit"
+                    >
+                        <UpdateAdvance idx={id}/>
+                    </Dialog>
             </CardBody>
             <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
                 <Typography>
-233 results
+                    {result}
                 </Typography>
                 <div className="flex gap-2">
-                   <Pagination />
+                <Pagination  active={active} setActive={setActive} />
                 </div>
             </CardFooter>
         </Card>
@@ -167,5 +252,5 @@ export default AdvanceRequestList
 
 
 
-const TABLE_HEAD = ["Employee Name", "Advance", "Paid", "Remaining", "Make Payment"];
+const TABLE_HEAD = ["Employee Name", "Advance", "Description", "Handle"];
 

@@ -13,6 +13,7 @@ import SelectOption from "@material-tailwind/react/components/Select/SelectOptio
 import CreateAdvance from './advance/createadvance'
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { Dialog } from '@material-tailwind/react';
 
 
 
@@ -39,6 +40,12 @@ function EmployeePayment() {
     const [checkOutTotal,setCheckOutTotal] = useState()
 
     const [selectedMonth, setSelectedMonth] = useState ();
+
+    const [openCreate, setOpenCreate] = React.useState(false);
+    const handleOpenCreate = () => setOpenCreate((cur) => !cur);
+
+    const [openView, setOpenView] = React.useState(false);
+    const handleOpenView = () => setOpenView((cur) => !cur);
 
 
 
@@ -165,15 +172,31 @@ function EmployeePayment() {
         <div>
             <div>
                 <div className='flex justify-evenly pb-5'>
-                    <EmployeePaymentDetails></EmployeePaymentDetails>
-                    <ViewSalary></ViewSalary>
-                
+                    <div>
+                        <DashCard2 title2={"Create Employee Payment Details"} title3={""} onClick={handleOpenCreate} />
+                        <Dialog
+                            open={openCreate}
+                            handler={handleOpenCreate}
+                            className="bg-transparent shadow-none w-fit"
+                        >
+                            <EmployeePaymentDetails></EmployeePaymentDetails>
+                        </Dialog>
+                    </div>
+                    <div>
+                        <DashCard2 title2={"View Employee Payment Details"} title3={""} onClick={handleOpenView} />
+                        <Dialog
+                            open={openView}
+                            handler={handleOpenView}
+                            className="bg-transparent shadow-none w-fit"
+                        >
+                            <ViewEmployeePaymentDetails/>
+                        </Dialog>
+                    </div>
                 </div>
                 <div className='flex justify-evenly pb-5'>
-                    <ViewEmployeePaymentDetails></ViewEmployeePaymentDetails>
+                    {/* <ViewEmployeePaymentDetails></ViewEmployeePaymentDetails> */}
                 </div>
                 <div className='flex justify-evenly pb-5'>
-                    <CreateAdvance></CreateAdvance>
                     
                 </div>
             </div>
@@ -194,7 +217,7 @@ function EmployeePayment() {
 
             
 
-            <div className='Earning pt-10'>
+            {/* <div className='Earning pt-10'>
                 
                 <div className=''>
                     <div className='bg-gray-400 ml-20 mr-20 flex justify-evenly rounded'>
@@ -293,7 +316,7 @@ function EmployeePayment() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> */}
 
 
 

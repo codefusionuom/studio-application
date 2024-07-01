@@ -5,9 +5,11 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import UpdateAdvance from "../payment/editadvance";
 import UpdateEmployee from "../empForms/updateEmployee";
+import React from "react";
+import { Dialog } from "@material-tailwind/react";
 import EditRecordButton from "../../../components/buttons/EditRecordButton";
 
-function ViewAllowance() {
+function RejectAdvanceList() {
 
     const [id,setid] = useState()
     const [empId,setEmpId] = useState()
@@ -16,28 +18,19 @@ function ViewAllowance() {
     const [advancePaidAmount,setAdvencePaidAmount] = useState()
     const [advanceremaining,setAdvanceRemaining] = useState()
     const [users,setUser] = useState([])
+    const [open, setOpen] = React.useState(false);
     const [result, setResult] = useState()
     const [active, setActive] = useState(1)
 
-    
-
-
     useEffect(() => {
-        axios.get(`http://localhost:5000/employeeManager/getAllowance/?page=${active}`)
-          .then(result => {setUser(result.data.rows);setResult(result.data.count)})
+        axios.get(`http://localhost:5000/employeeManager/getRejectAdvance/?page=${active}`)
+          .then(result => {
+            setUser(result.data.rows)
+            setResult(result.data.count)
+        })
           .catch(err => console.log(err))
         console.log(users)
       }, [active])
-
-      const handleDelete = (id) => {
-        axios.delete('http://localhost:5000/employeeManager/deleteAllowance/' + id)
-          .then(res => {
-            console.log(res)
-            window.location.reload()
-          })
-          .catch(err => console.log(err))
-    
-      }
 
 
 
@@ -48,7 +41,7 @@ function ViewAllowance() {
             <CardHeader floated={false} shadow={false} className="rounded-none">
                 <div className="flex flex-col items-center justify-between gap-4  md:flex-row ">
                     <div className="text-2xl pt-6 pl-10 font-semibold">
-                    <p>Allowance/Deduction List</p>
+                    <p>Advance Request List</p>
                     </div>
 
                     <div className=" flex p-4 gap-6">
@@ -104,7 +97,7 @@ function ViewAllowance() {
                                                         color="blue-gray"
                                                         className="font-normal"
                                                     >
-                                                        {user.allowanceDeductionName}
+                                                        {user.empId}
                                                     </Typography>
                                                     
                                                 </div>
@@ -117,20 +110,21 @@ function ViewAllowance() {
                                                     color="blue-gray"
                                                     className="font-normal"
                                                 >
-                                                    {user.allowanceDeduction}
+                                                    {user.advanceAmount}
                                                 </Typography>
                                                 
                                             </div>
                                         </td>
-                                        
-                                        
-                                        
-                                        
-                                        
                                         <td className={"p-4 border-b border-blue-gray-50"}>
-                                            <Tooltip content="Edit User">
-                                                <EditRecordButton onClick={() => handleDelete(user.id)}></EditRecordButton>
-                                            </Tooltip>
+                                            <div className="flex flex-col">
+                                                <Typography
+                                                    variant="small"
+                                                    color="blue-gray"
+                                                    className="font-normal"
+                                                >
+                                                    {user.description}
+                                                </Typography>
+                                            </div>
                                         </td>
                                     </tr>
                                 );
@@ -150,9 +144,9 @@ function ViewAllowance() {
         </Card>
     );
 }
-export default ViewAllowance
+export default RejectAdvanceList
 
 
 
-const TABLE_HEAD = ["Name", "Allowance/Deduction", "Delete"];
+const TABLE_HEAD = ["Employee Name", "Advance", "Description"];
 

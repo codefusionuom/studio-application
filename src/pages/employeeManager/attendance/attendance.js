@@ -204,7 +204,7 @@ useEffect(() => {
                                     <Input
                                         label="Enter Name"
                                         value={empName}
-                                        onChange={(e) => {setSearch(e.target.value)}}
+                                        onChange={(e) => {setSearch(e.target.value); setEmpName(e.target.value)}}
                                         className="pr-20"
                                         containerProps={{
                                         className: "min-w-0",
