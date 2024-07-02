@@ -23,10 +23,12 @@ const EventManagerEventCalendar = () => {
   const [existError, setExistError] = useState(null);
 
   const getOneDayEvents = () => {
-    axios.get('http://localhost:5000/eventManager/getOnedayEvents')
+    // axios.get('http://localhost:5000/eventManager/getOnedayEvents')
+    axios.get('http://localhost:5000/eventManager/all-events')
       .then(response => {
         console.log("oneday events ", response.data.oneDayEvents);
-        setOneDayEvents(response.data.oneDayEvents);
+        // setOneDayEvents(response.data.oneDayEvents);
+        setOneDayEvents(response.data.events);
       })
       .catch(error => {
         setExistError(error.message);
@@ -37,6 +39,7 @@ const EventManagerEventCalendar = () => {
     axios.get("http://localhost:5000/eventManager/all-events")
       .then(res => {
         const events = res.data.events;
+        console.log("events :" , events)
         setEventList(events);
       })
       .catch(error => {
@@ -51,10 +54,10 @@ const EventManagerEventCalendar = () => {
 
   const events = eventList.map(event => (
     {
-      title: event.serviceType,
+      title: event.service['serviceName'],
       id: event.eventId,
-      start: format(new Date(event.date), 'yyyy-MM-dd'),
-      end: format(new Date(event.date), 'yyyy-MM-dd'),
+      start: format(new Date(event.serviceDate), 'yyyy-MM-dd'),
+      end: format(new Date(event.serviceDate), 'yyyy-MM-dd'),
       backgroundColor: "#2874A6",
       borderColor: "#2874A6"
     }
@@ -156,7 +159,7 @@ const EventManagerEventCalendar = () => {
                             color="blue-gray"
                             className="font-normal"
                           >
-                            {oneDayEvent.serviceType}
+                            {oneDayEvent.service['serviceName']}
                           </Typography>
                         </div>
                       </div>
@@ -168,7 +171,7 @@ const EventManagerEventCalendar = () => {
                           color="blue-gray"
                           className="font-normal"
                         >
-                          {oneDayEvent.date.slice(0, 10)}
+                          {oneDayEvent.date?.slice(0, 10)}
                         </Typography>
                       </div>
                     </td>

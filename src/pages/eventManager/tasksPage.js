@@ -24,15 +24,21 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 
 const TaskPage = () => {
-  const [date, setDate] = React.useState();
+  const [date, setDate] = React.useState('');
   let [taskList, setTaskList] = React.useState([]);
   let [selectedDateEventList, setselectedDateEventList] = React.useState([]);
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
   useEffect(() => {
     console.log("use effect");
   getTasks()
     //   getEvents();
   }, []);
+  useEffect(() => {
+    console.log("use effect");
+ 
+    //   getEvents();
+  }, [taskList , date]);
 
   const getTasks = () => {
     axios.get('http://localhost:5000/eventManager/tasks/all-tasks')
@@ -44,16 +50,85 @@ const TaskPage = () => {
       console.log("error : " + error)
     })
   }
+  const taskSearch = (taskName) => {
+    axios
+    .post("http://localhost:5000/eventManager/task/searchTaskName", {
+      taskName: taskName,
+    } ,{ params: { taskName: taskName, } })
+    .then( (response) => {
+      console.log("tasks -  : " , response)
+      console.log(response.data);
+      
+    setTaskList(response.data)
+    })
+    .catch((error) => {
+      console.log("error : " + error)
+    })
+  }
+  const taskDelete = (taskId) => {
+    console.log("tasks idddddddddddddd-  : " , taskId)
+    axios
+    .post("http://localhost:5000/eventManager/task/deleteTask", {
+      // taskName: taskName,
+    } ,{ params: { taskId: taskId, } })
+    .then( (response) => {
+      console.log("tasks -  : " , response)
+      console.log("delete ")
+      console.log(response.data);
+      if(response.status === 200) {
+        console.log("Status -  : " , response.status)
+        console.log("data delete -  : " , response.data)
+        handleRemoveItem(taskId);
+        setTaskList(response.data)
+      }
+      
+    })
+    .catch((error) => {
+      console.log("error : " + error)
+    })
+  }
+
+
+  
+  const getSelectedDayEvents = (date) => {
+    console.log("kkkkkkkkkkkkkkkkkkkk");
+    axios
+      .post("http://localhost:5000/eventManager/task/searchTaskDate", {
+        date: date,
+      })
+      .then((res) => {
+        // const events = res.data.events;
+        // console.log("event 0: " , events[0]);
+        // setEventList(res.data)
+
+        console.log(res.data.todayEvents);
+        // setselectedDateEventList(res.data.todayEvents)
+        setTaskList(res.data.todayEvents);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    // console.log("response: ", response);
+    // console.log(response.events);
+  };
+
   const TABLE_HEAD = [
     "Task Name",
     "Department",
     "date",
-    "Mobile No",
     "status",
+    "",
+    "",
+    ""
   ];
+  const handleRemoveItem = (id) => {
+    // console.log("itemList[0].id " , itemList[0].id)
+    var updatedTaskList = taskList.filter(item => item.id !== id);
+    setTaskList(updatedTaskList)
+}
 
   // const statusTypes = ["Active", "Desertion", "Upcoming", "Done", "Offline"];
-  const statusTypes = ["Active", "Upcoming", "Done"];
+  const statusTypes = ["Upcoming","Paused", "Done" , "Closed"];
   return (
     <div>
       <div className="flex  justify-between items-center w-full h-[140px] rounded font-lato text-xl text-cl-1   p-4 pt-2">
@@ -99,6 +174,10 @@ const TaskPage = () => {
                 </svg>
               }
               label="Search"
+              onChange={(e) => {
+                console.log(e.target.value);
+                taskSearch(e.target.value);
+              }}
             />
           </div>
           <div>
@@ -146,7 +225,7 @@ const TaskPage = () => {
                     setDate(selectedDate);
                     console.log(selectedDate);
                     // Call your function here
-                    //   getSelectedDayEvents(selectedDate);
+                      getSelectedDayEvents(selectedDate);
                     console.log("Updated eventList :", taskList);
                     // setEventList()
                   }}
@@ -193,13 +272,13 @@ const TaskPage = () => {
                 />
               </PopoverContent>
             </Popover>
-            {/* <Button variant="outlined" className="rounded-full" size="sm" onClick={
+            <Button variant="outlined" className="rounded-full" size="sm" onClick={
              useEffect(() => {
-               setDate(null)
-               getEvents()
+               setDate('')
+              //  getEvents()
              },[])
              
-             }>Clear</Button> */}
+             }>Clear</Button>
           </div>
         </div>
 </div>
@@ -240,16 +319,18 @@ const TaskPage = () => {
                           size="sm"
                           value={(function () {
                             switch (statusT) {
-                              case "Active":
-                                return "Active";
-                              case "Desertion":
-                                return "Desertion";
+                              // case "Active":
+                              //   return "Active";
+                              // case "Desertion":
+                              //   return "Desertion";
                               case "Done":
                                 return "Done";
                               case "Upcoming":
                                 return "Upcoming";
-                              case "Offline":
-                                return "Offline";
+                              case "Paused":
+                                return "Paused";
+                              case "Closed":
+                                return "Closed";
                               default:
                                 return "nothing";
                             }
@@ -262,6 +343,8 @@ const TaskPage = () => {
                                 return "green";
                               case "Desertion":
                                 return "red";
+                                case "Closed":
+                                  return "blue-gray";
                               case "Done":
                                 return "amber";
                               default:
@@ -299,7 +382,9 @@ const TaskPage = () => {
               </tr>
             </thead>
             <tbody>
-              {taskList.length == 0 ? (
+              {
+              
+              taskList && taskList.length === 0 ? (
                 <tr>
                   <td colSpan={TABLE_HEAD.length} className="text-center">
                     <div className="flex justify-center items-center h-full p-10">
@@ -344,8 +429,8 @@ const TaskPage = () => {
                   </td>
                 </tr>
               ) : (
-                taskList.map((oneTask, index) => {
-                  const isLast = index === taskList.length - 1;
+                taskList?.map((oneTask, index) => {
+                  const isLast = index === taskList.length ;
                   const classes = isLast
                     ? "p-4"
                     : "p-4 border-b border-blue-gray-50";
@@ -354,11 +439,11 @@ const TaskPage = () => {
                     // <Link to={{ pathname: "/eventManager/eventDetails", state: { oneTask } }}>
                     <tr
                       key={oneTask.id}
-                      onClick={() =>
-                        navigate("/eventManager/Tasks/view-Task", {
-                          state: { taskId: oneTask.id },
-                        })
-                      }
+                      // onClick={() =>
+                      //   navigate("/eventManager/Tasks/view-Task", {
+                      //     state: { taskId: oneTask.id },
+                      //   })
+                      // }
                     >
                       <td className={classes}>
                         <div className="flex items-center gap-3">
@@ -401,33 +486,7 @@ const TaskPage = () => {
                         </div>
                       </td>
 
-                      <td className={classes}>
-                        <Typography
-                          variant="paragraph"
-                          color="blue-gray"
-                          className="font-bold"
-                        >
-                           <Tooltip content="Edit User">
-                        <IconButton variant="text">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={2.5}
-                            stroke="currentColor"
-                            className="w-8 h-8 "
-                            color="#21179F"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                            />
-                          </svg>
-                        </IconButton>
-                      </Tooltip>
-                        </Typography>
-                      </td>
+                    
                       <td className={classes}>
                         <div className="w-[80px]  flex items-center font-bold">
                           <Chip
@@ -473,6 +532,58 @@ const TaskPage = () => {
                           />
                         </div>
                       </td>
+                      <td className={classes}>
+                        <Typography
+                          variant="paragraph"
+                          color="blue-gray"
+                          className="font-bold"
+                        >
+                           <Tooltip content="Edit User">
+                        <IconButton variant="text">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={2.5}
+                            stroke="currentColor"
+                            className="w-8 h-8 "
+                            color="#21179F"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                            />
+                          </svg>
+                        </IconButton>
+                      </Tooltip>
+                        </Typography>
+                      </td>
+                      <td>
+                      <Button variant="outlined" className="rounded-full" size="sm" onClick={( ) => { navigate("/eventManager/Tasks/view-Task", {
+                          state: { taskId: oneTask.id },
+                        })}}>
+                        View</Button>
+                      </td>
+                      <td>
+                      <IconButton variant="text" color="blue-gray" onClick={()=>{
+                        taskDelete(oneTask.id);
+                      }}>
+                <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          className="h-5 w-5"
+              >
+            <path
+              fillRule="evenodd"
+              d="M16.5 4.478v.227a48.816 48.816 0 013.878.512.75.75 0 11-.256 1.478l-.209-.035-1.005 13.07a3 3 0 01-2.991 2.77H8.084a3 3 0 01-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 01-.256-1.478A48.567 48.567 0 017.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 013.369 0c1.603.051 2.815 1.387 2.815 2.951zm-6.136-1.452a51.196 51.196 0 013.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 00-6 0v-.113c0-.794.609-1.428 1.364-1.452zm-.355 5.945a.75.75 0 10-1.5.058l.347 9a.75.75 0 101.499-.058l-.346-9zm5.48.058a.75.75 0 10-1.498-.058l-.347 9a.75.75 0 001.5.058l.345-9z"
+              clipRule="evenodd"
+            />
+          </svg>
+            </IconButton>
+                      </td>
+
                     </tr>
                     // </Link>
                   );
