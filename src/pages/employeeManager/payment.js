@@ -9,11 +9,16 @@ import ViewEmployeePaymentDetails from './payment/viewemployeePaymentDetails';
 import axios from "axios";
 import { Select } from "@material-tailwind/react";
 import SelectOption from "@material-tailwind/react/components/Select/SelectOption";
-import CreateAllowancesDeductions from './payment/createAllowancesDeductions';
-import CreateAdvance from './payment/createadvance';
-import ButtomViewAllowance from './payment/buttonViewAllowance';
+// import CreateAdvance from './payment/createadvance';
+import CreateAdvance from './advance/createadvance'
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { Dialog } from '@material-tailwind/react';
+import axiosInstance from '../../config/axios.config';
+// import { toast } from 'react-toastify';
+import { Card } from '@material-tailwind/react';
+import { useNavigate } from 'react-router-dom';
+
 
 
 
@@ -38,42 +43,61 @@ function EmployeePayment() {
     const [empId,setEmpId] = useState()
     const [checkInTotal,setCheckInTotal] = useState()
     const [checkOutTotal,setCheckOutTotal] = useState()
-
+    const [search, setSearch] = useState()
+    const [resultVisible, setResultVisible] = useState()
+    const [errorName, setErrorName] = useState()
+    const [empName, setEmpName] = useState()
+    const [searchValue, setSearchValue] = useState()
+    const [ToastError, setToastError] = useState()
     const [selectedMonth, setSelectedMonth] = useState ();
+    const [openCreate, setOpenCreate] = React.useState(false);
+    const handleOpenCreate = () => setOpenCreate((cur) => !cur);
+    const [openView, setOpenView] = React.useState(false);
+    const handleOpenView = () => setOpenView((cur) => !cur);
+    const navigate = useNavigate();
 
 
 
+    const generatepayslip = (id, monthselected) => {
+        const formateddate = formatDateForSQL(monthselected)
+        console.log("date " + formateddate);
+        console.log("id " + id);
+        navigate("/employeeManager/payslip", {
+            state: {
+                 date: formateddate,
+                 id: id 
+                },
+          })
+    }
 
 
+    useEffect(() => {
+        if (search !== "") {
+        handleSearch();
+        console.log(search);
+        console.log("search when name change");
+        }
+      }, [search]);
 
 
-    useEffect(()=>{
-        axios.get('http://localhost:5000/employeeManager/getEmployees')
-        .then(result => setUser(result.data))
-        .catch(err => console.log(err))
-        console.log(users)
-    },[])
+      // Search Employee
+    const handleSearch = async () => {
+        setResultVisible(true)
+        console.log("searching begin");
+        try {
+        const { data } = await axiosInstance.get(`/employeeManager/getEmployeeSearch/?empName=${search}`)
+        if (!data) {
+            ToastError("no employee exist")
+        }
+        console.log(data);
+        setUser(data);
+        // setResults(data.count)
+        } catch (error) {
+        console.log(error);
+        ToastError(error)
+        }
+    };
 
-
-    const OpenSelectHandle =async (e) => {
-        axios.get('http://localhost:5000/employeeManager/getEmployeeByid/'+e)
-         .then(result => {console.log(result)
-             setid(e)
-             setEmpSalary(result.data.empSalary)
-         })
-         .catch(err => console.log(err))
-         
-         axios.get('http://localhost:5000/employeeManager/getEmployeePaymentDetailsByid/'+e)
-         .then(result => {console.log(result)
-             setBank(result.data.bank)
-             setEpfNumber(result.data.epfNumber)
-             setAccountNumber(result.data.accountNumber)
-             setOvertimeRate(result.data.overtimeRate)
-             setDoubleovertimeRate(result.data.doubleovertimeRate)
-         })
-         .catch(err => console.log(err))
-         
-     }
 
 
      const [selectedDate, setSelectedDate] = useState(new Date());
@@ -81,14 +105,9 @@ function EmployeePayment() {
      const renderMonthContent = (month, shortMonth, longMonth, day) => {
        const fullYear = new Date(day).getFullYear();
        const tooltipText = `Tooltip for month: ${longMonth} ${fullYear}`;
-   
        return <span title={tooltipText}>{shortMonth}</span>;
      };
 
-
-     
-
-     
 
      function formatDateForSQL(date) {
         const year = date.getFullYear();
@@ -98,192 +117,47 @@ function EmployeePayment() {
         // const minutes = ('0').slice(-2);
         // const seconds = ('0').slice(-2);
         return `${year}-${month}`;
-
-
-        
     }
-
-
-    // const opentest = () => {
-    //     console.log(selectedDate);
-    //     const sqlFormattedDate = formatDateForSQL(selectedDate);
-    //     console.log(sqlFormattedDate);
-    //   };
-
-
-      const opentest =async (e) => {
-
-        console.log("selecteddate"+selectedDate);
-
-        // const sqlFormattedDate = formatDateForSQL(selectedDate);
-        // console.log("sqlformat"+sqlFormattedDate);
-
-        const dateString = formatDateForSQL(selectedDate);
-        console.log("sqlformat"+dateString);
-
-
-        // const dateString = sqlFormattedDate.toISOString();
-        // console.log("dateString"+dateString);
-        
-
-
-
-        axios.get('http://localhost:5000/employeeManager/getCheckInTotal/', {
-            params: {
-                month: dateString,
-                id: id,
-                
-            }
-        })
-         .then(result => {console.log(result)
-             setCheckInTotal(result.data.totalCheckIns)
-         })
-         .catch(err => console.log(err))
-
-         axios.get('http://localhost:5000/employeeManager/getCheckOutTotal/', {
-            params: {
-                month: dateString,
-                id: id,
-                
-            }
-        })
-         .then(result => {console.log(result)
-             setCheckOutTotal(result.data.totalCheckOuts)
-         })
-         .catch(err => console.log(err)) 
-
-         console.log("In"+checkInTotal);
-         console.log("Out"+checkOutTotal);
-     }
-
-
-
-    
-
 
 
     return (
         <div>
             <div>
                 <div className='flex justify-evenly pb-5'>
-                    <EmployeePaymentDetails></EmployeePaymentDetails>
-                    <ViewSalary></ViewSalary>
-                
+                    <div>
+                        <DashCard2 title2={"Create Employee Payment Details"} title3={""} onClick={handleOpenCreate} />
+                        <Dialog
+                            open={openCreate}
+                            handler={handleOpenCreate}
+                            className="bg-transparent shadow-none w-fit"
+                        >
+                            <EmployeePaymentDetails></EmployeePaymentDetails>
+                        </Dialog>
+                    </div>
+                    <div>
+                        <DashCard2 title2={"View Employee Payment Details"} title3={""} onClick={handleOpenView} />
+                        <Dialog
+                            open={openView}
+                            handler={handleOpenView}
+                            className="bg-transparent shadow-none w-fit"
+                        >
+                            <ViewEmployeePaymentDetails/>
+                        </Dialog>
+                    </div>
                 </div>
                 <div className='flex justify-evenly pb-5'>
-                    <ViewEmployeePaymentDetails></ViewEmployeePaymentDetails>
-                    <CreateAllowancesDeductions></CreateAllowancesDeductions>
+                    {/* <ViewEmployeePaymentDetails></ViewEmployeePaymentDetails> */}
                 </div>
                 <div className='flex justify-evenly pb-5'>
-                    <CreateAdvance></CreateAdvance>
-                    <ButtomViewAllowance></ButtomViewAllowance>
                     
                 </div>
             </div>
-
-
-
-
-
         <form>
         <div className='bg-cl-4 rounded'>
 
 
-            
-
-
-
-
-
-            
-
-            <div className='Earning pt-10'>
-                
-                <div className=''>
-                    <div className='bg-gray-400 ml-20 mr-20 flex justify-evenly rounded'>
-                    <div className='w-80 pt-5 pb-5'>
-                    <p className='text-2xl'>Earning Information</p>
-                    
-                    </div>
-                    <div className='w-80 pt-5 pb-5'>
-                    
-                    </div>
-                    <div className='w-80 pt-5 pb-5'></div>
-                    <div className='w-80 pt-5 pb-5'></div>
-
-                    
-                    </div>
-                </div>
-                <div className='flex justify-evenly pt-5'>
-                    <div className='pt-5'>
-                    <p>Employee Name :</p>
-                    <div className="w-80 pt-1 pb-10">
-                    <Select label='Select Name' onChange={OpenSelectHandle}>
-                            {users.map((user) => {
-                            return (
-                                <SelectOption   key={user.id} value={user.id}>{user.empName}  </SelectOption>
-                                );},
-                                )}
-                          </Select>
-                    </div>
-                    </div>
-                    <div>
-                    <p className='pt-5'>Basic Salary :</p>
-                    <div className="w-80 pt-1 pb-10">
-                        <Input label="Basic Salary" value={empSalary}/>
-                    </div>
-                    </div>
-                </div>
-                <div className='flex justify-evenly'>
-                    <div>
-                        <p>Overtime Hours :</p>
-                        <div className="w-80  pt-1 pb-10">
-                            <Input label="Overtime Hours" />
-                        </div>
-                    </div>
-                    <div>
-                        <p>Double Overtime Hours :</p>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="Double Overtime Hours" />
-                        </div>
-                    </div>
-                </div>
-                <div className='flex justify-evenly'>
-                    <div>
-                        <p>Overtime Rate :</p>
-                        <div className="w-80 pt-1 pb-1-">
-                            <Input label="Overtime Rate" value={overtimeRate}/>
-                        </div>
-                    </div>
-                    <div>
-                        <p>Double Overtime Rate :</p>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="Double Overtime Rate" value={doubleovertimeRate}/>
-                        </div>
-                    </div>
-                </div>
-                <div className='flex justify-evenly'>
-                    <div>
-                        <p>Overtime Amount :</p>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="Overtime Amount" />
-                        </div>
-                    </div>
-                    <div>
-                        <p>Double Overtime Amount :</p>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="Double Overtime Amount" />
-                        </div>
-                    </div>
-                </div>
-                <div className='flex justify-evenly'>
-                    <div>
-                        <p>Bonus :</p>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="Bonus" />
-                        </div>
-                    </div>
-                    <div>
+         
+                    {/* <div>
                         <p>Pick Month :</p>
                         <div className="w-80 pt-1 pb-10">
                         <DatePicker
@@ -296,7 +170,7 @@ function EmployeePayment() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>  */}
 
 
 
@@ -316,16 +190,50 @@ function EmployeePayment() {
                 </div>
                 <div className='flex justify-evenly'>
                     <div className='pt-10'>
-                        <p>Payment Period (From)</p>
-                        <Datepicker></Datepicker>
+                        <p>Payment Period</p>
+                        <DatePicker
+                        selected={selectedDate}
+                        onChange={(date) => setSelectedDate(date)}
+                        renderMonthContent={renderMonthContent}
+                        showMonthYearPicker
+                        dateFormat="MM/yyyy"
+                        />
                     </div>
-                    <div className='pt-10'>
-                    <p>Payment Period (To)</p>
-                        <Datepicker></Datepicker>
+                        <div className='pt-10'>
+                        <p>Select Employee</p>
+                        <div className="relative ">
+                    <div className="relative flex w-full max-w-[24rem] ">
+                      <Input
+                        error={errorName ? "true" : null}
+                        label="Enter Name"
+                        value={empName}
+                        onChange={(e) => {setSearch(e.target.value);setEmpName(e.target.value)}}
+                        className="pr-20"
+                        containerProps={{
+                          className: "min-w-0",
+                        }}
+                      />
                     </div>
-                    <div className='pt-10'>
-                    <p>Payment Date</p>
-                        <Datepicker></Datepicker>
+
+                    {resultVisible ? (
+                    <div>
+        
+      
+                    {users && users.map((user)=>{
+                      return (
+                        <Card className="p-2 rounded-md absolute top-10 w-full max-h-36 overflow-scroll z-[999]">
+                        <div className="" onClick={()=>{setEmpId(user.id); setEmpName(user.empName); setSearchValue(""); setResultVisible(false)}}>
+                          <div className="text-"> 
+                          {user.empName}
+                          </div>
+                        </div>
+                        </Card>
+                      )
+                    })}
+                    </div>
+                    ) : null}
+         
+                  </div>
                     </div>
                 </div>
 
@@ -335,30 +243,11 @@ function EmployeePayment() {
                     <Button variant='outlined'>Cancel</Button>
                 </div>
                 <div>
-                <Button color='green' onClick={opentest}>Submit and view paysheet</Button>
+                <Button color='green' onClick={() => generatepayslip(empId,selectedDate)}>Submit and view paysheet</Button>
                 </div>
             </div>
         </div>
-
-
-
-
-
-
-
-
         </form>
-
-
-
-
-
-
-
-
-
-
-
         </div>
     )
 }

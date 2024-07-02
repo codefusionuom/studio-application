@@ -1,17 +1,18 @@
 import { MagnifyingGlassIcon, } from "@heroicons/react/24/outline";
 import { Card, CardHeader, Input, Typography, CardBody, CardFooter, Tooltip, Select, Option, } from "@material-tailwind/react";
-import { Pagination } from "../../components/pagination/pagination";
-import UpdateEmployee from "./empForms/updateEmployee";
+import { Pagination } from "../../../components/pagination/pagination";
+import UpdateEmployee from "../empForms/updateEmployee";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import axiosInstance from "../../config/axios.config";
-import { ToastError } from "../customerManager/ToastAlert";
+import axiosInstance from "../../../config/axios.config";
+import { ToastError } from "../../customerManager/ToastAlert";
 import React from "react";
-import EditRecordButton from "../../components/buttons/EditRecordButton";
+import EditRecordButton from "../../../components/buttons/EditRecordButton";
 import { Dialog } from "@material-tailwind/react";
+import EditEmpAllowance from "./editEmpAllowance";
 
 
-function EmployeeList() {
+function AllowanceList() {
 
     const [users, setUser] = useState([])
     const [search, setSearch] = useState("")
@@ -20,6 +21,7 @@ function EmployeeList() {
     const [id,setId] = useState()
     const [open, setOpen] = React.useState(false);
     const handleOpen = (id) => {
+        console.log(users);
         setOpen((cur) => !cur)
         setId(id)
     };
@@ -35,8 +37,8 @@ function EmployeeList() {
     //   }
 
     // useEffect(() => {
-    //     axios.get('http://localhost:5000/employeeManager/getEmployees')
-    //         .then(result => setUser(result.data))
+    //     axios.get(`http://localhost:5000/employeeManager/getEmployees/?page=${active}`)
+    //         .then(result => {setUser(result.data.rows);setResults(result.data.count)})
     //         .catch(err => console.log(err))
     //     console.log(users)
     // }, [])
@@ -47,7 +49,7 @@ function EmployeeList() {
     const handleSearch = async () => {
         console.log("searching begin");
         try {
-        const { data } = await axiosInstance.get(`/employeeManager/getEmployeesandSearch/?empName=${search}&page=${active}`)
+        const { data } = await axiosInstance.get(`/employeeManager/getEmpAllowanceandSearch/?empName=${search}&page=${active}`)
         if (!data) {
             ToastError("no employee exist")
         }
@@ -84,7 +86,7 @@ function EmployeeList() {
             <CardHeader floated={false} shadow={false} className="rounded-none">
                 <div className="flex flex-col items-center justify-between gap-4  md:flex-row ">
                     <div className="text-2xl pt-6 pl-10 font-semibold">
-                        <p>Employee List</p>
+                        <p>Employee-Allowance/Deduciton List</p>
                     </div>
                     <div className=" flex p-4 gap-6">
                         {/* <Select size="lg" label="Sort By: Newest" className="z-10">
@@ -139,7 +141,7 @@ function EmployeeList() {
                                                     color="blue-gray"
                                                     className="font-normal"
                                                 >
-                                                    {user.empName}
+                                                    {user.employee.empName}
                                                 </Typography>
 
                                             </div>
@@ -152,7 +154,7 @@ function EmployeeList() {
                                                 color="blue-gray"
                                                 className="font-normal"
                                             >
-                                                {user.department.departmentName}
+                                                {user.paymentAllowanceDeduction.allowanceDeduction}
                                             </Typography>
 
                                         </div>
@@ -163,7 +165,7 @@ function EmployeeList() {
                                             color="blue-gray"
                                             className="font-normal"
                                         >
-                                            {user.empNumber}
+                                            {user.paymentAllowanceDeduction.allowanceDeductionName}
                                         </Typography>
                                     </td>
                                     <td >
@@ -172,7 +174,7 @@ function EmployeeList() {
                                             color="blue-gray"
                                             className="font-normal"
                                         >
-                                            {user.empEmail}
+                                            {user.date}
                                         </Typography>
                                     </td>
                                     <td >
@@ -181,16 +183,7 @@ function EmployeeList() {
                                             color="blue-gray"
                                             className="font-normal"
                                         >
-                                            {user.empAdd}
-                                        </Typography>
-                                    </td>
-                                    <td >
-                                        <Typography
-                                            variant="small"
-                                            color="blue-gray"
-                                            className="font-normal"
-                                        >
-                                            {user.empType}
+                                            {user.Amount}
                                         </Typography>
                                     </td>
                                     <td >
@@ -215,7 +208,8 @@ function EmployeeList() {
                         handler={handleOpen}
                         className="bg-transparent shadow-none w-fit"
                     >
-                        <UpdateEmployee idx={id}/>
+                        {/* <UpdateEmployee idx={id}/> */}
+                        <EditEmpAllowance idx={id}/>
                         </Dialog>
             </CardBody>
             <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
@@ -230,6 +224,6 @@ function EmployeeList() {
         
     );
 }
-export default EmployeeList
+export default AllowanceList
 
-const TABLE_HEAD = ["Employee Name", "Department", "Phone Number", "Employee Email", "Address", "Employed", "Edit"];
+const TABLE_HEAD = ["Employee Name", "Type", "Allowance/Deduction Name", "Month", "Amount", "Edit"];
