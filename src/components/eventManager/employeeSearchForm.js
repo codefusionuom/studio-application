@@ -1,8 +1,4 @@
-import { Alert, Avatar, IconButton, ListItem, ListItemPrefix, ListItemSuffix, Typography } from "@material-tailwind/react";
 import React, { useState, useRef, useEffect } from "react";
-
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import DisplayListWithAvatar from "./listDisplayWithAvatar";
 const EmployeeSearchForm = ({
   // title,
@@ -45,6 +41,8 @@ const EmployeeSearchForm = ({
 
   
   useEffect(() => {
+    console.log("-----------------------asignedEmployeesList:" , asignedEmployeesList);
+    console.log("-----------------------eventList/assigned employees :" , eventList);
     console.log("resultDisplayfield2 :" + resultDisplayfield2);
     setSearchResults(eventList);
     setResultDisplayfield1Val(resultDisplayfield1);
@@ -72,14 +70,15 @@ const EmployeeSearchForm = ({
   }, [dropdownRef, searchBarRef]);
 
   const handleResultClick = (result) => {
-    if (!asignedEmployeesList.some(emp => emp.empId === result.id)) {
+    if (!asignedEmployeesList.some(emp => emp.id === result.id)) {
       setAsignedEmployeesList((prevEmpList) => [
         ...prevEmpList,
-        {
-          empId: result["id"],
-          empName: result["empName"],
-          empDepartment : result["empDepartment"],
-        },
+        // {
+        //   id: result["id"],
+        //   empName: result["empName"],
+        //   empDepartment : result["empDepartment"],
+        // },
+        result
       ])
     };
    
@@ -94,9 +93,6 @@ const EmployeeSearchForm = ({
           className="flex relative w-full"
           onClick={() => setIsClickedSearchBar(true)}
         >
-          {/* <label htmlFor="search-dropdown" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">
-            Your Email
-          </label> */}
 
           <div className=" w-full flex justify-between ">
           <button
@@ -180,29 +176,6 @@ const EmployeeSearchForm = ({
                 <span className="sr-only">Search</span>
               </button>
             </div>
-            {/* Search Results */}
-            {/* {isClickedSearchBar && (
-            <div className="flex mt-4  justify-start">
-              {searchResults.length > 0 ? (
-                <ul className="list-disc pl-5">
-              {searchResults.map((result, index) => (
-                <div key={index} className="w-full" 
-                onClick={() => {}}>
-                  <h6 className="block font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-blue-gray-900">
-                    {result[resultDisplayfield1Val]}
-                  </h6>
-                  <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700">
-                
-                    {resultDisplayfield2=="date" ? result[resultDisplayfield2Val].slice(0, 10) : "tttttttttt"}
-                  </p>
-                </div>
-              ))}
-            </ul>
-                ) : (
-                  <p>No results found.</p>
-                )}
-              </div>
-            )} */}
           </div>
         </div>
       </form>

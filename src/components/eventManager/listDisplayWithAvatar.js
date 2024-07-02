@@ -2,8 +2,10 @@ import { Avatar, IconButton, ListItem, ListItemPrefix, ListItemSuffix, Typograph
 import React from 'react'
 
 const DisplayListWithAvatar = ({itemList , setAsignedEmployeesList, displayField1 ,displayField2}) => {
+  console.log("itemList " ,itemList);
   const handleRemoveItem = (id) => {
-    var updatedEmployeeList = itemList.filter(item => item.empId !== id);
+    console.log("itemList[0].id " , itemList[0].id)
+    var updatedEmployeeList = itemList.filter(item => item.id !== id);
     setAsignedEmployeesList(updatedEmployeeList)
 }
 
@@ -11,7 +13,7 @@ const DisplayListWithAvatar = ({itemList , setAsignedEmployeesList, displayField
     <div className=" w-full overflow-y-auto mx-2 mt-8 max-h-80 ">
           {itemList.map(employee =>  
    
-         <ListItem ripple={false} className="w-full flex justify-center items-center py-1 pr-1 pl-4 bg-gray-200 my-2.5">
+         <ListItem ripple={false} className="w-11/12 flex justify-center items-center py-1 pr-1 pl-4 bg-gray-200 my-2.5">
             <ListItemPrefix>
             <Avatar variant="circular" alt="candice" src="https://docs.material-tailwind.com/img/face-1.jpg" />
           </ListItemPrefix>
@@ -24,7 +26,7 @@ const DisplayListWithAvatar = ({itemList , setAsignedEmployeesList, displayField
             </Typography>
           </div>
           <ListItemSuffix>
-            <IconButton variant="text" color="blue-gray" onClick={()=>{handleRemoveItem(employee.empId)}}>
+            <IconButton variant="text" color="blue-gray" onClick={()=>{handleRemoveItem(employee.id)}}>
                 <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
