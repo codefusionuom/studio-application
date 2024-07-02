@@ -15,17 +15,19 @@ import CardEvent from "../../components/eventManager/cardEvent";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Button } from "@material-tailwind/react";
-import { Pagination } from "../../components/pagination/pagination";
 import axiosInstance from "../../config/axios.config";
+import { Pagination } from "../../components/pagination/pagination";
+import EditButton from "../../components/cards/buttons/EditButton";
 
 
 
 
-const EventRequests = () => {
+const Events = () => {
   const [eventRequestList, setEventRequestList] = useState([]);
   const [eventRequestCount, setEventRequestCount] = useState("");
   const [active, setActive] = useState(1);
   const [results, setResults] = useState(0);
+  const [status, setStatus] = useState("Active");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -41,7 +43,7 @@ const EventRequests = () => {
   
     
     await  axiosInstance.get(
-      `/customerManager/eventRequest/?status=pending&page=${active}&limit=8`
+      `/customerManager/eventRequest/?status=${status}&page=${active}&limit=8`
     )
       .then((response) => {
         console.log(response.data);
@@ -57,7 +59,8 @@ const EventRequests = () => {
     console.log("search when page change");
     getEventRequests();
     
-  }, [active]);
+  }, [active,status]);
+
   return (
     <>
       <div className="flex space-x-4 justify-between"  color="red">
@@ -126,6 +129,19 @@ const EventRequests = () => {
               <Option>Material Tailwind Svelte</Option>
             </Select>
           </div> */}
+          <div className=" flex p-4 gap-6">
+              <select
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+                class=" p-2 h-full w-full rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 empty:!bg-gray-900 focus:border-2 focus:border-gray-900 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
+              >
+                <option value="" disabled selected>
+                  Select Status
+                </option>
+                <option value="pending">pending</option>
+                <option value="Active">active</option>
+              </select>
+            </div>
         </div>
       </div>
 
@@ -139,7 +155,7 @@ const EventRequests = () => {
           <div className="mb-1 flex items-center justify-between gap-8">
             <div>
               <Typography variant="h5" color="blue-gray" className="text-3xl">
-                Event Requests
+                Events
               </Typography>
             </div>
           </div>
@@ -214,7 +230,7 @@ const EventRequests = () => {
                         color="blue-gray"
                         className="font-normal"
                       >
-                        {formatDate(request.createdAt)}
+                        {formatDate(request.serviceDate)}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -227,7 +243,7 @@ const EventRequests = () => {
                       </Typography>
                     </td>
                     <td className={classes}>
-                    <Button onClick={()=>handleOneRequest(request.id)} variant="fill" className="rounded-full bg-btn-success" size="sm" color="" >Create Event</Button>
+                      <EditButton onClick={()=>handleOneRequest(request.id)} />
                     </td>
 
                    
@@ -248,7 +264,7 @@ const EventRequests = () => {
   );
 };
 
-export default EventRequests;
+export default Events;
 
 
 
@@ -257,7 +273,8 @@ const TABLE_HEAD = [
   "Service Type",
   "Phone Number",
   "Date",
-  "Status",""
+  "Status",
+  "Edit"
 ];
 const formatDate = (isoString) => {
   const date = new Date(isoString);

@@ -10,33 +10,32 @@ import {
   Input,
   Tooltip,
   IconButton,
+  Textarea,
+  Select,
+  Option,
 } from "@material-tailwind/react";
 import EditButton from "../../../components/cards/buttons/EditButton";
+import axiosInstance from "../../../config/axios.config";
+import { ToastError, ToastSuccess } from "../../customerManager/ToastAlert";
 
-function AddDepartmentForm(props) {
-  const { id } = props;
-  const [open, setOpen] = React.useState(false);
+function AddDepartmentForm({id,handleOpen,setOpen,open}) {
+
+  //const [open, setOpen] = React.useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [employeeList, setEmployeeList] = useState();
+  const [search, setSearch] = useState( "");
   const [formErrors, setFormError] = useState({});
   const [formData, setFormData] = useState({
-    departmentId: "",
     departmentName: "",
-    departmentHead: "",
-    departmentEmp: "",
-    departmentItem: "",
-    departmentTask: "",
+    departmentHeadId:"",
+    departmentHeadName: "",
     description: "",
   });
+const {departmentName,
+  departmentHeadId,
+  departmentHeadName,
+  description}=formData
 
-  useEffect(() => {
-    setIsLoading(true); // Set loading state to true initially
-    axios
-      .get("http://localhost:5000/superAdmin/departmentId/" + id)
-      .then((res) => {
-        setFormData(res.data);
-        setIsLoading(false); // Set loading state to false after fetching data
-      });
-  }, []);
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -44,14 +43,17 @@ function AddDepartmentForm(props) {
     setFormError(error);
     console.log(validate(formData).iserror, "is error");
     if (!error.iserror) {
-      axios
-        .put("http://localhost:5000/superAdmin/department/" + id, formData)
+      axiosInstance
+        .put("/superAdmin/department/" + id, formData)
         .then((res) => {
-          alert("data added successfully");
-          window.location.replace("/superAdmin/Department");
+          // alert("data added successfully");
+          ToastSuccess("successfully created depatment")
+          setOpen(false)
+          // window.location.replace("/superAdmin/Department");
         })
         .catch((err) => {
           console.log(err);
+          ToastError(err|| "error on edit depatment")
           console.log("data enter error");
         });
     }
@@ -61,61 +63,65 @@ function AddDepartmentForm(props) {
     const errors = {};
     errors.iserror = false;
     console.log(values);
-    if (!values.departmentId) {
-      errors.departmentId = "department Id is required!";
-      errors.iserror = true;
-    } else if (!/^d-\d{3}$/.test(values.departmentId)) {
-      errors.departmentId =
-        "department ID should start with 'd-' followed by exactly three digits.";
-      errors.iserror = true;
-    }
+   
     if (!values.departmentName) {
       errors.departmentName = "department Name is required!";
       errors.iserror = true;
     }
-    if (!values.departmentHead) {
-      errors.departmentHead = "department Head is required!";
-      errors.iserror = true;
-    }
+
 
     return errors;
   };
 
-  const handleOpen = () => setOpen(!open);
+  // const handleOpen = () => setOpen(!open);
 
   const err = "text-red-500 w-60";
 
+  const handleSearch = async () => {
+    console.log("searching begin");
+    try {
+      const { data } = await axiosInstance.get(
+        `/employeeManager/getEmployeesandSearch/?empName=${search}`
+      );
+      if (!data) {
+        // ToastError("no employee exist")
+      }
+      console.log(data.rows);
+      setEmployeeList(data.rows);
+      // setResults(data.count)
+    } catch (error) {
+      console.log(error);
+      // ToastError(error)
+    }
+  };
+
+  useEffect(() => {
+    handleSearch();
+  }, [search]);
+
+  useEffect(() => { 
+    setIsLoading(true); // Set loading state to true initially
+    axios
+      .get("http://localhost:5000/superAdmin/departmentId/" + id)
+      .then((res) => {
+        console.log(res.data);
+        setFormData(res.data);
+        setSearch(res.data.departmentHeadName)
+        setIsLoading(false); // Set loading state to false after fetching data
+      });
+  }, []);
+
   return (
     <>
-      <EditButton onClick={handleOpen} />
+     
 
-      <Dialog
-        open={open}
-        handler={handleOpen}
-        className="bg-transparent shadow-none w-fit "
-      >
+      
         <Card className="mx-auto w-full ">
-          <CardBody className="flex flex-col gap-4 pb-20">
+        <CardBody className="flex flex-col gap-4 pb-20">
             <Typography variant="h4" color="blue-gray" className="text-center">
-              Update Department
+              Create Department
             </Typography>
-
-            <div className=" flex flex-row justify-between pt-20">
-              <div className="flex flex-col justify-between pl-20">
-                <Typography className="mb-2" variant="h6">
-                  Departmrnt ID :
-                </Typography>
-                <Input
-                  label="department ID"
-                  size="lg"
-                  value={formData.departmentId}
-                  onChange={(e) =>
-                    setFormData({ ...formData, departmentId: e.target.value })
-                  }
-                />
-                <p className={err}>{formErrors.departmentId}</p>
-              </div>
-
+            <div className=" grid grid-cols-2 pt-20">
               <div className="flex flex-col justify-between pr-20">
                 <Typography className="mb-2" variant="h6">
                   Department Name :
@@ -123,88 +129,64 @@ function AddDepartmentForm(props) {
                 <Input
                   label="department name"
                   size="lg"
-                  value={formData.departmentName}
+                  placeholder="photogrphy"
+                  value={departmentName}
                   onChange={(e) =>
                     setFormData({ ...formData, departmentName: e.target.value })
                   }
                 />
                 <p className={err}>{formErrors.departmentName}</p>
               </div>
-            </div>
-
-            {/* <div className=" flex flex-row justify-between "> */}
-            <div className=" flex flex-row justify-between">
-              <div className=" flex flex-col pl-20">
-                <Typography className="mb-2" variant="h6">
-                  Description:
-                </Typography>
-
-                <Input
-                  label="Description"
-                  size="lg"
-                  value={formData.description}
-                  type="textarea"
-                  className="h-full md:h-60"
-                  onChange={(e) =>
-                    setFormData({ ...formData, description: e.target.value })
-                  }
-                />
-              </div>
-
-              <div className=" flex flex-col justify-between pr-20">
+              <div className=" flex flex-col relative justify-between pr-20">
                 <Typography className="mb-2" variant="h6">
                   Department Head :
                 </Typography>
-
                 <Input
-                  label=" department head"
-                  size="lg"
-                  value={formData.departmentHead}
-                  onChange={(e) =>
-                    setFormData({ ...formData, departmentHead: e.target.value })
-                  }
+                  label="Search"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="pr-20"
+                  containerProps={{
+                    className: "min-w-0",
+                  }}
                 />
+                <Card className="p-2 rounded-md absolute top-20 w-full max-h-36 overflow-scroll">
+                  {employeeList &&
+                    employeeList.map((employee) => {
+                      return (
+                        <div
+                          className=""
+                          onClick={() => {
+                            setSearch(employee.empName);
+                            setFormData({ ...formData, departmentHeadId: employee.id, departmentHeadName: employee.empName})
+                          }}
+                        >
+                          <div className="text-">{employee.empName}</div>
+                        </div>
+                      );
+                    })}
+                </Card>
+
                 <p className={err}>{formErrors.departmentHead}</p>
-
+              </div>
+              <div className="flex flex-col justify-between pr-20">
                 <Typography className="mb-2" variant="h6">
-                  Add Employees :
+                  Description:
                 </Typography>
-
-                <Input
-                  label=" employee"
-                  size="lg"
-                  value={formData.departmentEmp}
+                <Textarea
+                  label="Description about payment  "
+                  className="h-[150px] "
+                  id="description"
+                  type="text"
+                  name="description"
+                   value={description}
                   onChange={(e) =>
-                    setFormData({ ...formData, departmentEmp: e.target.value })
+                    setFormData({ ...formData, description: e.target.value })
                   }
-                />
-
-                <Typography className="mb-2" variant="h6">
-                  Add Items :
-                </Typography>
-
-                <Input
-                  label=" item"
-                  size="lg"
-                  value={formData.departmentItem}
-                  onChange={(e) =>
-                    setFormData({ ...formData, departmentItem: e.target.value })
-                  }
-                />
-
-                <Typography className="mb-2" variant="h6">
-                  Add Tasks :
-                </Typography>
-
-                <Input
-                  label="tasks"
-                  size="lg"
-                  value={formData.departmentTask}
-                  onChange={(e) =>
-                    setFormData({ ...formData, departmentTask: e.target.value })
-                  }
+                  maxlength="100"
                 />
               </div>
+              
             </div>
           </CardBody>
           <CardFooter className="pt-0">
@@ -219,7 +201,7 @@ function AddDepartmentForm(props) {
             </div>
           </CardFooter>
         </Card>
-      </Dialog>
+  
     </>
   );
 }

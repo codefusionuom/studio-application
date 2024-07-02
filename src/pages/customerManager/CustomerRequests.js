@@ -9,6 +9,7 @@ import {
   addCustomerRequest,
   selectCustomerRequest,
   resetCustomerRequest,
+  resetSelectCustomerRequest
 } from "../../features/customerManager/customerRequest";
 import TableOfRequests from "./tableContents/TableOfRequests";
 
@@ -16,7 +17,7 @@ function CustomerRequests() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const socket = socketIOClient("http://localhost:5000");
-  const [status, setStatus] = useState("inprogress");
+  const [status, setStatus] = useState("pending");
   const [active, setActive] = useState(1);
   const [results, setResults] = useState(0);
   const [requestList, setRequestList] = useState([]);
@@ -59,6 +60,9 @@ function CustomerRequests() {
       setRequestList([newRequest, ...requestList]);
     });
   }, [socket]);
+  useEffect(()=>{
+    dispatch(resetSelectCustomerRequest())
+  },[])
 
   return (
     <div className="flex flex-col gap-10">
@@ -68,7 +72,7 @@ function CustomerRequests() {
             navigate("/customerManager/createCustomerRequest");
           }}
           className=" w-full"
-          title="Create Customer Request"
+          title="Create Event Request"
         />
         <Card className="w-full rounded flex justify-center ">
           <div className="flex flex-col items-center justify-between gap-4  md:flex-row p-4">
@@ -82,9 +86,8 @@ function CustomerRequests() {
                 <option value="" disabled selected>
                   Select Status
                 </option>
-                <option value="inprogress">Inprogress</option>
-                <option value="completed">Completed</option>
-                <option value="rejected">Rejected</option>
+                <option value="pending">pending</option>
+                <option value="confirmed">confirmed</option>
               </select>
             </div>
           </div>

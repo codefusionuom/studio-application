@@ -1,6 +1,12 @@
-import { Button, Card, Input, Typography } from "@material-tailwind/react";
+import {
+  Button,
+  Card,
+  Input,
+  Radio,
+  Typography,
+} from "@material-tailwind/react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axiosInstance from "../../config/axios.config";
 import { useSelector } from "react-redux";
 import {
@@ -15,46 +21,49 @@ import { useNavigate } from "react-router-dom";
 
 function CreateCustomerRequest() {
   const navigate = useNavigate();
+  const isMounted = useRef(false);
   const request = useSelector(
     (state) => state.customerRequests.customerRequest
   );
-  console.log(request);
+
   const [requestedCustomer, setRequestedCustomer] = useState(
     request || initialCustomerRequest
   );
   const [customerList, setCustomerList] = useState();
   const [Service, setService] = useState([]);
   const [eventRequest, setEventRequest] = useState(initialEventRequest);
-
+  const [customerInformation, setCustomerInformation] = useState();
   const [mode, setMode] = useState(
     customerList && customerList.length == 1 ? false : true
   );
 
   const [search, setSearch] = useState(requestedCustomer.mobilePhone || "");
 
-  const handleCustomerRequest =async () => {
-    console.log(eventRequest, "customerRequest");
-
+  const handleCustomerRequest = async () => {
+    // api
+    console.log("fee");
     try {
-      const { data } = await axiosInstance.post(
-        "/customerManager/eventRequest",
-        {customerId:eventRequest.customerId,
-          services:eventRequest.services,
-          note:eventRequest.note
+      if (requestedCustomer.id) {
+        const { data } = await axiosInstance.put(
+          `/customerManager/customerRequest/${requestedCustomer.id}`,
+          {
+            status: "confirmed",
+          }
+        );
+        if (data) {
+          resetStates()
+          navigate("/customerManager/CustomerRequest");
         }
-      );
-      console.log(data);
-      
-      if (data) {
-        ToastSuccess("successfully created");
       }
-    } catch (error) {
-      
-    }
+      else{
+        resetStates()
+        navigate("/customerManager/CustomerRequest");
+      }
+    } catch (error) {}
   };
   const handleCancel = () => {
+    resetStates()
     navigate("/customerManager/CustomerRequest");
-    setEventRequest({ services: [], cutomerId: "" });
   };
   const customerSearch = async (query) => {
     if (!search) {
@@ -69,7 +78,9 @@ function CreateCustomerRequest() {
       if (data) {
         console.log(data.rows[0]);
         setCustomerList(data.rows);
-        if (data.rows.length != 1) setMode(false);
+        if (data.rows.length != 1) {
+          setMode(false);
+        }
       }
     } catch (error) {
       console.log(error);
@@ -78,7 +89,7 @@ function CreateCustomerRequest() {
   };
 
   useEffect(() => {
-    console.log(requestedCustomer.mobilePhone, "customers");
+    //console.log(requestedCustomer.mobilePhone, "customers search");
     customerSearch();
   }, [search]);
 
@@ -100,11 +111,17 @@ function CreateCustomerRequest() {
         conflict: true,
       }));
     } else {
-      console.log(customer,'customerrr');
+      console.log(customer, "customerrr");
       setEventRequest((prev) => ({
         ...prev,
-        customerId:customer.id
+        customerId: customer.id,
       }));
+      setCustomerInformation({
+        customerId: customer.id,
+        mobilePhone: customer.mobilePhone,
+        firstname: customer.firstname,
+        lastname: customer.lastname,
+      });
       setRequestedCustomer(customer);
     }
 
@@ -112,12 +129,17 @@ function CreateCustomerRequest() {
     setMode(true);
   };
 
+  const resetStates = () => {
+    setRequestedCustomer(initialCustomerRequest);
+    setEventRequest(initialEventRequest);
+  };
+
   return (
     <div className="bg-cl-4 p-20 rounded flex flex-col gap-12 overflow-scroll  h-screen">
       <div className="">
         <div className="bg-bg py-10 px-8 flex justify-between rounded">
           <Typography className="font-Lato text-4xl font-normal font-500">
-            Customer Information
+            Customer Request Information
           </Typography>
           <div className="relative ">
             <div className="relative flex w-full max-w-[24rem] ">
@@ -148,15 +170,18 @@ function CreateCustomerRequest() {
                 customerList.map((customer) => {
                   return (
                     <div
-                      className=""
+                      className="flex justify-between items-center"
                       onClick={() => handleSearchCustomer(customer)}
                     >
-                      <div className="text-">
-                        {customer.firstname + " " + customer.lastname}
+                      <div className="">
+                        <div className="text-">
+                          {customer.firstname + " " + customer.lastname}
+                        </div>
+                        <div className="text-sm text-blue-gray-500">
+                          {customer.mobilePhone}
+                        </div>
                       </div>
-                      <div className="text-sm text-blue-gray-500">
-                        {customer.mobilePhone}
-                      </div>
+                      <div>{customerList.length == 1 && <Radio />}</div>
                     </div>
                   );
                 })
@@ -174,16 +199,62 @@ function CreateCustomerRequest() {
           setSearch={setSearch}
           customerList={customerList}
           setCustomerList={setCustomerList}
-          setCustomerRequest={setEventRequest}
+          // setCustomerRequest={setEventRequest}
+          setCustomerInformation={setCustomerInformation}
+          customer={customerInformation}
           customerRequest={eventRequest}
         />
       </div>
+      {
+        <>
+          {" "}
+          <div className="bg-bg p-4 flex justify-between rounded">
+            <Typography className="font-Lato text-4xl font-normal font-500">
+              Customer Information
+            </Typography>
+          </div>
+          <div className="my-4  grid grid-cols-2 gap-10">
+            <Input
+              type="name"
+              label="Full name"
+              value={
+                customerInformation
+                  ? customerInformation?.firstname +
+                    " " +
+                    customerInformation?.lastname
+                  : ""
+              }
+              className="pr-20 bg-white text-black font-bold"
+              containerProps={{
+                className: "min-w-0",
+              }}
+              disabled
+            />
+            <Input
+              type="name"
+              label="Mobile phone"
+              value={customerInformation?.mobilePhone}
+              className="pr-20"
+              containerProps={{
+                className: "min-w-0",
+              }}
+              disabled
+            />
+          </div>
+        </>
+      }
 
+      <div className="bg-bg p-4 flex justify-between rounded">
+        <Typography className="font-Lato text-4xl font-normal font-500">
+          Event Information
+        </Typography>
+      </div>
       {Service.map((oneService) => {
         return (
           <RequestService
             customerRequest={eventRequest}
             setCustomerRequest={setEventRequest}
+            customer={customerInformation}
           />
         );
       })}
@@ -205,8 +276,6 @@ function CreateCustomerRequest() {
         <Button className="bg-btn-warning text-lg " onClick={handleCancel}>
           Cancel
         </Button>
-        <Button className="bg-btn-danger text-lg">Reject</Button>
-        <Button className="bg-btn-info text-lg">Leave</Button>
         <Button
           onClick={handleCustomerRequest}
           className="bg-btn-success text-lg"
@@ -219,3 +288,25 @@ function CreateCustomerRequest() {
 }
 
 export default CreateCustomerRequest;
+
+// const handleCustomerRequest =async () => {
+//   console.log(eventRequest, "customerRequest");
+
+//   try {
+//     const { data } = await axiosInstance.post(
+//       "/customerManager/eventRequest",
+//       {customerId:eventRequest.customerId,
+//         services:eventRequest.services,
+//         note:eventRequest.note,
+//         customerRequestId:requestedCustomer.id
+//       }
+//     );
+//     console.log(data);
+
+//     if (data) {
+//       ToastSuccess("successfully created");
+//     }
+//   } catch (error) {
+
+//   }
+// };

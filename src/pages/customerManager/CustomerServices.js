@@ -8,6 +8,7 @@ import DropdownTreeSelect from "react-dropdown-tree-select";
 import "react-dropdown-tree-select/dist/styles.css";
 import "./customerService.css";
 import CustomerServiceform from "./Components/customerServiceform";
+import CustomerServiceEditform from "./Components/customerServiceEditform";
 
 
 function CustomerServices() {
@@ -17,9 +18,11 @@ function CustomerServices() {
 
   const [mode, setMode] = useState(false);
   const [open, setOpen] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
   const [refresh, setRefreash] = useState(false);
 
   const handleOpen = () => setOpen((cur) => !cur);
+  const handleOpenEdit = () => setOpenEdit((cur) => !cur);
 
   const handleRefresh = () => {setRefreash((cur) => !cur);setServices({})};
 
@@ -31,10 +34,11 @@ function CustomerServices() {
 
   //edit handler
   const handleEdit = () => {
-   setMode(true);
+
    setSelectedService(service)
-   handleOpen()
+   handleOpenEdit()
   };
+
 
   const fetchCategories = async () => {
     try {
@@ -124,10 +128,23 @@ const handleDelete=async()=>{
       >
         <CustomerServiceform
           handleOpen={handleOpen}
-          handleRefresh={handleRefresh}
+          setRefreash={setRefreash}
           selectedService={selectedService}
           services={services}
           mode={mode}
+        />
+      </Dialog>
+      <Dialog
+        size="xl"
+        open={openEdit}
+        handler={handleOpenEdit}
+        className="bg-transparent shadow-none"
+      >
+        <CustomerServiceEditform
+          handleOpen={handleOpenEdit}
+          setRefreash={setRefreash}
+          selectedService={selectedService}
+          services={services}
         />
       </Dialog>
     </div>

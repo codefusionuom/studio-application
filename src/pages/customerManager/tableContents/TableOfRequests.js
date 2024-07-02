@@ -93,8 +93,12 @@ function TableOfRequests({handleOneRequest,requests,active,setActive,results}) {
                         variant="small"
                         color="blue-gray"
                         className="font-normal"
-                      >
-                        {serviceDate}
+                      >{serviceDate ? (new Date(serviceDate).getFullYear() +
+                        "-" +
+                        (new Date(serviceDate).getMonth() + 1) +
+                        "-" +
+                        new Date(serviceDate).getDate()):"now"}
+                        
                       </Typography>
                     </div>
                   </td>
