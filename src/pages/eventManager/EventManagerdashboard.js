@@ -26,7 +26,7 @@ function EventManagerDashboard() {
       console.log("today events :", todayEvents);
       
     }).catch( (error) => {
-      setExistError(error.message);
+      // setExistError(error.message);
     })
   }
   const TABLE_HEAD = ["Custermer Name", "Service Type", "Phone Number", "Status"];
