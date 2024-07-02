@@ -152,7 +152,7 @@ function EmployeeList() {
                                                 color="blue-gray"
                                                 className="font-normal"
                                             >
-                                                {user.empDepartment}
+                                                {user.department.departmentName}
                                             </Typography>
 
                                         </div>

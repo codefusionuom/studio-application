@@ -174,7 +174,7 @@ function AllowanceList() {
                                             color="blue-gray"
                                             className="font-normal"
                                         >
-                                            {user.createdAt}
+                                            {user.date}
                                         </Typography>
                                     </td>
                                     <td >

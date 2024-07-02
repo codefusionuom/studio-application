@@ -146,7 +146,7 @@ function AdvanceRequestList() {
                                                         color="blue-gray"
                                                         className="font-normal"
                                                     >
-                                                        {user.empId}
+                                                        {user.employee.empName}
                                                     </Typography>
                                                     
                                                 </div>

@@ -44,6 +44,21 @@ function AddAllowance() {
   const [resultVisible, setResultVisible] = useState(false)
   const [searchvalue, setSearchValue] = useState()
   const [errorAllowance, setErrorAllowance] = useState()
+  const [date, setDate] = useState()
+
+
+
+
+  useEffect(() => {
+    // Get the current date
+    const TodayDate = new Date();
+
+    // Convert the date to a string
+    const currentDateString = TodayDate.toISOString();
+
+    // Set the date string to state
+    setDate(currentDateString);
+  }, []); // Empty dependency array means this effect runs once on mount
 
 
   //Get Allowance use effect
@@ -117,7 +132,7 @@ useEffect(() => {
     }
     setErrorAllowance(false);
 
-    axios.post("http://localhost:5000/employeeManager/createEmpAllowance", { id, empId, amount })
+    axios.post("http://localhost:5000/employeeManager/createEmpAllowance", { id, empId, amount, date })
       .then(result => {
         console.log(result)
         window.location.reload()

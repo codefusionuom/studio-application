@@ -127,7 +127,7 @@ const handleEmpSearch = async () => {
     setResultVisible(true)
     console.log("searching begin");
     try {
-    const { data } = await axiosInstance.get(`/employeeManager/getEmployeeSearch/?empName=${search}`)
+    const { data } = await axiosInstance.get(`/employeeManager/getEmployeeSearchViewPaymentDetails/?empName=${search}`)
     if (!data) {
         ToastError("no employee exist")
     }
@@ -152,7 +152,7 @@ const handleEmpSearch = async () => {
       .then(result => {
         console.log(result)
         setid(e)
-        setEmpDepartment(result.data.empDepartment)
+        setEmpDepartment(result.data.department.departmentName)
         setEmpType(result.data.empType)
       })
       .catch(err => console.log(err))
@@ -214,7 +214,7 @@ const handleEmpSearch = async () => {
                                     <Card className="p-2 rounded-md absolute top-10 w-full max-h-36 overflow-scroll z-[999]">
                                     <div className="" onClick={()=>{setEmpId(user.id); setEmpName(user.empName); setSearchValue(""); setResultVisible(false);OpenSelectHandle(user.id)}}>
                                     <div className="text-"> 
-                                    {user.empName}
+                                    {user.employee.empName}
                                     </div>
                                     </div>
                                     </Card>

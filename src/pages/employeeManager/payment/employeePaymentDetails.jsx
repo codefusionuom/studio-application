@@ -153,8 +153,9 @@ const handleEmpSearch = async () => {
       .then(result => {
         console.log(result)
         setid(id)
-        setEmpDepartment(result.data.empDepartment)
+        setEmpDepartment(result.data.department.departmentName)
         setEmpType(result.data.empType)
+
       })
       .catch(err => console.log(err))
     console.log(id);
