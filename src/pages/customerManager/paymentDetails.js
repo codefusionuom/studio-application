@@ -3,7 +3,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axiosInstance from "../../config/axios.config";
-import BackButton from "../../components/buttons/backButton";
+import BackButton from "../../components/buttons/BackButton";
 
 
 function PaymentDetails() {
