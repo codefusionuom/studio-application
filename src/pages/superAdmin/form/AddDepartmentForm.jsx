@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {
   Button,
@@ -8,20 +8,23 @@ import {
   CardFooter,
   Typography,
   Input,
+  Textarea,
+  Select,
+  Option,
 } from "@material-tailwind/react";
 import Card2 from "../../../components/cards/Card2";
+import axiosInstance from "../../../config/axios.config";
+import { ToastError, ToastSuccess } from "../../customerManager/ToastAlert";
 
-function AddDepartmentForm({ title }) {
-
-  const [open, setOpen] = React.useState(false);
+function AddDepartmentForm({ title ,handleAddOpen,setOpenAdd}) {
+ 
+  const [employeeList, setEmployeeList] = useState();
   const [formErrors, setFormError] = useState({});
+  const [search, setSearch] = React.useState("");
   const [formData, setFormData] = useState({
-    departmentId: "",
     departmentName: "",
-    departmentHead: "",
-    departmentEmp: "",
-    departmentItem: "",
-    departmentTask: "",
+    departmentHeadId: "",
+    departmentHeadName: "",
     description: "",
   });
 
@@ -35,11 +38,12 @@ function AddDepartmentForm({ title }) {
         .post("http://localhost:5000/superAdmin/department", formData)
         .then((res) => {
           console.log(res);
-          alert("data added successfully");
-          window.location.replace("/superAdmin/Department");
+          ToastSuccess("successfully created depatment")
+          setOpenAdd(false)
         })
         .catch((err) => {
           console.log(err);
+          ToastError(err|| "error on created depatment")
           console.log("data enter error");
         });
     }
@@ -49,20 +53,9 @@ function AddDepartmentForm({ title }) {
     const errors = {};
     errors.iserror = false;
     console.log(values);
-    if (!values.departmentId) {
-      errors.departmentId = "department Id is required!";
-      errors.iserror = true;
-    } else if (!/^d-\d{3}$/.test(values.departmentId)) {
-      errors.departmentId =
-        "department ID should start with 'd-' followed by exactly three digits.";
-      errors.iserror = true;
-    }
+
     if (!values.departmentName) {
       errors.departmentName = "department Name is required!";
-      errors.iserror = true;
-    }
-    if (!values.departmentHead) {
-      errors.departmentHead = "department Head is required!";
       errors.iserror = true;
     }
 
@@ -72,55 +65,54 @@ function AddDepartmentForm({ title }) {
   const handleClear = () => {
     console.log("handling clear");
     setFormData({
-      departmentId: "",
       departmentName: "",
       departmentHead: "",
-      departmentEmp: "",
-      departmentItem: "",
-      departmentTask: "",
       description: "",
     });
   };
 
-  const handleOpen = () => setOpen(!open);
+  // const handleOpen = () => setOpen(!open);
 
   const err = "text-red-500 w-60";
 
+  const handleSearch = async () => {
+    console.log("searching begin");
+    try {
+      const { data } = await axiosInstance.get(
+        `/employeeManager/getEmployeesandSearch/?empName=${search}`
+      );
+      if (!data) {
+        // ToastError("no employee exist")
+      }
+      console.log(data.rows);
+      setEmployeeList(data.rows);
+      // setResults(data.count)
+    } catch (error) {
+      console.log(error);
+      // ToastError(error)
+    }
+  };
+
+  useEffect(() => {
+
+    handleSearch();
+  }, [search]);
+
   return (
     <>
-      <Card2
-        title1="CREATE DEPARTMENT"
-        title2={"Structure Teams & Assets"}
-        onClick={handleOpen}
-      />
+      
 
-      <Dialog
+      {/* <Dialog
         open={open}
         handler={handleOpen}
         className="bg-transparent shadow-none w-fit "
-      >
+      > */}
         <Card className="mx-auto w-full ">
           <CardBody className="flex flex-col gap-4 pb-20">
             <Typography variant="h4" color="blue-gray" className="text-center">
-              Make New Department
+              Create Department
             </Typography>
-
-            <div className=" flex flex-row justify-between pt-20">
-              <div className="flex flex-col justify-between pl-20">
-                <Typography className="mb-2" variant="h6">
-                  Departmrnt ID :
-                </Typography>
-                <Input
-                  label="department ID"
-                  size="lg"
-                  placeholder="d-987"
-                  onChange={(e) =>
-                    setFormData({ ...formData, departmentId: e.target.value })
-                  }
-                />
-                <p className={err}>{formErrors.departmentId}</p>
-              </div>
-
+            <div className=" grid grid-cols-2 pt-20">
               <div className="flex flex-col justify-between pr-20">
                 <Typography className="mb-2" variant="h6">
                   Department Name :
@@ -135,79 +127,53 @@ function AddDepartmentForm({ title }) {
                 />
                 <p className={err}>{formErrors.departmentName}</p>
               </div>
-            </div>
-
-            {/* <div className=" flex flex-row justify-between "> */}
-            <div className=" flex flex-row justify-between">
-              <div className=" flex flex-col pl-20">
-                <Typography className="mb-2" variant="h6">
-                  Description:
-                </Typography>
-
-                <Input
-                  label="Description"
-                  size="lg"
-                  placeholder="Enter description here"
-                  type="textarea"
-                  className="h-full md:h-60"
-                  onChange={(e) =>
-                    setFormData({ ...formData, description: e.target.value })
-                  }
-                />
-              </div>
-
-              <div className=" flex flex-col justify-between pr-20">
+              <div className=" flex flex-col relative justify-between pr-20">
                 <Typography className="mb-2" variant="h6">
                   Department Head :
                 </Typography>
-
                 <Input
-                  label=" department head"
-                  size="lg"
-                  placeholder="k.Amal Perera"
-                  onChange={(e) =>
-                    setFormData({ ...formData, departmentHead: e.target.value })
-                  }
+                  label="Search"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="pr-20"
+                  containerProps={{
+                    className: "min-w-0",
+                  }}
                 />
+                <Card className="p-2 rounded-md absolute top-20 w-full max-h-36 overflow-scroll">
+                  {employeeList &&
+                    employeeList.map((employee) => {
+                      return (
+                        <div
+                        className={employeeList.length === 1 ? "bg-blue-50" : ""}
+                          onClick={() => {
+                            setSearch(employee.empName);
+                            setFormData({ ...formData, departmentHeadId: employee.id, departmentHeadName: employee.empName})
+                          }}
+                        >
+                          <div className="text-">{employee.empName}</div>
+                        </div>
+                      );
+                    })}
+                </Card>
+
                 <p className={err}>{formErrors.departmentHead}</p>
-
+              </div>
+              <div className="flex flex-col justify-between pr-20">
                 <Typography className="mb-2" variant="h6">
-                  Add Employees :
+                  Description:
                 </Typography>
-
-                <Input
-                  label=" employee"
-                  size="lg"
-                  placeholder="A.D. Silva"
+                <Textarea
+                  label="Description about payment  "
+                  className="h-[150px] "
+                  id="description"
+                  type="text"
+                  name="description"
+                  // value={description}
                   onChange={(e) =>
-                    setFormData({ ...formData, departmentEmp: e.target.value })
+                    setFormData({ ...formData, description: e.target.value })
                   }
-                />
-
-                <Typography className="mb-2" variant="h6">
-                  Add Items :
-                </Typography>
-
-                <Input
-                  label=" item"
-                  size="lg"
-                  placeholder="camera"
-                  onChange={(e) =>
-                    setFormData({ ...formData, departmentItem: e.target.value })
-                  }
-                />
-
-                <Typography className="mb-2" variant="h6">
-                  Add Tasks :
-                </Typography>
-
-                <Input
-                  label="tasks"
-                  size="lg"
-                  placeholder="wedding photography"
-                  onChange={(e) =>
-                    setFormData({ ...formData, departmentTask: e.target.value })
-                  }
+                  maxlength="100"
                 />
               </div>
             </div>
@@ -224,7 +190,7 @@ function AddDepartmentForm({ title }) {
             </div>
           </CardFooter>
         </Card>
-      </Dialog>
+      {/* </Dialog> */}
     </>
   );
 }

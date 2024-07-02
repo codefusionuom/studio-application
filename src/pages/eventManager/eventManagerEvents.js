@@ -18,6 +18,7 @@ import { DayPicker } from "react-day-picker";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ErrorDisplayWindow from "../../components/eventManager/errorDisplayWindow";
+import axiosInstance from "../../config/axios.config";
 
 
 
@@ -46,8 +47,8 @@ const EventManagerEvents = () => {
   
   const getEvents = () => {
     console.log("kkkkkkkkkkkkkkkkkkkk");
-    const response = axios
-    .get("http://localhost:5000/eventManager/all-events")
+    const response = axiosInstance
+    .get("/eventManager/all-events")
     .then((res) => {
       const events = res.data.events;
       console.log("events: ", events);
@@ -55,7 +56,7 @@ const EventManagerEvents = () => {
         setEventList(events);
     })
     .catch((error) => {
-      setExistError(error.message);
+      // setExistError(error.message);
       console.log(error);
     });
     // console.log("response: ", response);
@@ -158,7 +159,7 @@ const EventManagerEvents = () => {
                   className=" "
                   label="Sort by : Date"
                   onChange={(e) => {
-                    setDate(Date);
+                    setDate(date);
                     // console.log(date);
                   }}
                   value={
@@ -411,7 +412,8 @@ const EventManagerEvents = () => {
                               color="blue-gray"
                               className="font-bold"
                             >
-                              {oneEvent.serviceType}
+                            {oneEvent.service['serviceName']}
+
                             </Typography>
                           </div>
                         </div>
@@ -423,7 +425,7 @@ const EventManagerEvents = () => {
                             color="blue-gray"
                             className="font-bold"
                           >
-                            {oneEvent.date.slice(0, 10)}
+                            {oneEvent.serviceDate?.slice(0, 10)}
                           </Typography>
                         </div>
                       </td>

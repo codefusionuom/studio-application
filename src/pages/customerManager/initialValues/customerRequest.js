@@ -21,5 +21,8 @@ export const initialCustomerRequest = {
   }
 
   export const initialEventRequest ={
-    services:[],customerId:"",note:""
+    selectedServices:[],
+    services:[],
+    customerId:"",
+    note:""
   }

@@ -51,6 +51,9 @@ import TaskPage from './pages/eventManager/tasksPage';
 import TaskView from './pages/eventManager/taskView';
 import CreateTask from './pages/eventManager/createTask';
 import CustomerServices from './pages/customerManager/CustomerServices';
+import { ToastContainer } from 'react-toastify';
+import CreateEventRequest from './pages/eventManager/CreateEventRequest';
+import Events from './pages/eventManager/event';
 
 
 function App() {
@@ -74,8 +77,10 @@ function App() {
       <Route path="/eventManager" element={<EventManager/>}>
         <Route path="/eventManager" element={<EventManagerDashboard/>}/>
         <Route path="/eventManager/eventRequests" element={<EventRequests />}/>
+        <Route   path="/eventManager/createEventRequest/:id" element={<CreateEventRequest />} />
         <Route path="/eventManager/eventCalandar" element={<EventManagerEventCalendar/>} />
-        <Route path="/eventManager/Events" element={<EventManagerEvents/>} />
+        {/* <Route path="/eventManager/Events" element={<EventManagerEvents/>} /> */}
+        <Route path="/eventManager/Events" element={<Events/>} />
         <Route  path='/eventManager/createEvent' element={<CreateEvent />} />
         <Route  path='/eventManager/createTask' element={<CreateTask/>} />
         <Route path='/eventManager/eventDetails' element = {<EventManagerEvents2/>} />
@@ -115,7 +120,18 @@ function App() {
     
     </Routes>
     
-      
+    <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        /> 
  
   
   

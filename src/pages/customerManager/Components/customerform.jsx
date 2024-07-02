@@ -18,12 +18,12 @@ function Customerform({
   setSearch,
   setCustomers,
   componentType,
-  setCustomerRequest,
+  setCustomerInformation,
   customerRequest
 }) {
-  console.log(initialvalues);
+  // console.log(initialvalues);
   const [customerForm, setCustomerForm] = useState(initialvalues );
-
+  const [error, setError] = useState( {});
   const {firstname,lastname,email,mobilePhone,address}=customerForm
 
   const handleDelete = async (id) => {
@@ -59,17 +59,29 @@ function Customerform({
    
     const mobileRegex = /^(?:\+94|0)([1-9][0-9]{8})$/;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
+     console.log(mobilePhone,email,address);
       if(!mobileRegex.test(mobilePhone)){
-        ToastError("enter valid mobile number")
-        handleOpen()
+        setError({mobilePhone:"enter valid mobile number"})
+        // ToastError("enter valid mobile number")
+        // handleOpen()
         return
       } 
+      if(firstname == ""){
+        //ToastError("enter valid name")
+        setError({firstName:"enter valid Name"})
+        // handleOpen()
+        return
+      }
+      // if (email && !emailRegex.test(email)) {
+      //   ToastError("enter valid email")
+      //   handleOpen()
+      //   return
+      // }
      if(email != ""){
       if( !emailRegex.test(email)){
-        ToastError("enter valid email")
-        handleOpen()
-        return
+        setError({email:"enter valid Email"})
+      // handleOpen()
+      return
       } 
      }
       
@@ -88,15 +100,21 @@ function Customerform({
           }
         );
     
-      
+        setError({})
         if (data) {
+          if(componentType) handleOpen()
           ToastSuccess("successfully updated");
           console.log(data);
           if(componentType){
           setSearch(data[1][0].mobilePhone);
           setCustomer(data[1][0]);console.log(data[1][0])
         }
-          setCustomerRequest && setCustomerRequest({customer:data.id})
+        else{
+          setSearch(data[1][0].mobilePhone);
+        }
+        
+        setCustomerInformation && setCustomerInformation({customerId:data[1][0].id,mobilePhone:data[1][0].mobilePhone,firstname:data[1][0].firstname,lastname:data[1][0].lastname})
+      
         }
       } else {
         const { data } = await axiosInstance.post(
@@ -110,20 +128,20 @@ function Customerform({
           }
         );
         console.log(data);
-        
+        setError({})
         if (data) {
           ToastSuccess("successfully created");
           if(componentType)setSearch(data.mobilePhone);
-          setCustomerRequest && setCustomerRequest({customer:data.id})
+          setCustomerInformation && setCustomerInformation({customerId:data.id,mobilePhone:data.mobilePhone,firstname:data.firstname,lastname:data.lastname})
+      
+          if(componentType)  handleOpen()
         }
       }
     } catch (error) {
       console.log(error);
+      setError({})
       ToastError(error.response.data.message || error.message);
-    }
-    finally{
-      if(componentType) {console.log("jkjhk"); handleOpen();}
-      
+       if(componentType) handleOpen()
     }
   }
   const handleChange = (e) => {
@@ -134,7 +152,9 @@ function Customerform({
     }));
   };
 
+
 useEffect(()=>{setCustomerForm(initialvalues)},[initialvalues])
+
 
 
   return (
@@ -162,6 +182,7 @@ useEffect(()=>{setCustomerForm(initialvalues)},[initialvalues])
                 onChange={handleChange}
                 size="lg"
               />
+              {error.firstName && <div className="text-red-500">{error.firstName}</div>}
             </div>
             <div className="flex flex-col gap-4">
               <Typography className="-mb-2" variant="h6">
@@ -192,6 +213,7 @@ useEffect(()=>{setCustomerForm(initialvalues)},[initialvalues])
                 onChange={handleChange}
                 size="lg"
               />
+              {error.email && <div className="text-red-500">{error.email}</div>}
             </div>
             <div className="flex flex-col gap-4">
               <Typography className="-mb-2 " variant="h6">
@@ -200,13 +222,13 @@ useEffect(()=>{setCustomerForm(initialvalues)},[initialvalues])
               <Input
                 label="mobilePhone"
                 id="mobilePhone"
-                type="number"
+                type=""
                 name="mobilePhone"
                 value={mobilePhone}
                 onChange={handleChange}
                 size="lg"
               />
-             
+             {error.mobilePhone && <div className="text-red-500">{error.mobilePhone}</div>}
             </div>
 
             <div className="flex flex-col gap-4">
