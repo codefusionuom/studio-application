@@ -47,18 +47,7 @@ function CustomerManager() {
     // section should be your topic list of side bar in /global/data.js
   <Layout sections={customerList}>
     <Outlet />
-    <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-        />
+   
   </Layout >
 
   )

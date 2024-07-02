@@ -18,6 +18,7 @@ import { DayPicker } from "react-day-picker";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ErrorDisplayWindow from "../../components/eventManager/errorDisplayWindow";
+import axiosInstance from "../../config/axios.config";
 
 
 
@@ -46,8 +47,8 @@ const EventManagerEvents = () => {
   
   const getEvents = () => {
     console.log("kkkkkkkkkkkkkkkkkkkk");
-    const response = axios
-    .get("http://localhost:5000/eventManager/all-events")
+    const response = axiosInstance
+    .get("/eventManager/all-events")
     .then((res) => {
       const events = res.data.events;
       console.log("events: ", events);
@@ -55,7 +56,7 @@ const EventManagerEvents = () => {
         setEventList(events);
     })
     .catch((error) => {
-      setExistError(error.message);
+      // setExistError(error.message);
       console.log(error);
     });
     // console.log("response: ", response);

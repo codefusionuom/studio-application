@@ -19,52 +19,95 @@ import React, { useEffect, useState } from "react";
 import { DayPicker } from "react-day-picker";
 import DropdownTreeSelect from "react-dropdown-tree-select";
 import axiosInstance from "../../../config/axios.config";
+import { ToastError, ToastSuccess } from "../ToastAlert";
 
-function RequestService({ setCustomerRequest, customerRequest }) {
+function RequestService({
+  setCustomerRequest,
+  customerRequest,
+  Services,
+  customer,
+}) {
   const [open, setOpen] = useState(1);
   const [date, setDate] = useState(0);
   const [services, setServices] = useState({});
   const [selectedServices, setSelectedServices] = useState();
-  const[added, setAdded] = useState();
-  // const [service, setService] = useState(null);
+  const [added, setAdded] = useState(0);
+  const [offerType, setOfferType] = useState(true);
   const [serviceInputFields, setServiceInputFields] = useState([]);
   const [form, setForm] = useState({});
+  const [error,setError]=useState()
 
   const onChangeTree = (currentNode, selectedNodes) => {
     fetchCustomerServices(currentNode);
-   
   };
 
+  const handleRemove = () => {
+    setAdded(-1);
+  };
+  const handleRequestService = async () => {
+    if(!customer?.customerId ){
+      setError("registered customer required")
+      return
+    }
+    if(!selectedServices?.id ){
+      setError(" customer service required")
+      return
+    }
+    if(!form.amount ){
+      setError("expected amount required")
+      return
+    }
 
-  const handleRemove=()=>{
-    setAdded(0)
-  }
-  const handleRequestService = () => {
-    console.log(selectedServices,"selctedservice");
+    // console.log(selectedServices, "selctedservice");
     const output = {
       serviceArray: Object.keys(form)
         .filter((key) => !isNaN(key))
         .map((key) => ({ [key]: form[key] })),
       amount: parseFloat(form.amount),
       note: form.note,
-      offers:parseFloat( form.offers),
-      payment:parseFloat( form.payment),
-      serviceDate:date,
-      serviceId:selectedServices
+      offers: parseFloat(form.offers),
+      payment: form.amount
+        ? form.offers
+          ? offerType
+            ? parseFloat(form.amount) - parseFloat(form.offers)
+            : parseFloat(form.amount) -
+              (parseFloat(form.offers) * parseFloat(form.amount)) / 100
+          : form.amount
+        : form.payment,
+      serviceDate: date,
+      serviceId: selectedServices.id,
+      customerId: customer.customerId,
+      status: "pending",
     };
+    console.log(output);
 
-    console.log("output", form, output);
+    try {
+      const { data } = await axiosInstance.post(
+        "/customerManager/eventRequestService",
+        { ...output }
+      );
+      console.log(data);
 
-    setCustomerRequest((prevState) => ({
-      ...prevState,
-      services: [...prevState.services, output],
-    }));
-    setAdded(1)
+      if (data) {
+        ToastSuccess("successfully created");
+        setError("")
+        setAdded(1);
+      }
+    } catch (error) {
+      ToastError(error);
+    }
+    // console.log("output", form, output);
+
+    // setCustomerRequest((prevState) => ({
+    //   ...prevState,
+    //   services: [...prevState.services, output],
+    // }));
+
+   
   };
 
   const fetchServiceCategories = async () => {
     try {
-      console.log("try services");
       const { data } = await axiosInstance.get(`/customerManager/service`);
       console.log(data);
       setServices(data);
@@ -80,7 +123,7 @@ function RequestService({ setCustomerRequest, customerRequest }) {
         `/customerManager/service/${currentNode.value}`
       );
       console.log(data);
-      setSelectedServices(data.id)
+      setSelectedServices(data);
       setServiceInputFields(data.serviceInputFields);
     } catch (error) {
       console.log(error);
@@ -88,15 +131,23 @@ function RequestService({ setCustomerRequest, customerRequest }) {
   };
 
   useEffect(() => {
-    console.log("customers");
     fetchServiceCategories();
   }, []);
 
   return (
-    <Accordion open={open} icon={<ChevronDownIcon />} className={` ${added === 0 ? 'hidden' : ''}`}>
-      <AccordionHeader>
-        <div className={`flex justify-between items-center  ${added === 1 ? 'bg-green-50' : 'bg-bg'} p-4 font-Lato text-4xl w-full font-normal font-500 rounded`}>
-          <div>Service Information</div>
+    <Accordion
+      open={open}
+      icon={<ChevronDownIcon />}
+      className={` ${added === -1 ? "hidden" : ""}`}
+    >
+      <AccordionHeader >
+        <div
+          className={`flex justify-between items-center  ${
+            added === 1 ? "bg-green-50" : "bg-bg"
+          } p-4 font-Lato text-2xl w-full font-normal font-500 rounded`}
+        >
+          <div>{selectedServices?.serviceName? selectedServices?.serviceName
+:"Event"} Information</div>
           <div className="flex gap-10 items-center justify-center">
             <DropdownTreeSelect
               data={services}
@@ -120,8 +171,12 @@ function RequestService({ setCustomerRequest, customerRequest }) {
           </div>
         </div>
       </AccordionHeader>
-      <AccordionBody>
-        <div className={`grid grid-cols-2 gap-4 w-full ${added === 1 ? 'bg-green-50' : ''}`}>
+      <AccordionBody className={`${
+            added === 1 ? "bg-green-50" : ""
+          }`}>
+        <div
+          className={`grid grid-cols-2 gap-4 w-full `}
+        >
           {serviceInputFields &&
             serviceInputFields.map((serviceinput) => {
               return (
@@ -163,13 +218,12 @@ function RequestService({ setCustomerRequest, customerRequest }) {
                         value={serviceinput.id}
                         className="w-full "
                         onChange={(value) => {
-                          console.log(value,"select value")
+                          console.log(value, "select value");
                           setForm({
                             ...form,
                             [serviceinput.id]: value,
                           });
                         }}
-                       
                       >
                         {serviceinput.serviceInputFieldValues.map((option) => (
                           <Option
@@ -185,6 +239,7 @@ function RequestService({ setCustomerRequest, customerRequest }) {
                           >
                             <div className="flex justify-between w-full">
                               <div>{option.fieldValueName}</div>
+                              <div>{" "+ " - "+" "}</div>
                               <div>{option.price && option.price}</div>
                             </div>
                           </Option>
@@ -195,7 +250,8 @@ function RequestService({ setCustomerRequest, customerRequest }) {
                 </div>
               );
             })}
-
+        </div>
+        <div className="mt-4 grid gap-4  grid-cols-2">
           <div className="flex flex-col gap-4 w-full">
             <Typography className="-mb-2" variant="h6">
               Service Date
@@ -240,7 +296,7 @@ function RequestService({ setCustomerRequest, customerRequest }) {
               }}
             />
           </div>
-          <div className="gap-4">
+          <div className="flex flex-col gap-2 ">
             <div>
               <Typography className="" variant="h6">
                 Note
@@ -256,62 +312,100 @@ function RequestService({ setCustomerRequest, customerRequest }) {
                 size="lg"
               />
             </div>
-            <div className="flex flex-col gap-4 w-full">
-              <Typography className="-mb-2" variant="h6">
-                Amount
-              </Typography>
+            <div className="flex flex-col gap-2">
+              <div className="flex">
+                <Typography className="text-lg text-cl-2">Amount</Typography>{" "}
+                {!form.amount ? (
+                  <Typography className="text-sm text-btn-danger">
+                    * required
+                  </Typography>
+                ) : (
+                  ""
+                )}
+              </div>
               <Input
-                label="serviceType"
+                id="amount"
+                type="number"
+                name="amount"
+                value={form.amount}
                 onChange={(e) => {
                   setForm({ ...form, ["amount"]: e.target.value });
                 }}
-                id="note"
-                type="number"
-                size="lg"
+                label="LKR"
+                className=""
               />
             </div>
-            <div className="flex flex-col gap-4 w-full">
-              <Typography className="-mb-2" variant="h6">
-                offers
-              </Typography>
-              <Input
-                label="serviceType"
-                onChange={(e) => {
-                  setForm({ ...form, ["offers"]: e.target.value });
-                }}
-                id="note"
-                type="number"
-                size="lg"
-              />
+            <div className="w-32  outline-none mt-6">
+              <Select
+                value={offerType}
+                onChange={(value) => setOfferType(value)}
+                className=" outline-none border-none"
+                label="Discount Type"
+              >
+                <Option value={false}>Precentage %</Option>
+                <Option selected value={true}>
+                  Price $
+                </Option>
+              </Select>
             </div>
-            <div className="flex flex-col gap-4 w-full">
-              <Typography className="-mb-2" variant="h6">
-                Payment
-              </Typography>
+            <Input
+              id="offers"
+              type="number"
+              name="offers"
+              value={form.offers}
+              onChange={(e) => {
+                setForm({ ...form, ["offers"]: e.target.value });
+              }}
+              label={offerType == true ? "LKR" : "%"}
+              className=""
+            />
+            <div>
+              <Typography className="text-lg text-cl-2">Payment</Typography>
+
               <Input
-                label="serviceType"
+                id="payment"
+                type="number"
+                name="payment"
+                value={
+                  form.amount
+                    ? form.offers
+                      ? offerType
+                        ? parseFloat(form.amount) - parseFloat(form.offers)
+                        : parseFloat(form.amount) -
+                          (parseFloat(form.offers) * parseFloat(form.amount)) /
+                            100
+                      : form.amount
+                    : form.payment
+                }
                 onChange={(e) => {
                   setForm({ ...form, ["payment"]: e.target.value });
                 }}
-                id="note"
-                type="number"
-                size="lg"
+                label="LKR"
+                className=""
               />
             </div>
           </div>
         </div>
-
-        <div className="flex justify-between mt-4 px-20">
-          <Button className="bg-btn-warning text-lg"
-          onClick={handleRemove}
-          >Remove</Button>
-          <Button
-            onClick={handleRequestService}
-            className="bg-btn-success text-lg"
-          >
-            Add
-          </Button>
-        </div>
+        {error ?
+          <div className="flex my-4 justify-center text-red-500">
+{error}
+          </div>:""
+        }
+        {added == 1 ? (
+          ""
+        ) : (
+          <div className="flex justify-between mt-4 px-20">
+            <Button className="bg-btn-warning text-lg" onClick={handleRemove}>
+              Remove
+            </Button>
+            <Button
+              onClick={handleRequestService}
+              className="bg-btn-success text-lg"
+            >
+              Add
+            </Button>
+          </div>
+        )}
       </AccordionBody>
     </Accordion>
   );
