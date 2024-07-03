@@ -18,6 +18,8 @@ import 'react-clock/dist/Clock.css';
 import axiosInstance from '../../../config/axios.config';
 import { Card } from '@material-tailwind/react';
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { ToastError, ToastSuccess } from '../../customerManager/ToastAlert';
+import {Typography} from '@material-tailwind/react';
 
 function Attendance() {
 
@@ -25,123 +27,76 @@ function Attendance() {
     const [errorName, setErrorName] = useState(false)
     const [errorDate, setErrorDate] = useState(false)
     const [errorCheckIn, setErrorCheckIn] = useState(false)
-    const [errorDayType, setErrorDayType] = useState(false)
     const [errorCheckOut, setErrorCheckOut] = useState(false)
-    const [errorLeaveType, setErrorLeaveType] = useState(false)
     const [checkIn, setCheckIn] = useState()
     const [checkOut, setCheckOut] = useState()
-    // const [dayType, setDayType] = useState()
-    // const [leaveType, setLeaveType] = useState()
+
     const [id, setid] = useState()
     const [date, setDate] = useState()
     const [timein, setTimein] = useState()
-    // const [checkInSeconds,setCheckInSeconds] = useState()
-    // const [checkOutSeconds,setCheckOutSeconds] = useState()
-    // const [todayDate, setTodayDate] = useState(new Date()); // Initialize date with today's date
     const [resultVisible, setResultVisible] = useState(false)
     const [search, setSearch] = useState()
     const [searchvalue, setSearchValue] = useState()
-    const [ToastError, setToastError] = useState()
-    const [empId, setEmpId] = useState()
     const [empName, setEmpName] = useState()
+    const [reload,setReload] = useState(false)
+    const today = new Date();
 
     function convertTimeToSeconds(timeString) {
         console.log("input:"+timeString);
         // Split the time string into hours, minutes, and seconds
         const [hoursStr, minutesStr] = timeString.split(':');
-
         // Convert string parts to numbers
         const hours = parseInt(hoursStr, 10);
         const minutes = parseInt(minutesStr, 10);
-        // console.log("hours:"+hours);
-        // console.log(typeof hours);
-        // console.log("min:"+minutes);
-        // console.log(typeof minutes);
-
-
-      
-        // Calculate total seconds
         const totalSeconds = hours * 3600 + minutes * 60;
-        // console.log("total"+totalSeconds);
-        // console.log(typeof totalSeconds);
-      
+
         return totalSeconds;
       }
-
-
-    // useEffect(() => {
-    //     axios.get('http://localhost:5000/employeeManager/getEmployees')
-    //         .then(result => setUser(result.data))
-    //         .catch(err => console.log(err))
-    //     console.log(users)
-    // }, [])
 
     const Submit = (e) => {
         e.preventDefault()
         if (!id) {
             setErrorName(true);
-            alert("Please select employee Name");
             return;
         }
         setErrorName(false);
         if (!date) {
             setErrorDate(true);
-            alert("Please select date");
             return;
         }
         setErrorDate(false);
         if (!checkIn) {
             setErrorCheckIn(true);
-            alert("Please fill in Check-In time");
             return;
         }
-        // if (isNaN(checkIn)) {
-        //     setErrorCheckIn(true);
-        //     alert("Time must be numeric");
-        //     return;
-        // }
         setErrorCheckIn(false);
         if (!checkOut) {
             setErrorCheckOut(true);
-            alert("Please fill in Check-out time");
             return;
         }
-        // if (isNaN(checkOut)) {
-        //     setErrorCheckOut(true);
-        //     alert("Time must be numeric");
-        //     return;
-        // }
         setErrorCheckOut(false);
-        
 
+
+        /////Time COnversions
         const checkInSeconds = convertTimeToSeconds(checkIn);
-        const checkOutSeconds = convertTimeToSeconds(checkOut);
-
-        // const checkintemp = convertTimeToSeconds(checkIn);
-        // const checkouttemp = convertTimeToSeconds(checkOut);
-
-        // console.log(checkintemp);
-        // console.log(checkouttemp);
-
-        // setCheckOutSeconds(checkintemp);
-        // setCheckInSeconds(checkouttemp);
-        
+        const checkOutSeconds = convertTimeToSeconds(checkOut);  
         console.log(checkInSeconds);
         console.log(checkOutSeconds);
-
         const newDate = new Date(date); // Create a new Date object based on the current date
         newDate.setDate(date.getDate() + 1);
-
         const dateString = newDate.toISOString().replace('Z', '+00:00');
         console.log(dateString);
+        //////////
 
         axios.post("http://localhost:5000/employeeManager/createAttendance", { id, dateString, checkIn, checkOut, checkInSeconds, checkOutSeconds })
             .then(result => {
                 console.log(result)
-                window.location.reload()
+                ToastSuccess("Attendance Marked")
+                setReload((prev)=>!prev)
+                // window.location.reload()
                 // navigate('/employeeManager')
             })
-            .catch(err => console.log(err))
+            .catch(err => {console.log(err);ToastError(err.message)})
     }
 
     // Search Employee
@@ -155,13 +110,11 @@ function Attendance() {
     }
     console.log(data);
     setUser(data);
-    // setResults(data.count)
     } catch (error) {
     console.log(error);
-    ToastError(error)
+    ToastError(error.message)
     }
 };
-
 
 useEffect(() => {
     if (search !== "") {
@@ -179,7 +132,7 @@ useEffect(() => {
                         <div className=''>
                             <div className='bg-gray-400 ml-20 mr-20 flex justify-evenly rounded'>
                                 <div className='w-80 pt-5 pb-5'>
-                                    <p className='text-2xl'>Attendance</p>
+                                    <p className='text-2xl pl-7'>Attendance</p>
                                 </div>
                                 <div className='w-80 pt-5 pb-5'>
                                 </div>
@@ -191,14 +144,6 @@ useEffect(() => {
                             <div>
                                 <p className='pt-5'>Employee Name :</p>
                                 <div className="w-80 pt-1 pb-10">
-                                    {/* <Select label='Select Name' onChange={item => { setid(item) }} error={errorName ? "true" : null}>
-                                        {users.map((user) => {
-                                            return (
-                                                <SelectOption key={user.id} value={user.id}>{user.empName}</SelectOption>
-                                            );
-                                        },
-                                        )}
-                                    </Select> */}
                                     <div className="relative ">
                                     <div className="relative flex w-full max-w-[24rem] ">
                                     <Input
@@ -206,29 +151,25 @@ useEffect(() => {
                                         value={empName}
                                         onChange={(e) => {setSearch(e.target.value); setEmpName(e.target.value)}}
                                         className="pr-20"
+                                        error={errorName ? "true" : null}
                                         containerProps={{
-                                        className: "min-w-0",
+                                        className: "min-w-0"
+                                        
                                         }}
                                     />
-                                    <Button
-                                        size="sm"
-                                        color={search ? "gray" : "blue-gray"}
-                                        disabled={!search}
-                                        className="!absolute right-0 bottom-0 rounded "
-                                        onClick={handleSearch}
-                                    >
-                                        <MagnifyingGlassIcon className="h-6 w-5" />
-                                    </Button>
+                                    
                                     </div>
-
+                                    { errorName ? 
+                                        <Typography variant="small" color="red" className="  flex items-center gap-1 font-normal">Name cannot be empty</Typography> 
+                                        : 
+                                        null
+                                    }
                                     {resultVisible ? (
                                     <div>
-                        
-                    
                                     {users && users.map((user)=>{
                                     return (
                                         <Card className="p-2 rounded-md absolute top-10 w-full max-h-36 overflow-scroll z-[999]">
-                                        <div className="" onClick={()=>{setid(user.id); setEmpName(user.empName); setSearchValue(""); setResultVisible(false)}}>
+                                        <div className="" onClick={()=>{setid(user.id); setEmpName(user.empName); setSearchValue(""); setResultVisible(false)} }>
                                         <div className="text-"> 
                                         {user.empName}
                                         </div>
@@ -238,9 +179,11 @@ useEffect(() => {
                                     })}
                                     </div>
                                     ) : null}
-                        
+                                    
                                 </div>
+                                
                                 </div>
+                                
                             </div>
                             <div className='pt-5'>
                                 <p>Select Date :</p>
@@ -255,11 +198,13 @@ useEffect(() => {
                                                     value={date ? `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}` : ""}
                                                     error={errorDate ? "true" : null}
                                                 />
+                                                
                                             </PopoverHandler>
                                             <PopoverContent>
                                                 <DayPicker
                                                     mode="single"
                                                     selected={date}
+                                                    disabled={{ before: today }}
 
                                                     onSelect={setDate}
                                                     showOutsideDays
@@ -298,6 +243,11 @@ useEffect(() => {
                                                 />
                                             </PopoverContent>
                                         </Popover>
+                                        { errorDate ? 
+                                                    <Typography variant="small" color="red" className="  flex items-center gap-1 font-normal">Date cannot be empty</Typography> 
+                                                    : 
+                                                    null
+                                                }
                                     </div>
                                 </div>
                             </div>
@@ -306,19 +256,26 @@ useEffect(() => {
                             <div>
                                 <p>Check In Time :</p>
                                 <div className="w-80  pt-1 pb-10">
-                                    {/* <Input onChange={(e) => setCheckIn(e.target.value)} error={errorCheckIn ? "true" : null}/> */}
                                     <TimePicker  onChange={setCheckIn} disableClock={true} value={checkIn} />
+                                    { errorCheckIn ? 
+                                        <Typography variant="small" color="red" className="  flex items-center gap-1 font-normal">Check in cannot be empty</Typography> 
+                                        : 
+                                        null
+                                    }
                                 </div>
                             </div>
                             <div>
                             <p>Check Out Time :</p>
                                 <div className="w-80 pt-1 pb-1-">
-                                    {/* <Input onChange={(e) => setCheckOut(e.target.value)} error={errorCheckOut ? "true" : null} /> */}
                                     <TimePicker  onChange={setCheckOut} disableClock={true} value={checkOut} />
+                                    { errorCheckOut ? 
+                                        <Typography variant="small" color="red" className="  flex items-center gap-1 font-normal">Check out cannot be empty</Typography> 
+                                        : 
+                                        null
+                                    }
                                 </div>
                             </div>
                         </div>
-                        
                     </div>
                     <div className='flex justify-evenly pb-10 pt-10'>
                         <div>
@@ -329,9 +286,8 @@ useEffect(() => {
                     </div>
                 </form>
             </div>
-
             <div className='pt-10'>
-                <AttendanceOverviewList></AttendanceOverviewList>
+                <AttendanceOverviewList reload={reload}></AttendanceOverviewList>
             </div>
         </div>
     )

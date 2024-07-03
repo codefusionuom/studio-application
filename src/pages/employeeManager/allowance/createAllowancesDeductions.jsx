@@ -14,9 +14,10 @@ import DashCard from "../dashButtonCard";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import DashCard2 from "../dashButtonCard copy";
+import { ToastError,ToastSuccess } from "../../customerManager/ToastAlert";
 
 
-function CreateAllowancesDeductions() {
+function CreateAllowancesDeductions({setOpenCreate}) {
 
   const [empName, setEmpName] = useState()
   // const [empId, setEmpId] = useState()
@@ -38,9 +39,13 @@ function CreateAllowancesDeductions() {
   const Submit = (e) => {
     e.preventDefault()
 
+    if (!allowanceorDeduction) {
+      setErrorType(true);
+      return;
+    }
+    setErrorType(false);
     if (!allowanceDeductionName) {
       setErrorName(true);
-      alert("Please fill in" + {allowanceorDeduction} + "name");
       return;
     }
     setErrorName(false);
@@ -48,9 +53,11 @@ function CreateAllowancesDeductions() {
     axios.post("http://localhost:5000/employeeManager/createAllowanceDeduction", { allowanceorDeduction, allowanceDeductionName })
       .then(result => {
         console.log(result)
-        window.location.reload()
+        // window.location.reload()
+        ToastSuccess("Record added successfully")
+        setOpenCreate((prev)=>!prev)
       })
-      .catch(err => console.log(err))
+      .catch(err => {console.log(err);ToastError(err.message)})
   }
 
   // const [open, setOpen] = React.useState(false);
@@ -70,10 +77,15 @@ function CreateAllowancesDeductions() {
                   <Typography className="mb-2" variant="h6">
                     Allowance/Deduction :
                   </Typography>
-                  <Select label="Allowance/Deduction" onChange={(val) => setAllowanceorDeduction(val)}>
+                  <Select label="Allowance/Deduction" onChange={(val) => setAllowanceorDeduction(val)} error={errorType ? "true" : null}>
                     <Option value="Allowance">Allowance</Option>
                     <Option value="Deduction">Deduction</Option>
                   </Select>
+                  { errorType ? 
+                    <Typography variant="small" color="red" className="  flex items-center gap-1 font-normal">Select Type</Typography> 
+                  : 
+                    null
+                   }
                 </div>
                 <div className="flex flex-col justify-between">
                 </div>
@@ -83,7 +95,12 @@ function CreateAllowancesDeductions() {
                   <Typography className="mb-2" variant="h6">
                     {allowanceorDeduction}
                   </Typography>
-                  <Input label={allowanceorDeduction} size="lg" onChange={(e) => setAllowanceDeductionName(e.target.value)} error={errorAdd ? "true" : null} />
+                  <Input label={allowanceorDeduction} size="lg" onChange={(e) => setAllowanceDeductionName(e.target.value)} error={errorName ? "true" : null} />
+                  { errorName ? 
+                    <Typography variant="small" color="red" className="  flex items-center gap-1 font-normal">Select Name</Typography> 
+                  : 
+                    null
+                   }
                 </div>
                 <div className=" flex flex-col justify-between">
                 </div>

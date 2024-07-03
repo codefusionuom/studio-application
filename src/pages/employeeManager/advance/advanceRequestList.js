@@ -8,8 +8,12 @@ import UpdateEmployee from "../empForms/updateEmployee";
 import React from "react";
 import { Dialog } from "@material-tailwind/react";
 import EditRecordButton from "../../../components/buttons/EditRecordButton";
+import DeleteRecordButton from "../../../components/buttons/DeleteRecordButton"
+import { ToastSuccess,ToastError } from "../../customerManager/ToastAlert";
+import AcceptButton from "../../../components/buttons/AcceptButton";
+import RejectButton from "../../../components/buttons/RejectButton";
 
-function AdvanceRequestList() {
+function AdvanceRequestList(reload) {
 
     const [id,setid] = useState()
     const [empId,setEmpId] = useState()
@@ -40,10 +44,11 @@ function AdvanceRequestList() {
         axios.put("http://localhost:5000/employeeManager/acceptAdvance/" + id)
       .then(result => {
         console.log(result)
+        ToastSuccess("Advance Accepted")
         // window.location.reload()
         // navigate('/')
       })
-      .catch(err => console.log(err))
+      .catch(err => {console.log(err);ToastError(err.message)})
       }
 
       const SetAccept = (id) => {
@@ -62,10 +67,11 @@ function AdvanceRequestList() {
         axios.put("http://localhost:5000/employeeManager/rejectAdvance/" + id)
       .then(result => {
         console.log(result)
+        ToastSuccess("Advance Rejected")
         // window.location.reload()
         // navigate('/')
       })
-      .catch(err => console.log(err))
+      .catch(err => {console.log(err);ToastError(err.message)})
       }
 
     
@@ -77,9 +83,9 @@ function AdvanceRequestList() {
             setUser(result.data.rows)
             setResult(result.data.count)
         })
-          .catch(err => console.log(err))
+          .catch(err => {console.log(err);ToastError(err.message)})
         console.log(users)
-      }, [active])
+      }, [active,reload])
 
 
 
@@ -94,13 +100,6 @@ function AdvanceRequestList() {
                     </div>
 
                     <div className=" flex p-4 gap-6">
-                        <Select size="lg" label="Sort By: Newest" className="z-10">
-                            <Option>Material Tailwind HTML</Option>
-                            <Option>Material Tailwind React</Option>
-                            <Option>Material Tailwind Vue</Option>
-                            <Option>Material Tailwind Angular</Option>
-                            <Option>Material Tailwind Svelte</Option>
-                        </Select>
 
                         <Input size="lg"
                             label="Search"
@@ -171,6 +170,18 @@ function AdvanceRequestList() {
                                                     color="blue-gray"
                                                     className="font-normal"
                                                 >
+                                                    {user.monthtaken}
+                                                </Typography>
+                                                
+                                            </div>
+                                        </td>
+                                        <td className={"p-4 border-b border-blue-gray-50"}>
+                                            <div className="flex flex-col">
+                                                <Typography
+                                                    variant="small"
+                                                    color="blue-gray"
+                                                    className="font-normal"
+                                                >
                                                     {user.description}
                                                 </Typography>
                                                 
@@ -198,11 +209,11 @@ function AdvanceRequestList() {
 
                                             {user.advancerequest ? (
                                                 <div className="flex">
-                                                    <div>
-                                                    <EditRecordButton onClick={() => SetAccept(user.id,)}></EditRecordButton>
+                                                    <div className="pl-1 pr-1">
+                                                        <AcceptButton color="green" onClick={() => SetAccept(user.id,)}></AcceptButton>
                                                     </div>
-                                                    <div>
-                                                    <EditRecordButton onClick={() => SetReject(user.id,)}></EditRecordButton>
+                                                    <div className="pl-1 pr-1">
+                                                        <RejectButton onClick={() => SetReject(user.id,)}/>
                                                     </div>
                                                 </div>
                                                 ) : (
@@ -252,5 +263,5 @@ export default AdvanceRequestList
 
 
 
-const TABLE_HEAD = ["Employee Name", "Advance", "Description", "Handle"];
+const TABLE_HEAD = ["Employee Name", "Advance", "Month", "Description", "Handle"];
 

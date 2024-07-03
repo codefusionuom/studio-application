@@ -10,10 +10,12 @@ import { Popover, PopoverHandler, PopoverContent } from "@material-tailwind/reac
 import { DayPicker } from "react-day-picker";
 import { ChevronRightIcon, ChevronLeftIcon } from "@heroicons/react/24/outline";
 import axiosInstance from "../../../config/axios.config";
+import { ToastError,ToastSuccess } from "../../customerManager/ToastAlert";
+import ClearButton from "../../../components/buttons/ClearButton";
 
 
 
-function AttendanceOverviewList() {
+function AttendanceOverviewList(reload) {
 
 
     const [users, setUser] = useState([])
@@ -26,15 +28,16 @@ function AttendanceOverviewList() {
     const [searchvalue, setSearchValue] = useState()
     const [empId, setEmpId] = useState()
     const [date, setDate] = useState()
-    const [ToastError, setToastError] = useState()
     const [searchUser, setSearchUser] = useState([])
+    const [leave,setleave] = useState(false)
+    const [late,setlate] = useState(false)
 
     useEffect(() => {
         axios.get(`http://localhost:5000/employeeManager/getAttendance/?page=${active}`)
             .then(result => {setUser(result.data.rows); setResults(result.data.count)})
-            .catch(err => console.log(err))
+            .catch(err => {console.log(err);ToastError(err.message)})
         console.log(users);
-    }, [active])
+    }, [active,reload])
 
     useEffect(() => {
         if (search !== "") {
@@ -43,6 +46,9 @@ function AttendanceOverviewList() {
         console.log("search when name change");
         }
       }, [search]);
+
+
+
 
 
     const handleEmpSearch = async () => {
@@ -58,7 +64,7 @@ function AttendanceOverviewList() {
         // setResults(data.count)
         } catch (error) {
         console.log(error);
-        ToastError(error)
+        ToastError(error.message)
         }
     };
 
@@ -74,8 +80,7 @@ function AttendanceOverviewList() {
         if (!empId && !date) {
             axios.get(`http://localhost:5000/employeeManager/getAttendance/?page=${active}`)
             .then(result => {setUser(result.data.rows); setResults(result.data.count)})
-            .catch(err => console.log(err))
-            console.log("boohoo");
+            .catch(err => {console.log(err);ToastError(err.message)})
         } else { 
             console.log("searching begin");
             
@@ -95,7 +100,7 @@ function AttendanceOverviewList() {
                     setResults(data.count)
                     } catch (error) {
                     console.log(error);
-                    ToastError(error)
+                    ToastError(error.message)
                     }
             }
             else if(!date) {
@@ -114,7 +119,7 @@ function AttendanceOverviewList() {
                     setResults(data.count)
                     } catch (error) {
                     console.log(error);
-                    ToastError(error)
+                    ToastError(error.message)
                     }
                 
             }
@@ -132,7 +137,7 @@ function AttendanceOverviewList() {
                     setResults(data.count)
                     } catch (error) {
                     console.log(error);
-                    ToastError(error)
+                    ToastError(error.message)
                     }
             }
 
@@ -207,16 +212,16 @@ function AttendanceOverviewList() {
                                 >
                                     <MagnifyingGlassIcon className="h-6 w-5" />
                                 </Button>
-                                <Button
+                                {/* <Button
                                     size="sm"
                                     color={search ? "gray" : "blue-gray"}
                                     className="!absolute left-0 bottom-0 rounded "
-                                    onClick={handleClear}
+                                    
                                 >
                                     <MagnifyingGlassIcon className="h-6 w-5" />
-                                </Button>
+                                </Button> */}
+                                
                             </div>
-
                             {resultVisible ? (
                                 <div>
                                 {searchUser && searchUser.map((user)=>{
@@ -236,7 +241,8 @@ function AttendanceOverviewList() {
                         </div>
                     </div>
                     <div>
-                        <div className="">
+                        
+                        <div className="flex">
                                         <Popover placement="bottom">
                                             <PopoverHandler>
                                                 <Input
@@ -288,9 +294,9 @@ function AttendanceOverviewList() {
                                                 />
                                             </PopoverContent>
                                         </Popover>
+                                        <ClearButton onClick={handleClear}/>
                                     </div>
                     </div>
-
 
                 </div>
             </CardBody>
@@ -318,7 +324,7 @@ function AttendanceOverviewList() {
                         {(users).map((user) => {
                             return (
                                 <tr key={id}>
-                                    <td >
+                                    <td className="pt-2 pb-2" >
                                         <div className="flex items-center gap-3 justify-center">
                                             <div className="flex flex-col justify-center items-center align-middle">
                                                 <Typography
@@ -365,7 +371,7 @@ function AttendanceOverviewList() {
                                                     color="blue-gray"
                                                     className="font-normal"
                                                 >
-                                                    {user.checkIn.slice(12, 16)}
+                                                    {user.checkIn.slice(11, 16)}
                                                 </Typography>
                                             </div>
                                         </div>
@@ -378,21 +384,35 @@ function AttendanceOverviewList() {
                                                     color="blue-gray"
                                                     className="font-normal"
                                                 >
-                                                    {user.checkOut.slice(12, 16)}
+                                                    {user.checkOut.slice(11, 16)}
                                                 </Typography>
                                             </div>
                                         </div>
                                     </td>
                                     <td >
-                                        <div className="flex items-center gap-3 justify-center">
-                                            <div className="flex flex-col justify-center items-center align-middle">
-                                                <Typography
+                                        <div className="">
+                                            <div className="flex justify-center items-center align-middle">
+                                                <div className="">
+                                                { user.checkInSeconds>30600 ? <Typography
                                                     variant="small"
-                                                    color="blue-gray"
+                                                    color="btn-danger"
                                                     className="font-normal"
                                                 >
-                                                    {user.leaveType}
+                                                    Late Arrival
                                                 </Typography>
+                                                 : null }
+                                                 </div>
+                                                 <p>--</p>
+                                                 <div className="">
+                                                { user.checkOutSeconds<59400 ? <Typography
+                                                    variant="small"
+                                                    color="btn-danger"
+                                                    className="font-normal"
+                                                >
+                                                    Short Leave
+                                                </Typography>
+                                                 : null }
+                                                 </div>
                                             </div>
                                         </div>
                                     </td>

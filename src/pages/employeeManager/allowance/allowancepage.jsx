@@ -15,6 +15,7 @@ import { Dialog } from '@material-tailwind/react';
 import ViewAllowance from './viewallowance';
 import AddAllowance from './addallowance';
 import AllowanceList from './allowanceList';
+import SmallCard from '../../../components/cards/card';
 
 
 
@@ -27,63 +28,65 @@ function AllowancePage() {
     const handleOpenView = () => setOpenView((cur) => !cur);
     const [openAdd, setOpenAdd] = React.useState(false);
     const handleOpenAdd = () => setOpenAdd((cur) => !cur);
+    const [reload,setReload] = useState(false)
 
     return (
         <div>
             <div>
                 <div className='flex justify-evenly pb-5'>
                     <div>
-                        <DashCard2  title2={"Create Allowences/Deductions"} title3={""} onClick={handleOpenCreate}/>
+                        {/* <DashCard2  title2={"Create Allowences/Deductions"} title3={""} onClick={handleOpenCreate}/> */}
+                        <SmallCard
+                        className=" w-full cursor-pointer"
+                        title="+ Create Allowance/Deduction"
+                        onClick={handleOpenCreate}
+                        />
                         <Dialog
                             open={openCreate}
                             handler={handleOpenCreate}
                             className="bg-transparent shadow-none w-fit"
                         >
-                            <CreateAllowancesDeductions/>
+                            <CreateAllowancesDeductions setOpenCreate={setOpenCreate}/>
                         </Dialog>
                     </div>
                     <div className='flex justify-evenly pb-5'>
-                    <DashCard2 title2={"View Allowance/Deduction"} title3={""} onClick={handleOpenView} />
+                    {/* <DashCard2 title2={"View Allowance/Deduction"} title3={""} onClick={handleOpenView} /> */}
+                    <SmallCard
+                        className=" w-full cursor-pointer"
+                        title="View Allowance/Deduction"
+                        onClick={handleOpenView}
+                        />
                     <Dialog
                         open={openView}
                         handler={handleOpenView}
                         className="bg-transparent shadow-none w-fit"
                     >
-                        {/* <Card className="mx-auto w-full "> */}
-                        {/* <CardBody className="flex"> */}
                             <ViewAllowance/>
-                        {/* </CardBody> */}
-                        {/* </Card> */}
                     </Dialog>
                     </div>
-                    {/* <ButtomViewAllowance></ButtomViewAllowance> */}
-                </div>
-                <div className='flex justify-evenly pb-5'>
+                {/* </div> */}
+                {/* <div className='flex justify-evenly pb-5'> */}
                     <div>
-                        <DashCard2  title2={"Add Allowences/Deductions"} title3={""} onClick={handleOpenAdd}/>
+                        {/* <DashCard2  title2={"Add Allowences/Deductions"} title3={""} onClick={handleOpenAdd}/> */}
+                        <SmallCard
+                        className=" w-full cursor-pointer"
+                        title="+ Asign Allowance/Deduction"
+                        onClick={handleOpenAdd}
+                        />
                         <Dialog
                             open={openAdd}
                             handler={handleOpenAdd}
                             className="bg-transparent shadow-none w-fit"
                         >
-                            {/* <CreateAllowancesDeductions/> */}
-                            <AddAllowance/>
+                            <AddAllowance setOpenAdd={setOpenAdd} setReload={setReload}/>
                         </Dialog>
                     </div>
                     <div className='flex justify-evenly pb-5'>
-                    {/* <DashCard2 title2={"View Allowance/Deduction"} title3={""} onClick={handleOpenView} />
-                    <Dialog
-                        open={openView}
-                        handler={handleOpenView}
-                        className="bg-transparent shadow-none w-fit"
-                    >
-                            <ViewAllowance/>
-                    </Dialog> */}
                     </div>
                 </div>
             </div>
             <div>
-                <AllowanceList/>
+                <AllowanceList reload={reload}/>
             </div>
         </div>
     )

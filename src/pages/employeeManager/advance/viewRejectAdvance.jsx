@@ -8,6 +8,7 @@ import UpdateEmployee from "../empForms/updateEmployee";
 import React from "react";
 import { Dialog } from "@material-tailwind/react";
 import EditRecordButton from "../../../components/buttons/EditRecordButton";
+import { ToastError } from "../../customerManager/ToastAlert";
 
 function RejectAdvanceList() {
 
@@ -28,7 +29,7 @@ function RejectAdvanceList() {
             setUser(result.data.rows)
             setResult(result.data.count)
         })
-          .catch(err => console.log(err))
+          .catch(err => {console.log(err);ToastError(err.message)})
         console.log(users)
       }, [active])
 
@@ -97,7 +98,7 @@ function RejectAdvanceList() {
                                                         color="blue-gray"
                                                         className="font-normal"
                                                     >
-                                                        {user.empId}
+                                                        {user.employee.empName}
                                                     </Typography>
                                                     
                                                 </div>

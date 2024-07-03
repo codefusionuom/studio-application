@@ -18,18 +18,18 @@ import SelectOption from "@material-tailwind/react/components/Select/SelectOptio
 import axiosInstance from "../../../config/axios.config";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { Textarea } from "@material-tailwind/react";
+import { ToastError, ToastSuccess } from "../../customerManager/ToastAlert";
 
 
 
 
-function CreateAdvance() {
+function CreateAdvance({setOpenCreate,setReload}) {
 
   const [empName, setEmpName] = useState()
   const [users, setUser] = useState([])
   const [empId, setEmpId] = useState()
   const [empAdd, setEmpAdd] = useState()
   const [empType, setEmpType] = useState()
-  const [empSalary, setEmpSalary] = useState()
   const [empDepartment, setEmpDepartment] = useState()
   const [empNumber, setEmpNumber] = useState()
   const navigate = useNavigate()
@@ -46,14 +46,16 @@ function CreateAdvance() {
   const [ToastError, setToastError] = useState()
   const [searchvalue, setSearchValue] = useState()
   const [description,setDescription] = useState()
+  const [paymentDetails,setPaymentDetails] = useState()
+  const [empSalary, setEmpSalary] = useState([])
   
 
-//   useEffect(()=>{
-//     axios.get('http://localhost:5000/employeeManager/getEmployees')
-//     .then(result => setUser(result.data.rows))
-//     .catch(err => console.log(err))
-//     console.log(users)
-// },[])
+  useEffect(()=>{
+    axios.get('http://localhost:5000/employeeManager/getEmployeeByid/'+empId)
+    .then(result => setEmpSalary(result.data.employeePaymentDetail.empSalary))
+    .catch(err => console.log(err))
+    console.log(users)
+},[empId])
 
 
   useEffect(() => {
@@ -78,7 +80,7 @@ function CreateAdvance() {
     // setResults(data.count)
     } catch (error) {
     console.log(error);
-    ToastError(error)
+    ToastError(error.message)
     }
 };
 
@@ -90,32 +92,44 @@ function CreateAdvance() {
 
     if (!empId) {
       setErrorName(true);
-      alert("Please Select Employee");
       return;
     }
+    setEmpName(false);
     setErrorName(false);
     if (!advanceAmount) {
         setErrorAmount(true);
-        alert("Please fill amount");
         return;
       }
     setErrorName(false);
     if (isNaN(advanceAmount)) {
         setErrorAmount(true);
-        alert("Allowance must be numeric");
         return;
      }
+     setErrorAmount(false)
+     if (advanceAmount>=empSalary/3){
+      setErrorAmount(true);
+      return;
+     }
+     setErrorAmount(false)
 
-    axios.post("http://localhost:5000/employeeManager/createAdvance", { empId, advanceAmount, description })
+    axios.post(`http://localhost:5000/employeeManager/createAdvance/?empId=${empId}`, { advanceAmount, description })
       .then(result => {
         console.log(result)
-        window.location.reload()
+        // window.location.reload()
+        ToastSuccess("Advance created successfully")
+        setReload((prev)=>!prev)
+        setOpenCreate((prev)=>!prev)
       })
-      .catch(err => console.log(err))
+      .catch(err => {console.log(err);ToastError(err.message)})
   }
 
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen((cur) => !cur);
+  // const handleOpen = () => setOpen((cur) => !cur);
+
+  const handleOpen = () => {
+    console.log(empSalary);
+    console.log(empId);
+  }
 
   return (
     <>
@@ -153,11 +167,16 @@ function CreateAdvance() {
                         <MagnifyingGlassIcon className="h-6 w-5" />
                       </Button>
                     </div>
+                    { errorName ? 
+                    <Typography variant="small" color="red" className="  flex items-center gap-1 font-normal">Select Employee</Typography> 
+                  : 
+                    null
+                   }
 
                     {resultVisible ? (
                     <div>
         
-      
+
                     {users && users.map((user)=>{
                       return (
                         <Card className="p-2 rounded-md absolute top-10 w-full max-h-36 overflow-scroll z-[999]">
@@ -182,7 +201,12 @@ function CreateAdvance() {
                   <Typography className="mb-2" variant="h6">
                     Advance Amount:
                   </Typography>
-                  <Input label="Advance Amount" size="lg" onChange={(e) => setAdvanceAmount(e.target.value)} error={errorAdd ? "true" : null} />
+                  <Input label="Advance Amount" size="lg" onChange={(e) => setAdvanceAmount(e.target.value)} error={errorAmount ? "true" : null} />
+                  { errorAmount ? 
+                    <Typography variant="small" color="red" className="  flex items-center gap-1 font-normal">Incorrect Amount. Amount can't exceed 1/3 of salary</Typography> 
+                  : 
+                    null
+                   }
                 </div>
                 <div className=" flex flex-col justify-between">
                   <div className="w-96">

@@ -16,6 +16,8 @@ import { useNavigate } from "react-router-dom";
 import DashCard2 from "../dashButtonCard copy";
 import axiosInstance from "../../../config/axios.config";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { ToastError, ToastSuccess } from "../../customerManager/ToastAlert";
+
 
 
 function EditEmpAllowance({idx}) {
@@ -58,11 +60,8 @@ function EditEmpAllowance({idx}) {
         setId(result.data.allowanceid)
         setAmount(result.data.Amount)
         setRecId(result.data.id)
-        // setEmpNumber(result.data.empNumber)
-        // setEmpEmail(result.data.empEmail)
-        // setEmpEmail(result.date.empEmail)
       })
-      .catch(err => console.log(err))
+      .catch(err => {console.log(err);ToastError(err.message)})
       console.log("helllllo");
   }, [])
 
@@ -98,7 +97,7 @@ function EditEmpAllowance({idx}) {
     // setResults(data.count)
     } catch (error) {
     console.log(error);
-    ToastError(error)
+    ToastError(error.message)
     }
 };
 
@@ -122,12 +121,6 @@ function EditEmpAllowance({idx}) {
 //     }
 // };
 
-const handleTest = () => {
-    console.log(empId);
-    console.log(id);
-    console.log(amount);
-    console.log(recId);
-} 
 
   const Submit = (e) => {
     e.preventDefault()
@@ -149,8 +142,9 @@ const handleTest = () => {
       .then(result => {
         console.log(result)
         window.location.reload()
+        ToastSuccess("Updated successfully")
       })
-      .catch(err => console.log(err))
+      .catch(err => {console.log(err);ToastError(err.message)})
   }
 
   // const [open, setOpen] = React.useState(false);
@@ -212,9 +206,9 @@ const handleTest = () => {
           </CardBody>
           <CardFooter className="pt-0">
             <div className=" flex flex-row justify-between">
-              <Button className=" bg-yellow-800" onClick={handleTest}>
+              {/* <Button className=" bg-yellow-800" onClick={handleTest}>
                 Clear
-              </Button>
+              </Button> */}
               <Button className=" bg-green-600" onClick={Submit}>
                 Create
               </Button>

@@ -12,6 +12,7 @@ import { Navigate, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import EditRecordButton from "../../../components/buttons/EditRecordButton";
 import { Textarea } from "@material-tailwind/react";
+import { ToastError, ToastSuccess } from "../../customerManager/ToastAlert";
 
 function UpdateAdvance({ idx }) {
 
@@ -49,7 +50,7 @@ function UpdateAdvance({ idx }) {
         setDescription(result.data.description)
         setEmpName(result.data.employee.empName)
       })
-      .catch(err => console.log(err))
+      .catch(err => {console.log(err);ToastError(err.message)})
       console.log(id);
   }, [])
 
@@ -81,10 +82,11 @@ function UpdateAdvance({ idx }) {
     axios.put("http://localhost:5000/employeeManager/updateAdvance/" + id, { advanceAmount, description })
       .then(result => {
         console.log(result)
+        ToastSuccess("Advance updated successfully")
         // window.location.reload()
         // navigate('/')
       })
-      .catch(err => console.log(err))
+      .catch(err => {console.log(err);ToastError(err.message)})
   }
 
 

@@ -10,6 +10,7 @@ import AdvanceRequestList from './advanceRequestList.js'
 import DashCard2 from '../dashButtonCard copy.js'
 import CreateAdvance from './createadvance.jsx'
 import RejectAdvanceList from './viewRejectAdvance.jsx'
+import SmallCard from '../../../components/cards/card.js'
 
 
 
@@ -26,6 +27,7 @@ function AdvancePage() {
     const handleOpenAdd = () => setOpenAdd((cur) => !cur);
     const [openReject, setOpenReject] = React.useState(false);
     const handleOpenReject = () => setOpenReject((cur) => !cur);
+    const [reload,setReload] = useState(false)
 
 
     return (
@@ -33,17 +35,27 @@ function AdvancePage() {
 
                 <div className='flex justify-evenly pb-5'>
                 <div>
-                <DashCard2  title2={"Create Advance"} title3={""} onClick={handleOpenCreate}/>
+                {/* <DashCard2  title2={"Create Advance"} title3={""} onClick={handleOpenCreate}/> */}
+                <SmallCard
+                        className=" w-full cursor-pointer"
+                        title="+ Create Advance"
+                        onClick={handleOpenCreate}
+                        />
                 <Dialog
                     open={openCreate}
                     handler={handleOpenCreate}
                     className="bg-transparent shadow-none w-fit"
                 >
-                    <CreateAdvance/>
+                    <CreateAdvance setReload={setReload} setOpenCreate={setOpenCreate}/>
                 </Dialog>
                 </div>
                 <div>
-                <DashCard2  title2={"View Rejected Advance"} title3={""} onClick={handleOpenReject}/>
+                {/* <DashCard2  title2={"View Rejected Advance"} title3={""} onClick={handleOpenReject}/> */}
+                <SmallCard
+                        className=" w-full cursor-pointer"
+                        title="View Rejected Advance"
+                        onClick={handleOpenReject}
+                        />
                 <Dialog
                     open={openReject}
                     handler={handleOpenReject}
@@ -56,7 +68,7 @@ function AdvancePage() {
                 
             </div>
             <div className='employeeList'>
-                <AdvanceRequestList/>
+                <AdvanceRequestList reload={reload}/>
             </div>
         </div>
     )

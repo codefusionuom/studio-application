@@ -14,6 +14,7 @@ import DashCard2 from "../dashButtonCard copy";
 import { Select, Option } from "@material-tailwind/react";
 import SelectOption from '@material-tailwind/react/components/Select/SelectOption';
 import axiosInstance from "../../../config/axios.config";
+import { ToastError,ToastSuccess } from "../../customerManager/ToastAlert";
 
 function EmployeePaymentDetails() {
 
@@ -37,18 +38,11 @@ function EmployeePaymentDetails() {
   const [search, setSearch] = useState()
   const [searchvalue, setSearchValue] = useState()
   const [empName, setEmpName] = useState()
-  const [ToastError,setToastError] = useState()
   const [empId, setEmpId] = useState()
   const [empSalary,setEmpSalary] = useState()
+  const [errorSalary, setErrorSalary] = useState()
 
 
-
-  // useEffect(() => {
-  //   axios.get('http://localhost:5000/employeeManager/getEmployees')
-  //     .then(result => setUser(result.data))
-  //     .catch(err => console.log(err))
-  //   console.log(users)
-  // }, [])
 
   useEffect(() => {
     if (search !== "") {
@@ -72,7 +66,7 @@ const handleEmpSearch = async () => {
     // setResults(data.count)
     } catch (error) {
     console.log(error);
-    ToastError(error)
+    ToastError(error.message)
     }
 };
 
@@ -81,60 +75,50 @@ const handleEmpSearch = async () => {
     // validation
     if (!id) {
       setErrorId(true);
-      alert("Please Select employee name");
       return;
     }
     setErrorId(false);
     if (!bank) {
       setErrorBank(true);
-      alert("Please fill in bank");
       return;
     }
     setErrorBank(false);
     if (!epfNumber) {
       setErrorEpfNumber(true);
-      alert("Please fill in EPF Number");
       return;
     }
     if (isNaN(epfNumber)) {
       setErrorEpfNumber(true);
-      alert("EPF number must be numeric");
       return;
     }
     setErrorEpfNumber(false);
     if (!accoutNumber) {
       setErrorAccountNumber(true);
-      alert("Please fill in account number");
       return;
     }
     if (isNaN(accoutNumber)) {
       setErrorAccountNumber(true);
-      alert("Account number must be numeric");
       return;
     }
     setErrorAccountNumber(false);
     if (!overtimeRate) {
       setErrorOvertimeRate(true);
-      alert("Please fill in overtime rate");
       return;
     }
     if (isNaN(overtimeRate)) {
       setErrorOvertimeRate(true);
-      alert("overtime rate must be numeric");
       return;
     }
     setErrorOvertimeRate(false);
     if (!empSalary) {
-      setErrorDoubleovertimeRate(true);
-      alert("Please fill in doubleovertime rate");
+      setErrorSalary(true);
       return;
     }
     if (isNaN(empSalary)) {
-      setErrorDoubleovertimeRate(true);
-      alert("doubleovertime rate must be numeric");
+      setErrorSalary(true);
       return;
     }
-    setErrorDoubleovertimeRate(false);
+    setErrorSalary(false);
 
     axios.post("http://localhost:5000/employeeManager/registerEmployeePaymentDetails", { id, bank, epfNumber, accoutNumber, overtimeRate, empSalary })
       .then(result => {
@@ -142,7 +126,7 @@ const handleEmpSearch = async () => {
         window.location.reload()
 
       })
-      .catch(err => console.log(err))
+      .catch(err => {console.log(err);ToastError(err.response.data.message)})
   }
 
   const [open, setOpen] = React.useState(false);
@@ -157,7 +141,7 @@ const handleEmpSearch = async () => {
         setEmpType(result.data.empType)
 
       })
-      .catch(err => console.log(err))
+      .catch(err => {console.log(err);ToastError(err.message)})
     console.log(id);
   }
 
@@ -183,8 +167,6 @@ const handleEmpSearch = async () => {
                   <div className='pt-5'>
                     <p>Employee Name :</p>
                     <div className="w-80 pt-1 pb-10">
-
-
                     <div className="relative ">
                             <div className="relative flex w-full max-w-[24rem] ">
                                 <Input
@@ -192,12 +174,17 @@ const handleEmpSearch = async () => {
                                     value={empName}
                                     onChange={(e) => {setSearch(e.target.value); setEmpName(e.target.value)}}
                                     className="pr-20"
+                                    error={errorid ? "true" : null}
                                     containerProps={{
                                     className: "min-w-0",
                                     }}
                                 />
                             </div>
-
+                            { errorid ? 
+                                <Typography variant="small" color="red" className="  flex items-center gap-1 font-normal">Incorrect Name</Typography> 
+                              : 
+                                null
+                              }
                             {resultVisible ? (
                                 <div>
                                 {users && users.map((user)=>{
@@ -213,20 +200,7 @@ const handleEmpSearch = async () => {
                                 })}
                                 </div>
                             ) : null}
-                
                         </div>
-
-
-
-
-                      {/* <Select label='Select Name' onChange={OpenSelectHandle} error={errorid ? "true" : null}>
-                        {users.map((user) => {
-                          return (
-                            <Option key={user.id} value={user.id}>{user.empName} </Option>
-                          );
-                        },
-                        )}
-                      </Select> */}
                     </div>
                   </div>
                   <div>
@@ -247,6 +221,11 @@ const handleEmpSearch = async () => {
                     <p>Bank :</p>
                     <div className="w-80 pt-1 pb-10">
                       <Input label="Bank" onChange={(e) => setBank(e.target.value)} error={errorBank ? "true" : null} />
+                      { errorBank ? 
+                    <Typography variant="small" color="red" className="  flex items-center gap-1 font-normal">Incorrect Bank</Typography> 
+                  : 
+                    null
+                   }
                     </div>
                   </div>
                 </div>
@@ -255,12 +234,22 @@ const handleEmpSearch = async () => {
                     <p>EPF Number :</p>
                     <div className="w-80 pt-1 pb-10">
                       <Input label="EPF Number" onChange={(e) => setEpfNumber(e.target.value)} error={errorepfNumber ? "true" : null} />
+                      { errorepfNumber ? 
+                    <Typography variant="small" color="red" className="  flex items-center gap-1 font-normal">Incorrect EPF Number</Typography> 
+                  : 
+                    null
+                   }
                     </div>
                   </div>
                   <div>
                     <p>Account Number :</p>
                     <div className="w-80 pt-1 pb-10">
                       <Input label="Account Number" onChange={(e) => setAccountNumber(e.target.value)} error={erroraccoutNumber ? "true" : null} />
+                      { erroraccoutNumber ? 
+                    <Typography variant="small" color="red" className="  flex items-center gap-1 font-normal">Incorrect Account Number</Typography> 
+                  : 
+                    null
+                   }
                     </div>
                   </div>
                 </div>
@@ -269,12 +258,22 @@ const handleEmpSearch = async () => {
                     <p>Overtime Rate :</p>
                     <div className="w-80 pt-1 pb-10">
                       <Input label="Overtime Rate" onChange={(e) => setOvertimeRate(e.target.value)} error={errorovertimeRate ? "true" : null} />
+                      { errorovertimeRate ? 
+                    <Typography variant="small" color="red" className="  flex items-center gap-1 font-normal">Incorrect OT Rate</Typography> 
+                  : 
+                    null
+                   }
                     </div>
                   </div>
                   <div>
                     <p>Salary :</p>
                     <div className="w-80 pt-1 pb-10">
-                      <Input label="Salary" onChange={(e) => setEmpSalary(e.target.value)} error={errordoubleovertimeRate ? "true" : null} />
+                      <Input label="Salary" onChange={(e) => setEmpSalary(e.target.value)} error={errorSalary ? "true" : null} />
+                      { errorSalary ? 
+                    <Typography variant="small" color="red" className="  flex items-center gap-1 font-normal">Incorrect Salary</Typography> 
+                  : 
+                    null
+                   }
                     </div>
                   </div>
                 </div>

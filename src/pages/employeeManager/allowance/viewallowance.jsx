@@ -6,6 +6,7 @@ import axios from "axios";
 import UpdateAdvance from "../payment/editadvance";
 import UpdateEmployee from "../empForms/updateEmployee";
 import EditRecordButton from "../../../components/buttons/EditRecordButton";
+import { ToastSuccess, ToastError } from "../../customerManager/ToastAlert";
 
 function ViewAllowance() {
 
@@ -25,7 +26,7 @@ function ViewAllowance() {
     useEffect(() => {
         axios.get(`http://localhost:5000/employeeManager/getAllowance/?page=${active}`)
           .then(result => {setUser(result.data.rows);setResult(result.data.count)})
-          .catch(err => console.log(err))
+          .catch(err => {console.log(err);ToastError(err.message)})
         console.log(users)
       }, [active])
 
@@ -34,8 +35,9 @@ function ViewAllowance() {
           .then(res => {
             console.log(res)
             window.location.reload()
+            ToastSuccess("Recored deleted successfully")
           })
-          .catch(err => console.log(err))
+          .catch(err => {console.log(err);ToastError(err.message)})
     
       }
 

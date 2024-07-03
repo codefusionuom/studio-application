@@ -16,9 +16,10 @@ import { useNavigate } from "react-router-dom";
 import DashCard2 from "../dashButtonCard copy";
 import axiosInstance from "../../../config/axios.config";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { ToastSuccess } from "../../customerManager/ToastAlert";
 
 
-function AddAllowance() {
+function AddAllowance({setOpenAdd,setReload}) {
 
   const [empName, setEmpName] = useState()
   const [empId, setEmpId] = useState()
@@ -45,6 +46,8 @@ function AddAllowance() {
   const [searchvalue, setSearchValue] = useState()
   const [errorAllowance, setErrorAllowance] = useState()
   const [date, setDate] = useState()
+  const [errorAmount, setErrorAmount] = useState()
+  const [errorType, setErrorType] = useState()
 
 
 
@@ -92,7 +95,7 @@ useEffect(() => {
     // setResults(data.count)
     } catch (error) {
     console.log(error);
-    ToastError(error)
+    ToastError(error.message)
     }
 };
 
@@ -112,22 +115,25 @@ useEffect(() => {
     // setResults(data.count)
     } catch (error) {
     console.log(error);
-    ToastError(error)
+    ToastError(error.message)
     }
 };
 
   const Submit = (e) => {
     e.preventDefault()
 
+    if (!empId) {
+      setErrorName(true);
+      return;
+    }
+    setErrorName(false);
     if (!id) {
       setErrorAllowance(true);
-      alert("Please fill in" + {type} + "name");
       return;
     }
     setErrorAllowance(false);
-    if (!empName) {
-      setErrorName(true);
-      alert("Please employee name");
+    if (!amount) {
+      setErrorAmount(true);
       return;
     }
     setErrorAllowance(false);
@@ -135,9 +141,12 @@ useEffect(() => {
     axios.post("http://localhost:5000/employeeManager/createEmpAllowance", { id, empId, amount, date })
       .then(result => {
         console.log(result)
-        window.location.reload()
+        // window.location.reload()
+        ToastSuccess("Record created successfully")
+        setOpenAdd((prev)=>!prev)
+        setReload((prev)=>!prev)
       })
-      .catch(err => console.log(err))
+      .catch(err => {console.log(err);ToastError(err.message)})
   }
 
   // const [open, setOpen] = React.useState(false);
@@ -179,7 +188,11 @@ useEffect(() => {
                         <MagnifyingGlassIcon className="h-6 w-5" />
                       </Button>
                     </div>
-
+                    { errorName ? 
+                    <Typography variant="small" color="red" className="  flex items-center gap-1 font-normal">Select Employee</Typography> 
+                  : 
+                    null
+                   }
                     {resultVisible ? (
                     <div>
         
@@ -223,13 +236,22 @@ useEffect(() => {
                             },
                         )}
                     </Select>
-                  
+                    { errorAllowance ? 
+                    <Typography variant="small" color="red" className="  flex items-center gap-1 font-normal">Select Allowance/Deduction</Typography> 
+                  : 
+                    null
+                   }
                 </div>
                 <div className=" flex flex-col justify-between">
                 <Typography className="mb-2" variant="h6">
                     Enter Amount
                   </Typography>
                   <Input label="Enter Amount" size="lg" onChange={(e) => setAmount(e.target.value)} error={errorAdd ? "true" : null} />
+                  { errorAmount ? 
+                    <Typography variant="small" color="red" className="  flex items-center gap-1 font-normal">Incorrect amount</Typography> 
+                  : 
+                    null
+                   }
                 </div>
               </div>
             </form>

@@ -5,14 +5,14 @@ import UpdateEmployee from "../empForms/updateEmployee";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import axiosInstance from "../../../config/axios.config";
-import { ToastError } from "../../customerManager/ToastAlert";
 import React from "react";
 import EditRecordButton from "../../../components/buttons/EditRecordButton";
 import { Dialog } from "@material-tailwind/react";
 import EditEmpAllowance from "./editEmpAllowance";
+import { ToastError, ToastSuccess } from "../../customerManager/ToastAlert";
 
 
-function AllowanceList() {
+function AllowanceList(reload) {
 
     const [users, setUser] = useState([])
     const [search, setSearch] = useState("")
@@ -26,22 +26,7 @@ function AllowanceList() {
         setId(id)
     };
 
-    // const handleDelete = (e) => {
-    //     axios.delete('http://localhost:5000/employeeManager/deleteEmployee/' + id)
-    //       .then(res => {
-    //         console.log(res)
-    //         window.location.reload()
-    //       })
-    //       .catch(err => console.log(err))
-    
-    //   }
 
-    // useEffect(() => {
-    //     axios.get(`http://localhost:5000/employeeManager/getEmployees/?page=${active}`)
-    //         .then(result => {setUser(result.data.rows);setResults(result.data.count)})
-    //         .catch(err => console.log(err))
-    //     console.log(users)
-    // }, [])
 
 
 
@@ -58,7 +43,7 @@ function AllowanceList() {
         setResults(data.count)
         } catch (error) {
         console.log(error);
-        ToastError(error)
+        ToastError(error.message)
         }
     };
 
@@ -66,7 +51,7 @@ function AllowanceList() {
         console.log("search when page change");
         handleSearch();
         
-    }, [active]);
+    }, [active,reload]);
 
     useEffect(() => {
         if (search !== "") {
@@ -89,13 +74,6 @@ function AllowanceList() {
                         <p>Employee-Allowance/Deduciton List</p>
                     </div>
                     <div className=" flex p-4 gap-6">
-                        {/* <Select size="lg" label="Sort By: Newest" className="z-10">
-                            <Option>Material Tailwind HTML</Option>
-                            <Option>Material Tailwind React</Option>
-                            <Option>Material Tailwind Vue</Option>
-                            <Option>Material Tailwind Angular</Option>
-                            <Option>Material Tailwind Svelte</Option>
-                        </Select> */}
                         <Input
                             label="Search"
                             value={search}
@@ -120,7 +98,7 @@ function AllowanceList() {
                                     <Typography
                                         variant="small"
                                         color="blue-gray"
-                                        className="flex items-center justify-between gap-2 font-normal leading-none opacity-70"
+                                        className="flex  gap-2 font-normal leading-none opacity-70 justify-center items-center align-middle"
                                     >
                                         {head}
                                     </Typography>
@@ -134,8 +112,8 @@ function AllowanceList() {
                             return (
                                 <tr key={user.id}>
                                     <td >
-                                        <div className="flex items-center gap-3">
-                                            <div className="flex flex-col pl-8">
+                                    <div className="flex items-center gap-3 justify-center">
+                                    <div className="flex flex-col justify-center items-center align-middle">
                                                 <Typography
                                                     variant="small"
                                                     color="blue-gray"
@@ -148,7 +126,8 @@ function AllowanceList() {
                                         </div>
                                     </td>
                                     <td >
-                                        <div className="flex flex-col">
+                                    <div className="flex items-center gap-3 justify-center">
+                                    <div className="flex flex-col justify-center items-center align-middle">
                                             <Typography
                                                 variant="small"
                                                 color="blue-gray"
@@ -156,10 +135,13 @@ function AllowanceList() {
                                             >
                                                 {user.paymentAllowanceDeduction.allowanceDeduction}
                                             </Typography>
+                                            </div>
 
                                         </div>
                                     </td>
                                     <td >
+                                    <div className="flex items-center gap-3 justify-center">
+                                    <div className="flex flex-col justify-center items-center align-middle">
                                         <Typography
                                             variant="small"
                                             color="blue-gray"
@@ -167,17 +149,25 @@ function AllowanceList() {
                                         >
                                             {user.paymentAllowanceDeduction.allowanceDeductionName}
                                         </Typography>
+                                        </div>
+                                        </div>
                                     </td>
                                     <td >
+                                    <div className="flex items-center gap-3 justify-center">
+                                    <div className="flex flex-col justify-center items-center align-middle">
                                         <Typography
                                             variant="small"
                                             color="blue-gray"
                                             className="font-normal"
                                         >
-                                            {user.date}
+                                            {user.date.slice(0,10)}
                                         </Typography>
+                                        </div>
+                                        </div>
                                     </td>
                                     <td >
+                                    <div className="flex items-center gap-3 justify-center">
+                                    <div className="flex flex-col justify-center items-center align-middle">
                                     <Typography
                                             variant="small"
                                             color="blue-gray"
@@ -185,6 +175,8 @@ function AllowanceList() {
                                         >
                                             {user.Amount}
                                         </Typography>
+                                        </div>
+                                        </div>
                                     </td>
                                     <td >
                                         {/* <Tooltip content="Edit User">

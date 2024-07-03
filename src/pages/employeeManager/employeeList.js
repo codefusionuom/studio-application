@@ -11,7 +11,7 @@ import EditRecordButton from "../../components/buttons/EditRecordButton";
 import { Dialog } from "@material-tailwind/react";
 
 
-function EmployeeList() {
+function EmployeeList(reload) {
 
     const [users, setUser] = useState([])
     const [search, setSearch] = useState("")
@@ -23,6 +23,7 @@ function EmployeeList() {
         setOpen((cur) => !cur)
         setId(id)
     };
+    const [refresh,setRefresh] = useState(false)
 
     // const handleDelete = (e) => {
     //     axios.delete('http://localhost:5000/employeeManager/deleteEmployee/' + id)
@@ -56,7 +57,7 @@ function EmployeeList() {
         setResults(data.count)
         } catch (error) {
         console.log(error);
-        ToastError(error)
+        ToastError(error.message);
         }
     };
 
@@ -64,7 +65,7 @@ function EmployeeList() {
         console.log("search when page change");
         handleSearch();
         
-    }, [active]);
+    }, [active,reload,refresh]);
 
     useEffect(() => {
         if (search !== "") {
@@ -215,7 +216,7 @@ function EmployeeList() {
                         handler={handleOpen}
                         className="bg-transparent shadow-none w-fit"
                     >
-                        <UpdateEmployee idx={id}/>
+                        <UpdateEmployee idx={id} setRefresh={setRefresh} setOpen={setOpen} />
                         </Dialog>
             </CardBody>
             <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
