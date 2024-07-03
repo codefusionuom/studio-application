@@ -18,38 +18,19 @@ export function DefaultSidebar({ sections }) {
   const [open, setOpen] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [displayroleList, setDisplayroleList] = useState(false);
+  // const [role, setRole] = useState('');
   const roles = userRoles;
   const [role, setRole] = useState(roles[0].name);
   //  const [userPrivileges, setUserPrivileges] = useState(['read', 'write']);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // const { admin, privileges } = useSelector((state) => state.auth);
-
-  // // console.log(admin);
+  const { admin, privileges } = useSelector((state) => state.auth);
 
   const handleLogout = () => {
     dispatch(logout());
     navigate('/login');
   };
-
-  // const hasPrivilege = (requiredPrivilege) => {
-  //   return admin.privileges.includes(requiredPrivilege);
-  // };
-
-  //   const handleNavigation = (path, requiredPrivileges) => {
-  //     if (checkPrivileges(requiredPrivileges)) {
-  //       navigate(path);
-  //     } else {
-  //       console.error('Access Denied: Insufficient Privileges');
-  //     }
-  //   };
-
-  //     const checkPrivileges = (requiredPrivileges) => {
-  //       return requiredPrivileges.every((privilege) =>
-  //         userPrivileges.includes(privilege)
-  //       );
-  //     };
 
   return (
     <div className=' h-full'>
@@ -58,7 +39,7 @@ export function DefaultSidebar({ sections }) {
         shadow={false}
         className=' h-full  w-[375px]  rounded-none   p-4  '
       >
-        <div className='mb-2 flex items-center justify-between gap-4 p-4'>
+        {/* <div className='mb-2 flex items-center justify-between gap-4 p-4'>
           <Typography fontSize={'24px'} color={'white'} align='center'>
             Admin Panel
           </Typography>
@@ -75,7 +56,7 @@ export function DefaultSidebar({ sections }) {
               clipRule='evenodd'
             />
           </svg>
-        </div>
+        </div> */}
         <div>
           <div className='flex justify-center align-center flex-col my-10'>
             <div className='flex justify-center   '>
@@ -87,7 +68,7 @@ export function DefaultSidebar({ sections }) {
             </div>
 
             <Typography fontSize={'24px'} color={'white'} align='center'>
-              Smoe Joe
+              {admin.empName}
             </Typography>
             <div className='flex justify-center gap-2 relative'>
               <Typography
@@ -124,7 +105,7 @@ export function DefaultSidebar({ sections }) {
                           key={userrole.id}
                           className='bg-opacity-15'
                           onClick={() => {
-                            setRole(role);
+                            setRole(userrole.name);
                             setDisplayroleList(!displayroleList);
                             navigate(userrole.path);
                           }}
