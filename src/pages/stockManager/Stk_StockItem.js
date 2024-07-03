@@ -46,7 +46,7 @@ function StockItem() {
     setLoading(true);
     try {
       const response = await axios.get(
-        `http://localhost:5000/stockManager/stockItem?page=${currentPage}&limit=4`
+        `http://localhost:5000/stockManager/stockItem?page=${currentPage}&limit=6`
       );
       const { success, message, stockItems, totalPages } = response.data;
       if (success) {

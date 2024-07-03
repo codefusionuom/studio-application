@@ -1,30 +1,107 @@
-import { MagnifyingGlassIcon, ChevronUpDownIcon, } from "@heroicons/react/24/outline";
-import { PencilIcon, UserPlusIcon } from "@heroicons/react/24/solid";
-import { Card, CardHeader, Input, Typography, Button, CardBody, Chip, CardFooter, Tabs, TabsHeader, Tab, Avatar, IconButton, Tooltip, Select, Option, } from "@material-tailwind/react";
-import Datepicker from "../../components/datePicker/Datepicker";
+import { MagnifyingGlassIcon, } from "@heroicons/react/24/outline";
+import { Card, CardHeader, Input, Typography, CardBody, CardFooter, Tooltip, Select, Option, } from "@material-tailwind/react";
 import { Pagination } from "../../components/pagination/pagination";
+import UpdateEmployee from "./empForms/updateEmployee";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import axiosInstance from "../../config/axios.config";
+import { ToastError } from "../customerManager/ToastAlert";
+import React from "react";
+import EditRecordButton from "../../components/buttons/EditRecordButton";
+import { Dialog } from "@material-tailwind/react";
+
 
 function EmployeeList() {
+
+    const [users, setUser] = useState([])
+    const [search, setSearch] = useState("")
+    const [results, setResults] = useState()
+    const [active, setActive] = useState(1)
+    const [id,setId] = useState()
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = (id) => {
+        setOpen((cur) => !cur)
+        setId(id)
+    };
+
+    // const handleDelete = (e) => {
+    //     axios.delete('http://localhost:5000/employeeManager/deleteEmployee/' + id)
+    //       .then(res => {
+    //         console.log(res)
+    //         window.location.reload()
+    //       })
+    //       .catch(err => console.log(err))
+    
+    //   }
+
+    // useEffect(() => {
+    //     axios.get('http://localhost:5000/employeeManager/getEmployees')
+    //         .then(result => setUser(result.data))
+    //         .catch(err => console.log(err))
+    //     console.log(users)
+    // }, [])
+
+
+
+    // search employee
+    const handleSearch = async () => {
+        console.log("searching begin");
+        try {
+        const { data } = await axiosInstance.get(`/employeeManager/getEmployeesandSearch/?empName=${search}&page=${active}`)
+        if (!data) {
+            ToastError("no employee exist")
+        }
+        console.log(data);
+        setUser(data.rows);
+        setResults(data.count)
+        } catch (error) {
+        console.log(error);
+        ToastError(error)
+        }
+    };
+
+    useEffect(() => {
+        console.log("search when page change");
+        handleSearch();
+        
+    }, [active]);
+
+    useEffect(() => {
+        if (search !== "") {
+        handleSearch();
+        console.log(search);
+        console.log("search when name change");
+        }
+    }, [search]);
+
+
+
+
+
     return (
+        
         <Card className=" w-full border-2 ">
             <CardHeader floated={false} shadow={false} className="rounded-none">
                 <div className="flex flex-col items-center justify-between gap-4  md:flex-row ">
                     <div className="text-2xl pt-6 pl-10 font-semibold">
-                    <p>Employee List</p>
+                        <p>Employee List</p>
                     </div>
-
                     <div className=" flex p-4 gap-6">
-                        <Select size="lg" label="Sort By: Newest" className="z-10">
+                        {/* <Select size="lg" label="Sort By: Newest" className="z-10">
                             <Option>Material Tailwind HTML</Option>
                             <Option>Material Tailwind React</Option>
                             <Option>Material Tailwind Vue</Option>
                             <Option>Material Tailwind Angular</Option>
                             <Option>Material Tailwind Svelte</Option>
-                        </Select>
-
-                        <Input size="lg"
+                        </Select> */}
+                        <Input
                             label="Search"
-                            icon={<MagnifyingGlassIcon className="h-5 w-5" />}
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            className="pr-20"
+                            containerProps={{
+                            className: "min-w-0",
+                            }}
                         />
                     </div>
                 </div>
@@ -50,177 +127,109 @@ function EmployeeList() {
                         </tr>
                     </thead>
                     <tbody>
-                        {TABLE_ROWS.map(
-                            ({ img, name, email, job, org, phoneNumber, employeeId, online, date }, index) => {
-                                const isLast = index === TABLE_ROWS.length - 1;
-                                const classes = isLast
-                                    ? "p-4"
-                                    : "p-4 border-b border-blue-gray-50";
+                        {users.map((user,index) => {
 
-                                return (
-                                    <tr key={name}>
-                                        <td className={classes}>
-                                            <div className="flex items-center gap-3">
-                                                <div className="flex flex-col pl-8">
-                                                    <Typography
-                                                        variant="small"
-                                                        color="blue-gray"
-                                                        className="font-normal"
-                                                    >
-                                                        {name}
-                                                    </Typography>
-                                                    
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className={classes}>
-                                            <div className="flex flex-col">
+                            return (
+                                <tr key={user.id}>
+                                    <td >
+                                        <div className="flex items-center gap-3">
+                                            <div className="flex flex-col pl-8">
                                                 <Typography
                                                     variant="small"
                                                     color="blue-gray"
                                                     className="font-normal"
                                                 >
-                                                    {job}
+                                                    {user.empName}
                                                 </Typography>
-                                                
+
                                             </div>
-                                        </td>
-                                        <td className={classes}>
+                                        </div>
+                                    </td>
+                                    <td >
+                                        <div className="flex flex-col">
                                             <Typography
                                                 variant="small"
                                                 color="blue-gray"
                                                 className="font-normal"
                                             >
-                                                {phoneNumber}
+                                                {user.department.departmentName}
                                             </Typography>
-                                        </td>
-                                        <td className={classes}>
-                                            <Typography
-                                                variant="small"
-                                                color="blue-gray"
-                                                className="font-normal"
-                                            >
-                                                {employeeId}
-                                            </Typography>
-                                        </td>
-                                        <td className={classes}>
-                                            <div className="w-max">
-                                                <Chip
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    value={online ? "online" : "offline"}
-                                                    color={online ? "green" : "blue-gray"}
-                                                />
-                                            </div>
-                                        </td>
-                                        <td className={classes}>
-                                            <Typography
-                                                variant="small"
-                                                color="blue-gray"
-                                                className="font-normal"
-                                            >
-                                                {date}
-                                            </Typography>
-                                        </td>
-                                        <td className={classes}>
-                                            <Tooltip content="Edit User">
-                                                <IconButton variant="text">
-                                                    <PencilIcon className="h-4 w-4" />
-                                                </IconButton>
-                                            </Tooltip>
-                                        </td>
-                                    </tr>
-                                );
-                            },
+
+                                        </div>
+                                    </td>
+                                    <td >
+                                        <Typography
+                                            variant="small"
+                                            color="blue-gray"
+                                            className="font-normal"
+                                        >
+                                            {user.empNumber}
+                                        </Typography>
+                                    </td>
+                                    <td >
+                                        <Typography
+                                            variant="small"
+                                            color="blue-gray"
+                                            className="font-normal"
+                                        >
+                                            {user.empEmail}
+                                        </Typography>
+                                    </td>
+                                    <td >
+                                    <Typography
+                                            variant="small"
+                                            color="blue-gray"
+                                            className="font-normal"
+                                        >
+                                            {user.empAdd}
+                                        </Typography>
+                                    </td>
+                                    <td >
+                                        <Typography
+                                            variant="small"
+                                            color="blue-gray"
+                                            className="font-normal"
+                                        >
+                                            {user.empType}
+                                        </Typography>
+                                    </td>
+                                    <td >
+                                        {/* <Tooltip content="Edit User">
+                                            <UpdateEmployee idx={user.id} />
+                                        </Tooltip> */}
+                                        <EditRecordButton onClick={() => handleOpen(user.id)}></EditRecordButton>
+                                        
+                                    </td>
+                                    
+                                </tr>
+                                
+                                
+                            );
+                        },
+                                        
                         )}
                     </tbody>
                 </table>
+                <Dialog
+                        open={open}
+                        handler={handleOpen}
+                        className="bg-transparent shadow-none w-fit"
+                    >
+                        <UpdateEmployee idx={id}/>
+                        </Dialog>
             </CardBody>
             <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
                 <Typography>
-233 results
+                    {results}
                 </Typography>
                 <div className="flex gap-2">
-                   <Pagination />
+                    <Pagination  active={active} setActive={setActive} />
                 </div>
             </CardFooter>
         </Card>
+        
     );
 }
 export default EmployeeList
 
-
-// const TABS = [
-//     {
-//         label: "All",
-//         value: "all",
-//     },
-//     {
-//         label: "Monitored",
-//         value: "monitored",
-//     },
-//     {
-//         label: "Unmonitored",
-//         value: "unmonitored",
-//     },
-// ];
-
-const TABLE_HEAD = ["Employee Name", "Department", "Phone Number", "Employee ID", "Status", "Employed", "Edit"];
-
-const TABLE_ROWS = [
-    {
-        img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg",
-        name: "John Michael",
-        email: "john@creative-tim.com",
-        job: "Manager",
-        org: "Organization",
-        phoneNumber: "0714567890",
-        employeeId: "#12345",
-        online: true,
-        date: "23/04/18",
-    },
-    {
-        img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-2.jpg",
-        name: "Alexa Liras",
-        email: "alexa@creative-tim.com",
-        job: "Programator",
-        org: "Developer",
-        phoneNumber: "0714567890",
-        employeeId: "#12345",
-        online: false,
-        date: "23/04/18",
-    },
-    {
-        img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-1.jpg",
-        name: "Laurent Perrier",
-        email: "laurent@creative-tim.com",
-        job: "Executive",
-        org: "Projects",
-        phoneNumber: "0714567890",
-        employeeId: "#12345",
-        online: false,
-        date: "19/09/17",
-    },
-    {
-        img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-4.jpg",
-        name: "Michael Levi",
-        email: "michael@creative-tim.com",
-        job: "Programator",
-        org: "Developer",
-        phoneNumber: "0714567890",
-        employeeId: "#12345",
-        online: true,
-        date: "24/12/08",
-    },
-    {
-        img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-5.jpg",
-        name: "Richard Gran",
-        email: "richard@creative-tim.com",
-        job: "Manager",
-        org: "Executive",
-        phoneNumber: "0714567890",
-        employeeId: "#12345",
-        online: false,
-        date: "04/10/21",
-    },
-];
+const TABLE_HEAD = ["Employee Name", "Department", "Phone Number", "Employee Email", "Address", "Employed", "Edit"];

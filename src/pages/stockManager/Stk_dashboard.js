@@ -33,25 +33,42 @@ function DashboardSmgr() {
   });
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
+  const [employees,setEmployees]= useState([]);  
+  const [refresh, setRefresh] = useState(false);
+
+
+  const triggerRefresh = () => {
+    setRefresh((prev) => !prev); // Toggle the refresh state
+  };
+
 
   useEffect(() => {
     fetchStockItemUsage();
+  },[currentPage,searchQuery,refresh]);
+
+  useEffect(() => {
+    
     fetchItems();
+    fetchEmployees();
   },[currentPage]);
 
-  const fetchStockItemUsage = async () => {
+const fetchStockItemUsage = async () => {
     setLoading(true);
     try {
-      let url = `http://localhost:5000/stockManager/stockItemUsage?page=${currentPage}&limit=4`;
-      if (searchQuery) {
-        url += `&searchQuery=${searchQuery}`;
-      }
-      const response = await axios.get(url);
-      const { success, message, stockItemUsage, totalPages } = response.data;
+      const response = await axios.get(
+        `http://localhost:5000/stockManager/stockItemUsage?page=${currentPage}&limit=4`
+      );
 
+      const { success, message, stockItemUsage, totalPages } = response.data;
+      console.log(response.data);
       if (success) {
         setStockItemUsage(stockItemUsage);
         setTotalPages(totalPages);
+        if (stockItemUsage.length === 0) {
+          setError("No stock items found");
+        } else {
+          setError(null);
+        }
       } else {
         setError(message);
       }
@@ -85,6 +102,8 @@ function DashboardSmgr() {
       setCurrentPage(currentPage + 1);
     }
     setStockItemUsage([ newStockItemUsage,...stockItemUsage,]);
+    triggerRefresh();
+    setOpen(false);
   };
 
   const handleDelete = async (id) => {
@@ -98,6 +117,7 @@ function DashboardSmgr() {
       setStockItemUsage(stockItemUsage.filter((item) => item.id !== id));
       console.log("Successfully deleted item");
       alert("Successfully deleted stock item");
+      triggerRefresh();
     } catch (error) {
       console.error("Error deleting item:", error);
     }
@@ -115,6 +135,7 @@ function DashboardSmgr() {
         setMode(true);
         handleOpen();
         setFormData(stockItemUsage)
+        triggerRefresh(); 
        console.log(stockItemUsage)
         // Handle the edit functionality using the fetched stock item data
         console.log("Editing return stock item:", stockItemUsage);
@@ -129,34 +150,50 @@ function DashboardSmgr() {
     setSearchQuery(e.target.value);
   };
   useEffect(() => {
-    stockItemUsageSearch();
+    handleItemSearch();
   }, [searchQuery]);
-
-  const stockItemUsageSearch = async () => {
-    if (!searchQuery) {
-      setCurrentPage(1); // Reset to first page when performing a new search
-    fetchStockItemUsage();
-      return;
-    }
+  
+  const handleItemSearch = async () => {
     try {
-      const { data } = await axios.get(
-        `http://localhost:5000/stockManager/stockItemUsage/?itemName=${searchQuery}`
-      );
-      const { success, stockItemUsage } = data;
-      if (success) {
-        setStockItemUsage(stockItemUsage);
+      const { data } = await axios.get(`http://localhost:5000/stockManager/stockItemUsageSearch/?itemName=${searchQuery}`);
+
+      if (data.success) {
+        setStockItemUsage(data.StockItemUsage );
+        console.log(data.StockItemUsage)
       } else {
-        setError("No stock items found");
+        setError("No  items found");
       }
     } catch (error) {
-      console.log("Error searching for stock items:", error);
-      setError("Failed to search stock items");
+      setError("Failed to search  items");
     }
   };
+  
   const getItemName = (itemId) => {
     const item = stkItems.find((cat) => cat.id === itemId);
     return item ? item.itemName : "Unknown";
   };
+  const fetchEmployees = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/employeeManager/getEmployeeSearch"
+      );
+      const { success, message, employees } = response.data;
+      
+
+       // Log the response to check the structure
+      setEmployees(response.data);
+      console.log(response.data)
+      
+    } catch (error) {
+      console.error("Error fetching employees:", error);
+    }
+  };
+
+  const getEmployeeName = (employeeId) => {
+    const employee = employees.find((emp) => emp.id === employeeId);
+    return employee ? employee.empName : "Unknown";
+  };
+
 
   const handleOpenAdd = () => {
     setMode(false);
@@ -175,18 +212,13 @@ function DashboardSmgr() {
     setOpen((cur) => !cur);
   };
 
+
   
 
   return (
     <div className="flex flex-col gap-10">
       <div className="flex gap-10">
-        <div>
-          {isFormVisible && (
-            <Modal onClose={closeForm}>
-              <AddStockItemUsage onClose={closeForm} />
-            </Modal>
-          )}
-        </div>
+
         <AddStockItemUsage 
                     onClose={closeForm}
                     mode={mode}
@@ -218,7 +250,7 @@ function DashboardSmgr() {
             <Input
               size="lg"
               label="Search"
-              icon={<MagnifyingGlassIcon className="h-5 w-5" onClick={stockItemUsageSearch}/>}
+              icon={<MagnifyingGlassIcon className="h-5 w-5" />}
               value={searchQuery}
               onChange={handleSearchChange}
             />
@@ -276,14 +308,15 @@ function DashboardSmgr() {
                 <tbody>
                   {stockItemUsage.map((item) => (
                     <tr key={item.id} className="even:bg-blue-gray-50/50">
+
                       <td className="p-4">
                         <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
-                          {getItemName(item.itemId)}
+                        {getEmployeeName(item.employeeId)}
                         </p>
                       </td>
                       <td className="p-4">
                         <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
-                          {item.price}
+                        {getItemName(item.stockItemId)}
                         </p>
                       </td>
                       <td className="p-4">
@@ -293,7 +326,7 @@ function DashboardSmgr() {
                       </td>
                       <td className="p-4">
                         <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
-                          {item.date ? new Date(item.date).toLocaleDateString() : "N/A"}
+                          {item.returnQuantity}
                         </p>
                       </td>
                       <td className="p-4">

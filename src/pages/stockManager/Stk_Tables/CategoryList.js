@@ -36,7 +36,7 @@ function CategoryList({ title }) {
     setLoading(true);
     try {
       const response = await axios.get(
-        `http://localhost:5000/stockManager/categoryList?page=${currentPage}&limit=3`
+        `http://localhost:5000/stockManager/categoryList?page=${currentPage}&limit=5`
       );
       const { success, message, categories, total_pages } = response.data;
       if (success) {
@@ -122,10 +122,10 @@ function CategoryList({ title }) {
       <Dialog
         open={open}
         handler={handleOpen}
-        className="bg-transparent shadow-none w-fix"
+        className="bg-transparent shadow-none w-full h-full flex items-center justify-center"
       >
-        <Card className="mx-auto w-fix">
-          <CardBody className="flex flex-col gap-4">
+        <Card className="mx-auto w-fix max-h-[70vh] h-[70vh] max-w-[150vh] w-[150vh] overflow-hidden">
+          <CardBody className="flex flex-col gap-4 h-full">
             <div className="flex flex-row justify-between">
               <Typography variant="h4" color="blue-gray">
                 Category List
@@ -147,7 +147,7 @@ function CategoryList({ title }) {
             ) : error ? (
               <p>Error: {error}</p>
             ) : (
-              <div className="overflow-auto">
+              <div className="overflow-auto flex-grow h-[70vh]">
                 <Card className="relative flex flex-col w-full h-full overflow-scroll text-gray-700 bg-white shadow-md bg-clip-border rounded-xl mt-10">
                   <table className="w-full text-left table-auto min-w-max">
                     <thead>

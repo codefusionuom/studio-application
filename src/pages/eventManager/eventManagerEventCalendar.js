@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import dayGridPlugin from "@fullcalendar/daygrid";
 import {
   Card,
   CardHeader,
@@ -7,75 +10,98 @@ import {
   Chip,
   IconButton,
   Tooltip,
+  Spinner,
 } from "@material-tailwind/react";
+import FullCalendar from "@fullcalendar/react";
+import ErrorDisplayWindow from "../../components/eventManager/errorDisplayWindow";
+import { format } from "date-fns";
+
 const EventManagerEventCalendar = () => {
-  const TABS = [
+  const navigate = useNavigate();
+  const [oneDayEvents, setOneDayEvents] = useState([]);
+  let [eventList, setEventList] = useState([]);
+  const [existError, setExistError] = useState(null);
+
+  const getOneDayEvents = () => {
+    // axios.get('http://localhost:5000/eventManager/getOnedayEvents')
+    axios.get('http://localhost:5000/eventManager/all-events')
+      .then(response => {
+        console.log("oneday events ", response.data.oneDayEvents);
+        // setOneDayEvents(response.data.oneDayEvents);
+        setOneDayEvents(response.data.events);
+      })
+      .catch(error => {
+        setExistError(error.message);
+      })
+  }
+
+  const getEvents = () => {
+    axios.get("http://localhost:5000/eventManager/all-events")
+      .then(res => {
+        const events = res.data.events;
+        console.log("events :" , events)
+        setEventList(events);
+      })
+      .catch(error => {
+        setExistError(error.message);
+      });
+  };
+
+  useEffect(() => {
+    getOneDayEvents();
+    getEvents();
+  }, []);
+
+  const events = eventList.map(event => (
     {
-      label: "All",
-      value: "all",
-    },
-    {
-      label: "Monitored",
-      value: "monitored",
-    },
-    {
-      label: "Unmonitored",
-      value: "unmonitored",
-    },
-  ];
+      title: event.service['serviceName'],
+      id: event.eventId,
+      start: format(new Date(event.serviceDate), 'yyyy-MM-dd'),
+      end: format(new Date(event.serviceDate), 'yyyy-MM-dd'),
+      backgroundColor: "#2874A6",
+      borderColor: "#2874A6"
+    }
+  ));
+
+ 
 
   const TABLE_HEAD = [
     "Customer Name",
-    "Time-slot",
-    "Phone Number",
+    "Date assigned",
+    "No of Employees",
     "Edit",
     "Status",
   ];
 
-  const TABLE_ROWS = [
-    {
-      name: "John Michael",
-      timeSlot: "8.00  AM",
-      phoneNo: "045 2287456",
-      org: "Organization",
-      online: true,
-      date: "23/04/18",
-    },
-    {
-      name: "Alexa Liras",
-      timeSlot: "8.00  AM",
-      phoneNo: "045 2287456",
-      org: "Developer",
-      online: false,
-      date: "23/04/18",
-    },
-    {
-      name: "Laurent Perrier",
-      timeSlot: "8.00  AM",
-      phoneNo: "045 2287456",
-      org: "Projects",
-      online: false,
-      date: "19/09/17",
-    },
-    {
-      name: "Michael Levi",
-      timeSlot: "8.00  AM",
-      phoneNo: "045 2287456",
-      org: "Developer",
-      online: true,
-      date: "24/12/08",
-    },
-    {
-      name: "Richard Gran",
-      timeSlot: "8.00  AM",
-      phoneNo: "045 2287456",
-      org: "Executive",
-      online: false,
-      date: "04/10/21",
-    },
-  ];
-  return (
+  return existError != null ? (
+    <ErrorDisplayWindow errorMsg={existError} />
+  ) : (
     <div>
+      <Card className="p-8">
+        <FullCalendar
+          defaultView="dayGridMonth"
+          header={{
+            left: "prev,next",
+            center: "title",
+            right: "dayGridMonth,timeGridWeek,timeGridDay",
+          }}
+          eventClick={ function(info) {
+            // alert('Event: ' + info.event.id);
+          
+            navigate("/eventManager/eventDetails", {
+              state: { eventId: info.event.id },
+            })
+            // change the border color just for fun
+            info.el.style.borderColor = 'red';
+          }}
+          plugins={[dayGridPlugin]}
+          events={events}
+          displayEventEnd="true"
+          contentHeight="900px"
+          borderColor="green"
+          eventColor={"green"}
+        />
+      </Card>
       <Card className="h-full w-full p-4 pt-2">
         <CardHeader
           floated={false}
@@ -111,94 +137,93 @@ const EventManagerEventCalendar = () => {
               </tr>
             </thead>
             <tbody>
-              {TABLE_ROWS.map(
-                (
-                  { img, name, timeSlot, phoneNo, org, online, date },
-                  index
-                ) => {
-                  const isLast = index === TABLE_ROWS.length - 1;
-                  const classes = isLast
-                    ? "p-4"
-                    : "p-4 border-b border-blue-gray-50";
+              {oneDayEvents.length === 0 ? (
+                <tr>
+                  <td colSpan={TABLE_HEAD.length} className="text-center">
+                    <div className="flex justify-center items-center h-full p-10">
+                      <Spinner color="blue" className="h-12 w-12 mx-auto" />
+                    </div>
+                  </td>
+                </tr>
+              ) : oneDayEvents.map((oneDayEvent, index) => {
+                const isLast = index === oneDayEvents.length - 1;
+                const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
 
-                  return (
-                    <tr key={name}>
-                      <td className={classes}>
-                        <div className="flex items-center gap-3">
-                          <div className="flex flex-col">
-                            <Typography
-                              variant="small"
-                              color="blue-gray"
-                              className="font-normal"
-                            >
-                              {name}
-                            </Typography>
-                          </div>
-                        </div>
-                      </td>
-                      <td className={classes}>
+                return (
+                  <tr key={index}>
+                    <td className={classes}>
+                      <div className="flex items-center gap-3">
                         <div className="flex flex-col">
                           <Typography
                             variant="small"
                             color="blue-gray"
                             className="font-normal"
                           >
-                            {timeSlot}
+                            {oneDayEvent.service['serviceName']}
                           </Typography>
                         </div>
-                      </td>
-
-                      <td className={classes}>
+                      </div>
+                    </td>
+                    <td className={classes}>
+                      <div className="flex flex-col">
                         <Typography
                           variant="small"
                           color="blue-gray"
                           className="font-normal"
                         >
-                          {phoneNo}
+                          {oneDayEvent.date?.slice(0, 10)}
                         </Typography>
-                      </td>
-                      <td className={classes}>
-                        <Tooltip content="Edit User">
-                          <IconButton variant="text">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              strokeWidth={2.5}
-                              stroke="currentColor"
-                              className="w-8 h-8"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                              />
-                            </svg>
-                          </IconButton>
-                        </Tooltip>
-                      </td>
-                      <td className={classes}>
-                        <div className="w-[80px]  flex items-center font-bold">
-                          <Chip
-                            className="w-[80px] "
-                            style={{
-                              color: "black",
-                              display: "flex",
-                              justifyContent: "center",
-                              background: online ? "#ffb300" : "#1dc560",
-                            }}
-                            variant="filled"
-                            size="sm"
-                            value={online ? "Active" : "offline"}
-                            color={online ? "yellow" : "blue-gray"}
-                            fontWeight="bold"
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                }
-              )}
+                      </div>
+                    </td>
+                    <td className={classes}>
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
+                      >
+                        6
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Tooltip content="Edit User">
+                        <IconButton variant="text">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={2.5}
+                            stroke="currentColor"
+                            className="w-8 h-8"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                            />
+                          </svg>
+                        </IconButton>
+                      </Tooltip>
+                    </td>
+                    <td className={classes}>
+                      <div className="w-[80px] flex items-center font-bold">
+                        <Chip
+                          className="w-[80px]"
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                          }}
+                          variant="gradient"
+                          size="sm"
+                          value={oneDayEvent.status === "Active" ? "Active" : "Offline"}
+                          color={oneDayEvent.status === "Active" ? "yellow" : "gray"}
+                          fontWeight="bold"
+                          fontColor="white"
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </CardBody>

@@ -1,7 +1,24 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Input } from "@material-tailwind/react";
 import Datepicker from '../../components/datePicker/Datepicker';
 import { Button } from "@material-tailwind/react";
+import ViewSalary from './payment/viewSalartbutton';
+import DashCard2 from './dashButtonCard copy';
+import EmployeePaymentDetails from './payment/employeePaymentDetails';
+import ViewEmployeePaymentDetails from './payment/viewemployeePaymentDetails';
+import axios from "axios";
+import { Select } from "@material-tailwind/react";
+import SelectOption from "@material-tailwind/react/components/Select/SelectOption";
+// import CreateAdvance from './payment/createadvance';
+import CreateAdvance from './advance/createadvance'
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { Dialog } from '@material-tailwind/react';
+import axiosInstance from '../../config/axios.config';
+// import { toast } from 'react-toastify';
+import { Card } from '@material-tailwind/react';
+import { useNavigate } from 'react-router-dom';
+
 
 
 
@@ -11,510 +28,150 @@ import { Button } from "@material-tailwind/react";
 
 
 function EmployeePayment() {
+
+
+    const [users, setUser] = useState([])
+    const [bank,setBank] = useState()
+    const [id,setid] = useState()
+    const [epfNumber,setEpfNumber] = useState()
+    const [accountNumber,setAccountNumber] = useState()
+    const [overtimeRate,setOvertimeRate] = useState()
+    const [doubleovertimeRate,setDoubleovertimeRate] = useState()
+    const [empDepartment,setEmpDepartment] = useState()
+    const [empType,setEmpType] = useState()
+    const [empSalary,setEmpSalary] = useState()
+    const [empId,setEmpId] = useState()
+    const [checkInTotal,setCheckInTotal] = useState()
+    const [checkOutTotal,setCheckOutTotal] = useState()
+    const [search, setSearch] = useState()
+    const [resultVisible, setResultVisible] = useState()
+    const [errorName, setErrorName] = useState()
+    const [empName, setEmpName] = useState()
+    const [searchValue, setSearchValue] = useState()
+    const [ToastError, setToastError] = useState()
+    const [selectedMonth, setSelectedMonth] = useState ();
+    const [openCreate, setOpenCreate] = React.useState(false);
+    const handleOpenCreate = () => setOpenCreate((cur) => !cur);
+    const [openView, setOpenView] = React.useState(false);
+    const handleOpenView = () => setOpenView((cur) => !cur);
+    const navigate = useNavigate();
+
+
+
+    const generatepayslip = (id, monthselected) => {
+        const formateddate = formatDateForSQL(monthselected)
+        console.log("date " + formateddate);
+        console.log("id " + id);
+        navigate("/employeeManager/payslip", {
+            state: {
+                 date: formateddate,
+                 id: id 
+                },
+          })
+    }
+
+
+    useEffect(() => {
+        if (search !== "") {
+        handleSearch();
+        console.log(search);
+        console.log("search when name change");
+        }
+      }, [search]);
+
+
+      // Search Employee
+    const handleSearch = async () => {
+        setResultVisible(true)
+        console.log("searching begin");
+        try {
+        const { data } = await axiosInstance.get(`/employeeManager/getEmployeeSearch/?empName=${search}`)
+        if (!data) {
+            ToastError("no employee exist")
+        }
+        console.log(data);
+        setUser(data);
+        // setResults(data.count)
+        } catch (error) {
+        console.log(error);
+        ToastError(error)
+        }
+    };
+
+
+
+     const [selectedDate, setSelectedDate] = useState(new Date());
+
+     const renderMonthContent = (month, shortMonth, longMonth, day) => {
+       const fullYear = new Date(day).getFullYear();
+       const tooltipText = `Tooltip for month: ${longMonth} ${fullYear}`;
+       return <span title={tooltipText}>{shortMonth}</span>;
+     };
+
+
+     function formatDateForSQL(date) {
+        const year = date.getFullYear();
+        const month = ('0' + (date.getMonth() + 1)).slice(-2);
+        // const day = ('1').slice(-2);
+        // const hours = ('0').slice(-2);
+        // const minutes = ('0').slice(-2);
+        // const seconds = ('0').slice(-2);
+        return `${year}-${month}`;
+    }
+
+
     return (
         <div>
-
-
-       <form>
+            <div>
+                <div className='flex justify-evenly pb-5'>
+                    <div>
+                        <DashCard2 title2={"Create Employee Payment Details"} title3={""} onClick={handleOpenCreate} />
+                        <Dialog
+                            open={openCreate}
+                            handler={handleOpenCreate}
+                            className="bg-transparent shadow-none w-fit"
+                        >
+                            <EmployeePaymentDetails></EmployeePaymentDetails>
+                        </Dialog>
+                    </div>
+                    <div>
+                        <DashCard2 title2={"View Employee Payment Details"} title3={""} onClick={handleOpenView} />
+                        <Dialog
+                            open={openView}
+                            handler={handleOpenView}
+                            className="bg-transparent shadow-none w-fit"
+                        >
+                            <ViewEmployeePaymentDetails/>
+                        </Dialog>
+                    </div>
+                </div>
+                <div className='flex justify-evenly pb-5'>
+                    {/* <ViewEmployeePaymentDetails></ViewEmployeePaymentDetails> */}
+                </div>
+                <div className='flex justify-evenly pb-5'>
+                    
+                </div>
+            </div>
+        <form>
         <div className='bg-cl-4 rounded'>
-            <div className='PersonalInfo pt-10'>
-                
-                <div className=''>
-                    <div className='bg-gray-400 ml-20 mr-20 flex justify-evenly rounded'>
-                    <div className='w-80 pt-5 pb-5'>
-                    <p className='text-2xl'>Personal Information</p>
-                    
-                    </div>
-                    <div className='w-80 pt-5 pb-5'></div>
-                    <div className='w-80 pt-5 pb-5'></div>
-                    <div className='w-80 pt-5 pb-5'></div>
-                    </div>
-                </div>
-                <div className='flex justify-evenly'>
-                    <div className='pt-5'>
-                    <p>Employee ID :</p>
-                    <div className="w-80 pt-1 pb-10">
-                        <Input label="Username" />
-                    </div>
-                    </div>
-                    <div>
-                    <p className='pt-5'>Name :</p>
-                    <div className="w-80 pt-1 pb-10">
-                        <Input label="Name" />
-                    </div>
-                    </div>
-                </div>
-                <div className='flex justify-evenly'>
-                    <div>
-                        <p>Designation :</p>
-                        <div className="w-80  pt-1 pb-10">
-                            <Input label="Designation" />
-                        </div>
-                    </div>
-                    <div>
-                        <p>Employee Status :</p>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="Employee Status" />
-                        </div>
-                    </div>
-                </div>
-                <div className='flex justify-evenly'>
-                    <div>
-                        <p>Department :</p>
-                        <div className="w-80 pt-1 pb-1-">
-                            <Input label="Department" />
-                        </div>
-                    </div>
-                    <div>
-                        <p>Bank :</p>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="Bank" />
-                        </div>
-                    </div>
-                </div>
-                <div className='flex justify-evenly'>
-                    <div>
-                        <p>EPF Number :</p>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="EPF Number" />
-                        </div>
-                    </div>
-                    <div>
-                        <p>Account Number :</p>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="Account Number" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div className='Earning pt-10'>
-                
-                <div className=''>
-                    <div className='bg-gray-400 ml-20 mr-20 flex justify-evenly rounded'>
-                    <div className='w-80 pt-5 pb-5'>
-                    <p className='text-2xl'>Earning Information</p>
-                    
-                    </div>
-                    <div className='w-80 pt-5 pb-5'>
-                    
-                    </div>
-                    <div className='w-80 pt-5 pb-5'></div>
-                    <div className='w-80 pt-5 pb-5'></div>
-
-                    
-                    </div>
-                </div>
-                <div className='flex justify-evenly'>
-                    <div className='pt-5'>
-                    <p>Basic Salary :</p>
-                    <div className="w-80 pt-1 pb-10">
-                        <Input label="Basic Salary" />
-                    </div>
-                    </div>
-                    <div>
-                    <p className='pt-5'>Basic Rate :</p>
-                    <div className="w-80 pt-1 pb-10">
-                        <Input label="Basic Rate" />
-                    </div>
-                    </div>
-                </div>
-                <div className='flex justify-evenly'>
-                    <div>
-                        <p>Over Time Hours :</p>
-                        <div className="w-80  pt-1 pb-10">
-                            <Input label="Over Time Hours" />
-                        </div>
-                    </div>
-                    <div>
-                        <p>Hours Worked :</p>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="Hours Worked" />
-                        </div>
-                    </div>
-                </div>
-                <div className='flex justify-evenly'>
-                    <div>
-                        <p>Overtime Hours :</p>
-                        <div className="w-80 pt-1 pb-1-">
-                            <Input label="Overtime Hours" />
-                        </div>
-                    </div>
-                    <div>
-                        <p>Overtime Amount :</p>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="Overtime Amount" />
-                        </div>
-                    </div>
-                </div>
-                <div className='flex justify-evenly'>
-                    <div>
-                        <p>Double Overtime Hours :</p>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="Double Overtime Hours" />
-                        </div>
-                    </div>
-                    <div>
-                        <p>Double Overtime Amount :</p>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="Double Overtime Amount" />
-                        </div>
-                    </div>
-                </div>
-                <div className='flex justify-evenly'>
-                    <div>
-                        <p>Bonus :</p>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="Bonus" />
-                        </div>
-                    </div>
-                    <div>
-                        <div className="w-80 pt-1 pb-10">
-                            
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div className='Allowance pt-10'>
-                
-                <div className=''>
-                    <div className='bg-gray-400 ml-20 mr-20 flex justify-evenly rounded'>
-                    <div className='w-80 pt-5 pb-5'>
-                    <p className='text-2xl'>Allowance</p>
-                    
-                    </div>
-                    <div className='w-80 pt-5 pb-5'>
-                    
-                    </div>
-                    <div className='w-80 pt-5 pb-5'></div>
-                    <div className='w-80 pt-5 pb-5'></div>
-                    </div>
-                </div>
-                <div className='flex justify-evenly'>
-                    <div className='pt-5'>
-                    <p>  </p>
-                    <div className="w-80 pt-1 pb-10">
-                    </div>
-                    </div>
-                    <div>
-                    <p className='pt-5'>Cost</p>
-                    <div className="w-80 pt-1 pb-10">
-                    </div>
-                    </div>
-                    <div className='pt-5'>
-                    <p>Percentage</p>
-                    <div className="w-80 pt-1 pb-10">
-                    </div>
-                    </div>
-                    <div className='pt-5'>
-                    <p>Allowance</p>
-                    <div className="w-80 pt-1 pb-10">
-                    </div>
-                    </div>
-                </div>
-                <div className='flex justify-evenly'>
-                    <div>
-                        <p>Medical</p>
-                        <div className="w-40  pt-1 pb-10">
-                        </div>
-                    </div>
-                    <div>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="" />
-                        </div>
-                    </div>
-                    <div>
-                        <div className="w-21 pt-1 pb-10">
-                            <Input label="" />
-                        </div>
-                    </div>
-                    <div>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="" />
-                        </div>
-                    </div>
-                    
-                </div>
-                <div className='flex justify-evenly'>
-                    <div>
-                        <p>Transport</p>
-                        <div className="w-40  pt-1 pb-10">
-                        </div>
-                    </div>
-                    <div>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="" />
-                        </div>
-                    </div>
-                    <div>
-                        <div className="w-21 pt-1 pb-10">
-                            <Input label="" />
-                        </div>
-                    </div>
-                    <div>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="" />
-                        </div>
-                    </div>
-                    
-                </div>
-                <div className='flex justify-evenly'>
-                    <div>
-                        <p>Meals Pay</p>
-                        <div className="w-40  pt-1 pb-10">
-                        </div>
-                    </div>
-                    <div>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="" />
-                        </div>
-                    </div>
-                    <div>
-                        <div className="w-21 pt-1 pb-10">
-                            <Input label="" />
-                        </div>
-                    </div>
-                    <div>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="" />
-                        </div>
-                    </div>
-                    
-                </div>
-                <div className='flex justify-evenly'>
-                    <div>
-                        <p>Uniform</p>
-                        <div className="w-40  pt-1 pb-10">
-                        </div>
-                    </div>
-                    <div>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="" />
-                        </div>
-                    </div>
-                    <div>
-                        <div className="w-21 pt-1 pb-10">
-                            <Input label="" />
-                        </div>
-                    </div>
-                    <div>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="" />
-                        </div>
-                    </div>
-                    
-                </div>
-                <div className='flex justify-evenly'>
-                    <div>
-                        <p>Communication</p>
-                        <div className="w-40  pt-1 pb-10">
-                        </div>
-                    </div>
-                    <div>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="" />
-                        </div>
-                    </div>
-                    <div>
-                        <div className="w-21 pt-1 pb-10">
-                            <Input label="" />
-                        </div>
-                    </div>
-                    <div>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="" />
-                        </div>
-                    </div>
-                    
-                </div>
-                <div className='flex justify-evenly'>
-                    <div>
-                        <p>Education</p>
-                        <div className="w-40  pt-1 pb-10">
-                        </div>
-                    </div>
-                    <div>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="" />
-                        </div>
-                    </div>
-                    <div>
-                        <div className="w-21 pt-1 pb-10">
-                            <Input label="" />
-                        </div>
-                    </div>
-                    <div>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="" />
-                        </div>
-                    </div>
-                    
-                </div>
-                <div className='flex justify-evenly'>
-                    <div>
-                        <p>Child Care</p>
-                        <div className="w-40  pt-1 pb-10">
-                        </div>
-                    </div>
-                    <div>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="" />
-                        </div>
-                    </div>
-                    <div>
-                        <div className="w-21 pt-1 pb-10">
-                            <Input label="" />
-                        </div>
-                    </div>
-                    <div>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="" />
-                        </div>
-                    </div>
-                    
-                </div>
-                <div className='flex justify-evenly'>
-                    <div>
-                        <p>Other</p>
-                        <div className="w-40  pt-1 pb-10">
-                        </div>
-                    </div>
-                    <div>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="" />
-                        </div>
-                    </div>
-                    <div>
-                        <div className="w-21 pt-1 pb-10">
-                            <Input label="" />
-                        </div>
-                    </div>
-                    <div>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="" />
-                        </div>
-                    </div>
-                    
-                </div>
-                
-                
-                
-            </div>
 
 
+         
+                    {/* <div>
+                        <p>Pick Month :</p>
+                        <div className="w-80 pt-1 pb-10">
+                        <DatePicker
+                            selected={selectedDate}
+                            onChange={(date) => setSelectedDate(date)}
+                            renderMonthContent={renderMonthContent}
+                            showMonthYearPicker
+                            dateFormat="MM/yyyy"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>  */}
 
-            <div className='Deductions pt-10'>
-                
-                <div className=''>
-                    <div className='bg-gray-400 ml-20 mr-20 flex justify-evenly rounded'>
-                    <div className='w-80 pt-5 pb-5'>
-                    <p className='text-2xl'>Deductions</p>
-                    
-                    </div>
-                    <div className='w-80 pt-5 pb-5'>
-                    
-                    </div>
-                    <div className='w-80 pt-5 pb-5'></div>
-                    <div className='w-80 pt-5 pb-5'></div>
-                    </div>
-                </div>
-                
-                <div className='flex justify-evenly pt-10'>
-                    <div>
-                        <p>Medical</p>
-                        <div className="w-60  pt-1 pb-10">
-                        </div>
-                    </div>
-                    <div>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="" />
-                        </div>
-                    </div>
-                    <div>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="" />
-                        </div>
-                    </div>
-                    
-                </div>
-                <div className='flex justify-evenly'>
-                    <div>
-                        <p>Health Insuarance</p>
-                        <div className="w-60  pt-1 pb-10">
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="" />
-                        </div>
-                    </div>
-                    <div>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="" />
-                        </div>
-                    </div>
-                    
-                </div>
-                <div className='flex justify-evenly'>
-                    <div>
-                        <p>Uniform Cost</p>
-                        <div className="w-60  pt-1 pb-10">
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="" />
-                        </div>
-                    </div>
-                    <div>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="" />
-                        </div>
-                    </div>
-                    
-                </div>
-                <div className='flex justify-evenly'>
-                    <div>
-                        <p>Training Cost</p>
-                        <div className="w-60  pt-1 pb-10">
-                        </div>
-                    </div>
-                    <div>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="" />
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="" />
-                        </div>
-                    </div>
-                    
-                </div>
-                <div className='flex justify-evenly'>
-                    <div>
-                        <p>Other</p>
-                        <div className="w-60  pt-1 pb-10">
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="" />
-                        </div>
-                    </div>
-                    <div>
-                        <div className="w-80 pt-1 pb-10">
-                            <Input label="" />
-                        </div>
-                    </div>
-                    
-                </div>
-                </div>
 
 
             <div className='paymentdetails pt-10'>
@@ -533,49 +190,64 @@ function EmployeePayment() {
                 </div>
                 <div className='flex justify-evenly'>
                     <div className='pt-10'>
-                        <p>Payment Period (From)</p>
-                        <Datepicker></Datepicker>
+                        <p>Payment Period</p>
+                        <DatePicker
+                        selected={selectedDate}
+                        onChange={(date) => setSelectedDate(date)}
+                        renderMonthContent={renderMonthContent}
+                        showMonthYearPicker
+                        dateFormat="MM/yyyy"
+                        />
                     </div>
-                    <div className='pt-10'>
-                    <p>Payment Period (From)</p>
-                        <Datepicker></Datepicker>
+                        <div className='pt-10'>
+                        <p>Select Employee</p>
+                        <div className="relative ">
+                    <div className="relative flex w-full max-w-[24rem] ">
+                      <Input
+                        error={errorName ? "true" : null}
+                        label="Enter Name"
+                        value={empName}
+                        onChange={(e) => {setSearch(e.target.value);setEmpName(e.target.value)}}
+                        className="pr-20"
+                        containerProps={{
+                          className: "min-w-0",
+                        }}
+                      />
                     </div>
-                    <div className='pt-10'>
-                    <p>Payment Period (From)</p>
-                        <Datepicker></Datepicker>
+
+                    {resultVisible ? (
+                    <div>
+        
+      
+                    {users && users.map((user)=>{
+                      return (
+                        <Card className="p-2 rounded-md absolute top-10 w-full max-h-36 overflow-scroll z-[999]">
+                        <div className="" onClick={()=>{setEmpId(user.id); setEmpName(user.empName); setSearchValue(""); setResultVisible(false)}}>
+                          <div className="text-"> 
+                          {user.empName}
+                          </div>
+                        </div>
+                        </Card>
+                      )
+                    })}
+                    </div>
+                    ) : null}
+         
+                  </div>
                     </div>
                 </div>
 
             </div>
             <div className='flex justify-evenly pb-10 pt-10'>
                 <div>
-                    <Button>Cancel</Button>
+                    <Button variant='outlined'>Cancel</Button>
                 </div>
                 <div>
-                <Button>Submit</Button>
+                <Button color='green' onClick={() => generatepayslip(empId,selectedDate)}>Submit and view paysheet</Button>
                 </div>
             </div>
         </div>
-
-
-
-
-
-
-
-
         </form>
-
-
-
-
-
-
-
-
-
-
-
         </div>
     )
 }

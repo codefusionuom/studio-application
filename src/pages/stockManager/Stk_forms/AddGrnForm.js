@@ -46,10 +46,10 @@ function AddGrnForm({ title }) {
     let isValid = true;
     let newErrors = {};
 
-    // if (!formData.itemName.trim()) {
-    //   newErrors.itemName = "Item Name is required";
-    //   isValid = false;
-    // }
+    if (!formData.date.trim()) {
+      newErrors.date = "date is required";
+      isValid = false;
+    }
     if (!formData.quantity.trim()) {
       newErrors.quantity = "Quantity is required";
       isValid = false;
@@ -99,6 +99,7 @@ function AddGrnForm({ title }) {
   };
 
   const handleSubmit2 = async () => {
+    if(validateForm()){
     console.log("Form submitted");
 
     // Prepare the data to be sent
@@ -145,7 +146,6 @@ function AddGrnForm({ title }) {
         theme: "light",
       });
       handleOpen(null);
-      // window.location.replace("/stockManager/grn");
     } catch (error) {
       console.error("Error creating grn:", error);
 
@@ -161,6 +161,7 @@ function AddGrnForm({ title }) {
       });
     }
   };
+}
 
   const handleChange = (e) => {
     if (!e || !e.target) {
@@ -317,48 +318,6 @@ function AddGrnForm({ title }) {
     alert("Successfully deleted stock item ");
   };
 
-  // const handleSelectChange = (value, name) => {
-  //   setFormData({ ...formData, [name]: value });
-  //   setErrors({ ...errors, [name]: "" });
-
-  //   if (name === "supplierName") {
-  //     const selectedSupplier = suppliers.find(
-  //       (supplier) => supplier.supplierName === value
-  //     );
-  //     if (selectedSupplier) {
-  //       setFormData((prevData) => ({
-  //         ...prevData,
-  //         supplierId: selectedSupplier.id,
-  //         address: selectedSupplier.address,
-  //         contactNo: selectedSupplier.contactNo,
-  //         email: selectedSupplier.email,
-  //       }));
-  //     }
-  //   }
-  //    else if (name === "itemName") {
-  //     const selectedItem = stkItems.find((item) => item.itemName === value);
-  //     if (selectedItem) {
-  //       setFormData((prevData) => ({
-  //         ...prevData,
-  //         itemId: selectedItem.itemId, // Store itemId
-  //         price: selectedItem.price,
-  //       }));
-  //     }
-  //   }
-  //   else if (name === "itemId") {
-  //     console.log(value,name,"jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj");
-  //     const selectedItem = stkItems.find((item) => item.id === value);
-  //     console.log(selectedItem);
-  //     if (selectedItem) {
-  //       setFormData((prevData) => ({
-  //         ...prevData,
-  //         itemId: selectedItem.id, // Store itemId
-  //         price: selectedItem.price,
-  //       }));
-  //     }
-  //   }
-  // };
-
   const handleSelectChangeId = (value) => {
     console.log(value);
     setFormData((prevFormData) => ({
@@ -468,9 +427,9 @@ function AddGrnForm({ title }) {
                       </Option>
                     ))}
                   </Select>
-                  {errors.itemName && (
-                    <Typography color="red" variant="small">
-                      {errors.itemName}
+                  {errors.itemId && ( // Display error message if itemId field has an error
+                    <Typography className="text-red-500 text-sm">
+                      {errors.itemId}
                     </Typography>
                   )}
                 </div>
@@ -498,6 +457,11 @@ function AddGrnForm({ title }) {
                     placeholder="Quantity"
                     error={!!errors.quantity}
                   />
+                  {errors.quantity && ( // Display error message if quantity field has an error
+                    <Typography className="text-red-500 text-sm">
+                      {errors.quantity}
+                    </Typography>
+                  )}
                 </div>
 
                 <div className="flex justify-end w-full">

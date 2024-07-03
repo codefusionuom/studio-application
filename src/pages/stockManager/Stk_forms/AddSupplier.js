@@ -15,6 +15,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function AddSupplier({ title, addSupplierToList,open,handleOpen,handleClose,setFormData,formData,mode  }) {
   const [errors, setErrors] = useState({});
+  
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -35,7 +36,7 @@ function AddSupplier({ title, addSupplierToList,open,handleOpen,handleClose,setF
 
 
     if (!formData.contactNo.trim()) {
-      newErrors.contactNo = "Item ID is required";
+      newErrors.contactNo = "Contact number is required";
       isValid = false;
     } else {
       const contactNoPattern = /^0\d{9}$/;

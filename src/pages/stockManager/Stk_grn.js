@@ -143,7 +143,18 @@ function GrnStock() {
     setPaymentStatusFilter(e.target.value);
     setCurrentPage(1); // Reset currentPage when changing payment status filter
   };
+  const extractUniquePaymentStatuses = () => {
+    const uniquePaymentStatuses = grn.reduce((acc, current) => {
+      if (!acc.includes(current.paymentStatus)) {
+        acc.push(current.paymentStatus);
+      }
+      return acc;
+    }, []);
+    return uniquePaymentStatuses;
+  };
 
+  // Extract unique payment statuses
+  const uniquePaymentStatuses = extractUniquePaymentStatuses();
   return (
     <div className="flex flex-col gap-10">
       <div className="flex gap-10">
@@ -160,22 +171,16 @@ function GrnStock() {
           </Typography>
           <Card className="w-400 rounded">
             <div className="flex p-4 gap-6 items-center">
-              {/* <Input
-                size="lg"
-                label="Search by supplier Name"
-                icon={<MagnifyingGlassIcon className="h-5 w-5" />}
-                value={searchQuery}
-                onChange={handleSearchChange}
-              /> */}
+              <Typography>Filter by: Payment status</Typography>
               <select
                 value={paymentStatusFilter}
                 onChange={handlePaymentStatusFilterChange}
                 className="border rounded p-2"
               >
                 <option value="">All Payments</option>
-                {grn.map((paymentStatus) => (
-                  <option key={paymentStatus.id} value={paymentStatus.paymentStatus}>
-                    {paymentStatus.paymentStatus}
+                {uniquePaymentStatuses.map((status) => (
+                  <option key={status} value={status}>
+                    {status}
                   </option>
                 ))}
               </select>
@@ -236,7 +241,9 @@ function GrnStock() {
                       supplierId ? item.supplierId === supplierId : true
                     )
                     .filter((item) =>
-                      paymentStatusFilter ? item.paymentStatus === paymentStatusFilter : true
+                      paymentStatusFilter
+                        ? item.paymentStatus === paymentStatusFilter
+                        : true
                     )
                     .map((item) => (
                       <tr key={item.id} className="even:bg-blue-gray-50/50">
@@ -258,7 +265,7 @@ function GrnStock() {
                         </td>
                         <td className="p-4">
                           <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
-                            Rs.{item.subtotal}
+                            {item.subtotal}
                           </p>
                         </td>
                         <td className="p-4">
@@ -289,8 +296,14 @@ function GrnStock() {
           </div>
         )}
       </CardBody>
-      <Dialog open={isDialogOpen} handler={closeDialog} className="w-full max-w-md">
-        <DialogHeader className=" bg-blue-gray-300 text-black">GRN Details</DialogHeader>
+      <Dialog
+        open={isDialogOpen}
+        handler={closeDialog}
+        className="w-full max-w-md"
+      >
+        <DialogHeader className=" bg-blue-gray-300 text-black">
+          GRN Details
+        </DialogHeader>
         <DialogBody className="p-4">
           {selectedRecord && (
             <div className=" flex flex-row justify-around">

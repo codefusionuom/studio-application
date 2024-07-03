@@ -11,11 +11,6 @@ import SmallCard from "../../components/cards/card";
 
 function ReturnedStock() {
   const [isFormVisible, setFormVisible] = useState(false);
-
-  const closeForm = () => {
-    setFormVisible(false);
-  };
-
   const [returnedStock, setReturnedStock] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -32,21 +27,21 @@ function ReturnedStock() {
     description: "",
   });
   const [open, setOpen] = useState(false);
-  const handleClose = () => setOpen(false);
+  const [refresh, setRefresh] = useState(false);
 
+
+  const triggerRefresh = () => {
+    setRefresh((prev) => !prev); // Toggle the refresh state
+  };
   useEffect(() => {
     fetchReturnedStocks();
     fetchItems();
-  },[currentPage]);
+  }, [currentPage, searchQuery]); // Include searchQuery in dependencies for search functionality
 
   const fetchReturnedStocks = async () => {
     setLoading(true);
     try {
-      let url = `http://localhost:5000/stockManager/returnStockItem?page=${currentPage}&limit=4`;
-      if (searchQuery) {
-        url += `&searchQuery=${searchQuery}`;
-      }
-      const response = await axios.get(url);
+      const response = await axios.get(`http://localhost:5000/stockManager/returnStockItem?page=${currentPage}&limit=6`);
       const { success, message, returnItems, totalPages } = response.data;
 
       if (success) {
@@ -64,13 +59,11 @@ function ReturnedStock() {
 
   const fetchItems = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:5000/stockManager/stockItem"
-      );
+      const response = await axios.get("http://localhost:5000/stockManager/stockItem");
       const { success, message, stockItems } = response.data;
 
       if (success) {
-        setStkItems(stockItems); // Update the items state with fetched data
+        setStkItems(stockItems);
       } else {
         console.error("Failed to fetch stock Items:", message);
       }
@@ -79,25 +72,21 @@ function ReturnedStock() {
     }
   };
 
-
   const addReturnedStockToList = (newReturnedStock) => {
     if (returnedStock.length === 4) {
       setCurrentPage(currentPage + 1);
     }
-    setReturnedStock([ newReturnedStock,...returnedStock,]);
+    setReturnedStock([newReturnedStock, ...returnedStock]);
+    triggerRefresh();
   };
 
   const handleDelete = async (id) => {
-    setMode(true);
-    console.log(" deleted", id);
-
     try {
-      await axios.delete(
-        `http://localhost:5000/stockManager/returnStockItem/${id}`
-      );
+      await axios.delete(`http://localhost:5000/stockManager/returnStockItem/${id}`);
       setReturnedStock(returnedStock.filter((item) => item.id !== id));
       console.log("Successfully deleted item");
       alert("Successfully deleted stock item");
+      triggerRefresh();
     } catch (error) {
       console.error("Error deleting item:", error);
     }
@@ -105,19 +94,15 @@ function ReturnedStock() {
 
   const handleEdit = async (id) => {
     try {
-      // fetch the stock item data to be edited
-      const response = await axios.get(
-        `http://localhost:5000/stockManager/returnStockItem/${id}`
-      );
+      const response = await axios.get(`http://localhost:5000/stockManager/returnStockItem/${id}`);
       const { success, message, returnItems } = response.data;
-     
+
       if (success) {
         setMode(true);
-        handleOpen();
-        setFormData(returnItems)
-       console.log(returnItems)
-        // Handle the edit functionality using the fetched stock item data
+        setOpen(true); // Ensure modal opens for editing
+        setFormData(returnItems);
         console.log("Editing return stock item:", returnItems);
+        triggerRefresh();
       } else {
         console.error("Failed to fetch return Stock Item details:", message);
       }
@@ -125,42 +110,33 @@ function ReturnedStock() {
       console.error("Error editing return Stock item:", error);
     }
   };
-  const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
-  };
   useEffect(() => {
-    returnItemSearch();
+    handleItemSearch();
   }, [searchQuery]);
 
-  const returnItemSearch = async () => {
-    if (!searchQuery) {
-      setCurrentPage(1); // Reset to first page when performing a new search
-    fetchReturnedStocks();
-      return;
-    }
+  const handleItemSearch = async () => {
     try {
-      const { data } = await axios.get(
-        `http://localhost:5000/stockManager/returnStockItem/?itemName=${searchQuery}`
-      );
-      const { success, returnItems } = data;
-      if (success) {
-        setReturnedStock(returnedStock);
+      const { data } = await axios.get(`http://localhost:5000/stockManager/returnStockItemsearch1/?itemName=${searchQuery}`);
+
+      if (data.success) {
+        setReturnedStock(data.returnedStock );
+        console.log(data.returnedStock)
       } else {
         setError("No stock items found");
       }
     } catch (error) {
-      console.log("Error searching for stock items:", error);
-      setError("Failed to search stock items");
+      setError("Failed to search return items");
     }
   };
+
   const getItemName = (itemId) => {
-    const item = stkItems.find((cat) => cat.id === itemId);
+    const item = stkItems.find((item) => item.id === itemId);
     return item ? item.itemName : "Unknown";
   };
 
   const handleOpenAdd = () => {
     setMode(false);
-    handleOpen();
+    setOpen(true);
     setFormVisible(true);
     setFormData({
       itemId: "",
@@ -170,61 +146,59 @@ function ReturnedStock() {
       description: "",
     });
   };
-
   const handleOpen = () => {
     setOpen((cur) => !cur);
   };
 
-  
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const closeForm = () => {
+    setFormVisible(false);
+  };
 
   return (
     <div className="flex flex-col gap-10">
       <div className="flex gap-10">
-        <div>
-          {isFormVisible && (
-            <Modal onClose={closeForm}>
-              <AddReturnStockForm onClose={closeForm} />
-            </Modal>
-          )}
-        </div>
-        <AddReturnStockForm 
-                    onClose={closeForm}
-                    mode={mode}
-                    formData={formData}
-                    setFormData={setFormData}
-                    handleClose={handleClose}
-                    open={open}
-                    handleOpen={handleOpen}
-                    addReturnedStockToList={addReturnedStockToList} />
-
-       
+        
+        <AddReturnStockForm
+         onClose={closeForm}
+         mode={mode}
+         formData={formData}
+         setFormData={setFormData}
+         handleClose={handleClose}
+         open={open}
+         handleOpen={handleOpen}
+         addReturnedStockToList={addReturnedStockToList}/>
       </div>
+
       <SmallCard
         className="cursor-pointer"
-        title={"  Add Return Stock Item"}
+        title={"Add Return Stock Item"}
         onClick={handleOpenAdd}
         variant="gradient"
       />
 
-
       <CardBody className="flex flex-col gap-1 bg-white rounded-md">
-      <div className="flex flex-row gap-1 justify-between">
-        <Typography variant="h4" color="blue-gray">
-          Returned Stock List
-        </Typography>
-        <Card className="w-400 rounded">
-          <div className="flex p-4 gap-6 items-center">
+        <div className="flex flex-row gap-1 justify-between">
+          <Typography variant="h4" color="blue-gray">
+            Returned Stock List
+          </Typography>
 
-            <Input
-              size="lg"
-              label="Search"
-              icon={<MagnifyingGlassIcon className="h-5 w-5" onClick={returnItemSearch}/>}
-              value={searchQuery}
-              onChange={handleSearchChange}
-            />
-          </div>
-        </Card>
+          <Card className="w-400 rounded">
+            <div className="flex p-4 gap-6 items-center">
+              <Input
+                size="lg"
+                label="Search"
+                icon={<MagnifyingGlassIcon className="h-5 w-5" />}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+          </Card>
         </div>
+
         {loading ? (
           <p>Loading...</p>
         ) : error ? (
@@ -313,10 +287,10 @@ function ReturnedStock() {
               </table>
             </Card>
             <Pagination
-                active={currentPage}
-                setActive={setCurrentPage}
-                total={totalPages}
-              />
+              active={currentPage}
+              setActive={setCurrentPage}
+              total={totalPages}
+            />
           </div>
         )}
       </CardBody>

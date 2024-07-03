@@ -41,7 +41,7 @@ function Suppliers() {
     setLoading(true);
     try {
       const response = await axios.get(
-        `http://localhost:5000/stockManager/supplierList?page=${currentPage}&limit=4`
+        `http://localhost:5000/stockManager/supplierList?page=${currentPage}&limit=6`
       );
       const { success, message, suppliers, totalPages } = response.data;
       if (success) {
@@ -100,9 +100,9 @@ function Suppliers() {
       console.error("Error editing supplier:", error);
     }
   };
-
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
+    setCurrentPage(1); // Reset to the first page on search
   };
 
   useEffect(() => {
@@ -117,12 +117,14 @@ function Suppliers() {
     }
     try {
       const { data } = await axios.get(
-        `http://localhost:5000/stockManager/supplierList/?supplierName=${searchQuery}`
+        `http://localhost:5000/stockManager/supplierList/?search=${searchQuery}`
       );
       const { success, suppliers } = data;
+      
 
       if (success) {
         setSuppliers(suppliers);
+        
       } else {
         setError("No suppliers found");
       }
@@ -239,10 +241,14 @@ function Suppliers() {
                         </p>
                       </td>
                       <td>
-                        <DeleteRecordButton onClick={() => handleDelete(supplier.id)} />
+                        <DeleteRecordButton
+                          onClick={() => handleDelete(supplier.id)}
+                        />
                       </td>
                       <td>
-                        <EditRecordButton onClick={() => handleEdit(supplier.id)} />
+                        <EditRecordButton
+                          onClick={() => handleEdit(supplier.id)}
+                        />
                       </td>
                     </tr>
                   ))}
@@ -250,14 +256,14 @@ function Suppliers() {
               </table>
             </Card>
             <Pagination
-                active={currentPage}
-                setActive={setCurrentPage}
-                total={totalPages}
-              />
+              active={currentPage}
+              setActive={setCurrentPage}
+              total={totalPages}
+              onPageChange={supplierSearch} // Call supplierSearch on page change
+            />
           </div>
         )}
       </CardBody>
-
     </div>
   );
 }

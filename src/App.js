@@ -32,7 +32,11 @@ import AddSupplier from './pages/stockManager/Stk_forms/AddSupplier';
 
 import EmployeeManagerDashboard from './pages/employeeManager/dashboard';
 import EmployeePayment from './pages/employeeManager/payment';
-import Attendance from './pages/employeeManager/attendance';
+import Attendance from './pages/employeeManager/attendance/attendance';
+import AllowancePage from './pages/employeeManager/allowance/allowancepage';
+import AdvancePage from './pages/employeeManager/advance/advancePage';
+import PaySlip from './pages/employeeManager/payment/generatesalary';
+
 import SuperAdminDashboard from './pages/superAdmin/Dashboard';
 import SuperAdminAdmins from './pages/superAdmin/admin';
 import SuperAdminEventCalandar from './pages/superAdmin/EventCalander';
@@ -42,6 +46,15 @@ import EventManagerDashboard from './pages/eventManager/EventManagerdashboard';
 import EventRequests from './pages/eventManager/eventRequests';
 import EventManagerEventCalendar from './pages/eventManager/eventManagerEventCalendar';
 import EventManagerEvents from './pages/eventManager/eventManagerEvents';
+import CreateEvent from './pages/eventManager/createEvent'; 
+import EventManagerEvents2 from './pages/eventManager/eventManagerEvents2';
+import TaskPage from './pages/eventManager/tasksPage';
+import TaskView from './pages/eventManager/taskView';
+import CreateTask from './pages/eventManager/createTask';
+import CustomerServices from './pages/customerManager/CustomerServices';
+import { ToastContainer } from 'react-toastify';
+import CreateEventRequest from './pages/eventManager/CreateEventRequest';
+import Events from './pages/eventManager/event';
 
 
 function App() {
@@ -59,13 +72,21 @@ function App() {
         <Route   path="/customerManager/createCustomerRequest" element={<CreateCustomerRequest />} />
         <Route   path="/customerManager/paymentList" element={<PaymentList />} />
         <Route  path="/customerManager/customerRequest" element={<CustomerRequests />} />
+        <Route  path="/customerManager/customerServices" element={<CustomerServices />} />
       </Route>
 
       <Route path="/eventManager" element={<EventManager/>}>
         <Route path="/eventManager" element={<EventManagerDashboard/>}/>
         <Route path="/eventManager/eventRequests" element={<EventRequests />}/>
+        <Route   path="/eventManager/createEventRequest/:id" element={<CreateEventRequest />} />
         <Route path="/eventManager/eventCalandar" element={<EventManagerEventCalendar/>} />
-        <Route path="/eventManager/Events" element={<EventManagerEvents/>} />
+        {/* <Route path="/eventManager/Events" element={<EventManagerEvents/>} /> */}
+        <Route path="/eventManager/Events" element={<Events/>} />
+        <Route  path='/eventManager/createEvent' element={<CreateEvent />} />
+        <Route  path='/eventManager/createTask' element={<CreateTask/>} />
+        <Route path='/eventManager/eventDetails' element = {<EventManagerEvents2/>} />
+        <Route path='/eventManager/Tasks' element = {<TaskPage/>} />
+        <Route path='/eventManager/Tasks/view-Task' element = {<TaskView/>} />
       </Route>
       
       <Route path="/stockManager" element={<StockManager />}>
@@ -83,6 +104,9 @@ function App() {
         <Route  path="/employeeManager/" element={<EmployeeManagerDashboard />} />
         <Route  path="/employeeManager/payment" element={<EmployeePayment />} />
         <Route  path='/employeeManager/attendance' element={<Attendance />} />
+        <Route path='/employeeManager/allowance' element={<AllowancePage/>}/>
+        <Route path='/employeeManager/advance' element={<AdvancePage/>}/>
+        <Route path='/employeeManager/payslip' element={<PaySlip/>}/>
         
         
       </Route>
@@ -96,20 +120,25 @@ function App() {
     
     </Routes>
     
-      
+    <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        /> 
  
   
   
     </>
-    // another way
-    // <Routes>
-    //   <Route exact path="cm" >
-    //     <Route exact path="/cm/pl" element={<PaymentList/>} />
-    //     <Route  path="/cm/ch" element={<CustomerRequests/>} />
-    //   </Route>
-    // </Routes>
+
     
   );
 }
-{/* <Layout sections={customerList}/>  */ }
+
 export default App;
