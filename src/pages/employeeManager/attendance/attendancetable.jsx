@@ -118,8 +118,8 @@ function AttendanceList() {
                                                     // case "wfo": return <div className="flex"><Chip color="blue" value="Work from office" /></div>;
                                                     // case "la": return <div className="flex"><Chip color="yellow" value="Late arrival" /></div>;
                                                     // default: return <div className="flex"><Chip color="red" value="Absent" /></div>
-                                                    case "wfh": return <div className="flex"><Typography className="flex bg-gray-300 rounded pl-3 pr-3 text-sm pt-1 pb-1 pt-1 text-gray-600">Work from home</Typography></div>;
-                                                    case "wfo": return <div className="flex"><Typography className="flex bg-light-blue-100 rounded pl-3 pr-3 text-sm pt-1 pb-1 text-light-blue-600 pt-1 ">Work from office</Typography></div>;
+                                                    case "wfh": return <div className="flex"><Typography className="flex bg-gray-300 rounded pl-3 pr-3 text-sm pb-1 pt-1 text-gray-600">Work from home</Typography></div>;
+                                                    case "wfo": return <div className="flex"><Typography className="flex bg-light-blue-100 rounded pl-3 pr-3 text-sm pb-1 text-light-blue-600 pt-1 ">Work from office</Typography></div>;
                                                     case "la": return <div className="flex"><Typography className="flex bg-yellow-100 rounded pl-3 pr-3 text-sm pt-1 pb-1 text-yellow-800">Late Arrival</Typography></div>;
                                                     case "hd": return <div className="flex"><Typography className="flex bg-yellow-100 rounded pl-3 pr-3 text-sm pt-1 pb-1 text-yellow-800">Half-Day</Typography></div>;
                                                     default: return <div className="flex"><Typography className="flex bg-red-100 rounded pl-3 pr-3 text-sm pt-1 pb-1 text-red-600">Absent</Typography></div>;

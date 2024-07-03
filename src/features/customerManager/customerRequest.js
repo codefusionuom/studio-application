@@ -26,6 +26,10 @@ const customerRequestSlice = createSlice({
       state.customerRequest=(action.payload);
     
     },
+    resetSelectCustomerRequest: (state, action) => {
+      state.customerRequest=initialState.customerRequest;
+    
+    },
     addCustomerRequest: (state, action) => {
       state.count++;
     },
@@ -37,5 +41,5 @@ const customerRequestSlice = createSlice({
   },
 });
 
-export const { addCustomerRequest,selectCustomerRequest,resetCustomerRequest } = customerRequestSlice.actions;
+export const { resetSelectCustomerRequest,addCustomerRequest,selectCustomerRequest,resetCustomerRequest } = customerRequestSlice.actions;
 export default customerRequestSlice.reducer;

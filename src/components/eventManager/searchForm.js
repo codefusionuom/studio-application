@@ -381,13 +381,14 @@ const SearchForm = ({
                   setOpen(false)
                 }}>
                   <h6 className="block font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-blue-gray-900">
-                    {result[resultDisplayfield1Val]}
+                    {/* {result[resultDisplayfield1Val]} */}
+                    {result.service[resultDisplayfield1Val]}
                   </h6><p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700">
                     customer:<span className="font-semibold"> {result['customer']['firstname']+' '+result['customer']['lastname']}
                   </span></p>
                   <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700">
                     {/* {result.customerId} */}
-                    {resultDisplayfield2=="date" ? result[resultDisplayfield2Val].slice(0, 10) :  result[resultDisplayfield2Val]}
+                    {resultDisplayfield2=="serviceDate" ? result[resultDisplayfield2Val]?.slice(0, 10) :  result[resultDisplayfield2Val]}
                     {/* {resultDisplayfield2 == "date" ? result["ggggggggg"] : result["yyyyyyyyyyyyyfgg"]} */}
                   </p>
                 </div>

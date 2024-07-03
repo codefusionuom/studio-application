@@ -3,7 +3,7 @@ import Customerform from './customerform'
 import { Input, Textarea, Typography } from '@material-tailwind/react'
 import DisabeldDatePicker from './disabeldDatePicker'
 
-function RequestCustomer({requestedCustomer,mode,setCustomerRequest,customerRequest,
+function RequestCustomer({requestedCustomer,mode,setCustomerInformation,customerRequest,
     setSearch,
     customerList,
     setCustomerList}) {
@@ -19,10 +19,10 @@ function RequestCustomer({requestedCustomer,mode,setCustomerRequest,customerRequ
       setCustomers={setCustomerList}
       componentType={0}
       customerRequest={customerRequest}
-      setCustomerRequest={setCustomerRequest}
+      setCustomerInformation={setCustomerInformation}
     />
     {requestedCustomer.conflict ? (
-      <div className="flex justify-center">
+      <div className="flex text-red-500 justify-center">
         {" "}
         There is conflict with previous recorded data and newly requested
         data

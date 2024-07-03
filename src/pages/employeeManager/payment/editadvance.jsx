@@ -11,12 +11,13 @@ import {
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import EditRecordButton from "../../../components/buttons/EditRecordButton";
+import { Textarea } from "@material-tailwind/react";
 
 function UpdateAdvance({ idx }) {
 
   const [empName, setEmpName] = useState()
-  const [empId = idx, setEmpId] = useState()
-  const [id = idx, setid] = useState()
+  // const [empId = idx, setEmpId] = useState(idx)
+  const [id, setid] = useState(idx)
   const [empAdd, setEmpAdd] = useState()
   const [empType, setEmpType] = useState()
   const [empSalary, setEmpSalary] = useState()
@@ -36,8 +37,7 @@ function UpdateAdvance({ idx }) {
   const [advancePayment,setAdvancePayment] = useState()
   const [errorAdvancePayment,setErrorAdvancePayment] = useState()
   const [advancePaidStatus, setAdvancePaidStatus] = useState()
-
-  let newpaidstatus;
+  const [description, setDescription] = useState()
 
 
   useEffect(() => {
@@ -45,10 +45,12 @@ function UpdateAdvance({ idx }) {
       .then(result => {
         console.log(result)
         setAdvanceAmount(result.data.advanceAmount)
-        setAdvancePaidAmount(result.data.advancePaidAmount)
-        setAdvancePaidStatus(result.data.advancePaidStatus)
+        // setAdvancePaidAmount(result.data.advancePaidAmount)
+        setDescription(result.data.description)
+        setEmpName(result.data.employee.empName)
       })
       .catch(err => console.log(err))
+      console.log(id);
   }, [])
 
   
@@ -58,70 +60,31 @@ function UpdateAdvance({ idx }) {
     e.preventDefault()
     // Basic validation
 
-    if (!advancePayment) {
+    if (!advanceAmount) {
       setErrorAdvancePayment(true);
-      alert("Please fill in payment amount");
+      alert("Please fill in amount");
       return;
     }
-    if (isNaN(advancePayment)) {
+    if (isNaN(advanceAmount)) {
       setErrorAdvancePayment(true);
-      alert("Payment amount must be numeric");
+      alert("Amount must be numeric");
       return;
     }
-    if(advancePayment>(advanceAmount-advancePaidAmount)) {
-        setErrorAdvancePayment(true);
-        alert("Payment amount cannot exceed remaining amount");
-        return;
-    }
+   
     setErrorAdvancePayment(false);
 
-    // setAdvancePaidAmount(advancePaidAmount+advancePayment);
 
-    const newAdvancePaidAmount = (parseInt(advancePaidAmount)) + (parseInt(advancePayment));
-    console.log(newAdvancePaidAmount);
-    console.log(advanceAmount);
 
-    // if (newAdvancePaidAmount===advanceAmount) {
-    //     setAdvancePaidStatus(true);
-    //     console.log("runn");
-    //     console.log(advancePaidStatus);
-    //     setAdvancePaidStatus(true);
-    //     console.log("runn");
-    //     console.log(advancePaidStatus);
-    // }
-    // if (newAdvancePaidAmount===advanceAmount) {
-    //     const newpaidstatus = true;
-    //     console.log(newpaidstatus);
-    // }
+    
 
-    if (newAdvancePaidAmount===advanceAmount) {
-        const newpaidstatus = true;
-        console.log(newpaidstatus);
-        axios.put("http://localhost:5000/employeeManager/updateAdvance/" + id, { newAdvancePaidAmount, newpaidstatus })
+
+    axios.put("http://localhost:5000/employeeManager/updateAdvance/" + id, { advanceAmount, description })
       .then(result => {
         console.log(result)
-        window.location.reload()
+        // window.location.reload()
         // navigate('/')
       })
       .catch(err => console.log(err))
-    } else {
-        axios.put("http://localhost:5000/employeeManager/updateAdvance/" + id, { newAdvancePaidAmount, newpaidstatus })
-      .then(result => {
-        console.log(result)
-        window.location.reload()
-        // navigate('/')
-      })
-      .catch(err => console.log(err))
-    }
-
-
-    // axios.put("http://localhost:5000/employeeManager/updateAdvance/" + id, { newAdvancePaidAmount, newpaidstatus })
-    //   .then(result => {
-    //     console.log(result)
-    //     // window.location.reload()
-    //     // navigate('/')
-    //   })
-    //   .catch(err => console.log(err))
   }
 
 
@@ -130,14 +93,6 @@ function UpdateAdvance({ idx }) {
 
   return (
     <>
-
-
-      <EditRecordButton onClick={handleOpen}></EditRecordButton>
-      <Dialog
-        open={open}
-        handler={handleOpen}
-        className="bg-transparent shadow-none w-fit"
-      >
         <Card className="mx-auto w-full ">
           <CardBody className="flex flex-col gap-4">
             <Typography variant="h4" color="blue-gray">
@@ -148,35 +103,22 @@ function UpdateAdvance({ idx }) {
               <Typography className="mb-2" variant="h6">
                   Employee Name :
                 </Typography>
-                <Input label={empId} disabled size="lg" />
+                <Input value={empName} disabled size="lg" />
               </div>
               <div className="flex flex-col justify-between">
               <Typography className="mb-2" variant="h6">
                   Advance Amount:
                 </Typography>
-                <Input label={advanceAmount} disabled size="lg"/>
+                <Input value={advanceAmount} size="lg" onChange={(e) => setAdvanceAmount(e.target.value)}/>
+              </div>
+            </div>
+            <div className=" flex flex-row justify-between ">
+            <div className="w-96">
+            <Textarea value={description} onChange={(e) => setDescription(e.target.value)}/>
               </div>
             </div>
             <div className=" flex flex-row justify-between ">
               <div className=" flex flex-col justify-between">
-              <Typography className="mb-2" variant="h6">
-                  Amount Remaining:
-                </Typography>
-                <Input label={advanceAmount-advancePaidAmount} disabled size="lg"/>
-              </div>
-              <div className=" flex flex-col justify-between">
-                <Typography className="mb-2" variant="h6">
-                  Amount Paid:
-                </Typography>
-                <Input label={advancePaidAmount} disabled size="lg"/>
-              </div>
-            </div>
-            <div className=" flex flex-row justify-between ">
-              <div className=" flex flex-col justify-between">
-              <Typography className="mb-2" variant="h6">
-                  Payment Amount :
-                </Typography>
-                <Input label="Enter Amoubt" size="lg"  onChange={(e) => setAdvancePayment(e.target.value) } error={errorAdvancePayment ? "true" : null} />
               </div>
               <div className=" flex flex-col justify-between">
               </div>
@@ -193,7 +135,6 @@ function UpdateAdvance({ idx }) {
             </div>
           </CardFooter>
         </Card>
-      </Dialog>
     </>
   );
 }

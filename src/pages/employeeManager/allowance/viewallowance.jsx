@@ -3,7 +3,7 @@ import { Card, CardHeader, Input, Typography, Button, CardBody, Chip, CardFooter
 import { Pagination } from "../../../components/pagination/pagination";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import UpdateAdvance from "./editadvance";
+import UpdateAdvance from "../payment/editadvance";
 import UpdateEmployee from "../empForms/updateEmployee";
 import EditRecordButton from "../../../components/buttons/EditRecordButton";
 
@@ -16,16 +16,18 @@ function ViewAllowance() {
     const [advancePaidAmount,setAdvencePaidAmount] = useState()
     const [advanceremaining,setAdvanceRemaining] = useState()
     const [users,setUser] = useState([])
+    const [result, setResult] = useState()
+    const [active, setActive] = useState(1)
 
     
 
 
     useEffect(() => {
-        axios.get('http://localhost:5000/employeeManager/getAllowance')
-          .then(result => setUser(result.data))
+        axios.get(`http://localhost:5000/employeeManager/getAllowance/?page=${active}`)
+          .then(result => {setUser(result.data.rows);setResult(result.data.count)})
           .catch(err => console.log(err))
         console.log(users)
-      }, [])
+      }, [active])
 
       const handleDelete = (id) => {
         axios.delete('http://localhost:5000/employeeManager/deleteAllowance/' + id)
@@ -46,7 +48,7 @@ function ViewAllowance() {
             <CardHeader floated={false} shadow={false} className="rounded-none">
                 <div className="flex flex-col items-center justify-between gap-4  md:flex-row ">
                     <div className="text-2xl pt-6 pl-10 font-semibold">
-                    <p>Advance Request List</p>
+                    <p>Allowance/Deduction List</p>
                     </div>
 
                     <div className=" flex p-4 gap-6">
@@ -139,10 +141,10 @@ function ViewAllowance() {
             </CardBody>
             <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
                 <Typography>
-233 results
+                    {result}
                 </Typography>
                 <div className="flex gap-2">
-                   <Pagination />
+                <Pagination  active={active} setActive={setActive} />
                 </div>
             </CardFooter>
         </Card>

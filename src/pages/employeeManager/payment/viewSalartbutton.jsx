@@ -12,7 +12,6 @@ import {
 } from "@material-tailwind/react";
 import SmallCard from "../../../components/cards/card";
 import DashCard from "../dashButtonCard";
-import AdvanceRequestList from "../advanceRequestList";
 import DashCard2 from "../dashButtonCard copy";
 import SalaryList from "./salaryList";
  

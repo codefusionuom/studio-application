@@ -4,9 +4,8 @@ import {
   Card,
   CardBody,
 } from "@material-tailwind/react";
-import AdvanceRequestList from "../advanceRequestList";
 import DashCard2 from "../dashButtonCard copy";
-import ViewAllowance from "./viewallowance";
+import ViewAllowance from "../allowance/viewallowance";
 
 function ButtomViewAllowance() {
 
