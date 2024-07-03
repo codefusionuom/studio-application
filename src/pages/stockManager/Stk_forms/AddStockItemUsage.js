@@ -15,19 +15,26 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-function AddReturnStockForm({
+function AddStockItemUsage({
   title,
-  addReturnedStockToList,
+  addStockItemUsageToList,
   open,
   handleOpen,
   handleClose,
   setFormData,
-  formData = { itemId: "", price: "", quantity: "", date: "", description: "" }, // Default values
+  formData = {
+    employeeId: "",
+    itemId: "",
+    quantity: "",
+    returnQuantity: "",
+    description: "",
+  }, // Default values
   mode,
 }) {
   const [size, setSize] = useState(null);
   const [errors, setErrors] = useState({});
   const [stkItems, setStkItems] = useState([]);
+  const [employees, setEmployees] = useState([]);
 
   const validateForm = () => {
     let isValid = true;
@@ -45,35 +52,38 @@ function AddReturnStockForm({
   const handleSubmit = async () => {
     if (validateForm()) {
       console.log("Form submitted");
-
+  
       try {
+
+  
         if (mode) {
           // Edit
           await axios.put(
-            `http://localhost:5000/stockManager/returnStockItem/${formData.id}`,
+            `http://localhost:5000/stockManager/stockItemUsage/${formData.id}`,
             formData
           );
-          addReturnedStockToList(formData);
+          addStockItemUsageToList(formData);
         } else {
           // Add
+         
           await axios.post(
-            "http://localhost:5000/stockManager/returnStockItem",
+            "http://localhost:5000/stockManager/stockItemUsage",
             formData
           );
-          addReturnedStockToList(formData);
+          addStockItemUsageToList(formData);
         }
         handleClose();
         // Clear the form data and errors
         setFormData({
           itemId: "",
-          price: "",
+          employeeId: "",
           quantity: "",
-          date: "",
+          returnQuantity: "",
           description: "",
         });
         setErrors({});
-
-        toast.success("Stock items created successfully", {
+  
+        toast.success(" items created successfully", {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -84,11 +94,11 @@ function AddReturnStockForm({
           theme: "light",
         });
         handleOpen();
-        window.location.replace("/stockManager/returnedStock");
+        // window.location.replace("/stockManager/returnedStock");
       } catch (error) {
-        console.error("Error creating stock items:", error);
-
-        toast.error("Stock item creation unsuccessful", {
+        console.error("Error creating  items:", error.response); // Log the response for more details
+  
+        toast.error(" item creation unsuccessful", {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -101,7 +111,9 @@ function AddReturnStockForm({
       }
     }
   };
-
+  
+  
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -115,74 +127,77 @@ function AddReturnStockForm({
       setFormData((prevData) => ({
         ...prevData,
         itemId: selectedItem.itemId,
-        price: selectedItem.cost,
       }));
     }
   };
 
   useEffect(() => {
+    // Fetch stock items from API
     const fetchItems = async () => {
       try {
-        let currentPage = 1;
-        let fetchedItems = [];
-  
-        // Loop until all pages are fetched
-        while (true) {
-          const response = await axios.get(
-            `http://localhost:5000/stockManager/stockItem?page=${currentPage}`
-          );
-  
-          const { success, message, stockItems, totalPages } = response.data;
-  
-          if (success) {
-            fetchedItems = [...fetchedItems, ...stockItems];
-            if (currentPage >= totalPages) {
-              break; // Exit loop if all pages have been fetched
-            } else {
-              currentPage++;
-            }
-          } else {
-            console.error("Failed to fetch stock items:", message);
-            break; // Exit loop on failure
-          }
+        const response = await axios.get(
+          "http://localhost:5000/stockManager/stockItem"
+        );
+        const { success, message, stockItems } = response.data;
+
+        if (success) {
+          setStkItems(stockItems); // Update the items state with fetched data
+        } else {
+          console.error("Failed to fetch stock Items:", message);
         }
-  
-        setStkItems(fetchedItems); // Update state with all fetched items
       } catch (error) {
-        console.error("Error fetching stock items:", error);
+        console.error("Error fetching stock Items:", error);
       }
     };
-  
+
+    // Fetch employees from API
+    // const fetchEmployees = async () => {
+    //   try {
+    //     const response = await axios.get(
+    //       "http://localhost:5000/employeeManager/employees"
+    //     );
+    //     const { success, message, employees } = response.data;
+
+    //     if (success) {
+    //       setEmployees(employees); // Update the employees state with fetched data
+    //     } else {
+    //       console.error("Failed to fetch employees:", message);
+    //     }
+    //   } catch (error) {
+    //     console.error("Error fetching employees:", error);
+    //   }
+    // };
+
     fetchItems();
+    // fetchEmployees();
   }, []);
-  
 
   const handleItemChange = (value) => {
     const selectedItem = stkItems.find((item) => item.itemName === value);
     if (selectedItem) {
-      setFormData({ ...formData, itemId: selectedItem.id, price: selectedItem.cost });
+      setFormData({ ...formData, itemId: selectedItem.id });
       setErrors({ ...errors, itemId: "" });
     }
   };
 
-  const calculateSubtotal = () => {
-    const { price, quantity } = formData;
-    const subtotal = price * quantity;
-    return (
-      "Rs. " +
-      subtotal.toLocaleString("en-IN", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })
+  const handleEmployeeChange = (value) => {
+    const selectedEmployee = employees.find(
+      (employee) => employee.empName === value
     );
+    if (selectedEmployee) {
+      setFormData({ ...formData, employeeId: selectedEmployee.id });
+      setErrors({ ...errors, employeeId: "" });
+    }
   };
+
+
 
   const handleClear = () => {
     setFormData({
+      employeeId: "",
       itemId: "",
-      price: "",
       quantity: "",
-      date: "",
+      returnQuantity: "",
       description: "",
     });
     setErrors({});
@@ -196,23 +211,43 @@ function AddReturnStockForm({
         handler={handleOpen}
         className="bg-white shadow-none w-1/4"
       >
-        <DialogHeader>Add New Damage Note</DialogHeader>
+        <DialogHeader>Borrow Item</DialogHeader>
         <DialogBody>
           <Card color="transparent" shadow={false}>
             <form className="p-2 w-full">
               <div className="flex flex-row gap-5 items-end mb-5 justify-around">
-                <div className="flex flex-col gap-2 w-1/4 ">
-                  <Typography>Date:</Typography>
-                  <Input
-                    label="Date"
+                {/* <div className="flex flex-col gap-2 w-1/4 ">
+                  <Typography className="mb-2" variant="h6">
+                    Employee Name:
+                  </Typography>
+                  <Select
+                    label="Employee Name"
                     size="lg"
-                    name="date"
-                    type="date"
-                    value={formData.date}
-                    onChange={handleChange}
-                    error={!!errors.date}
-                  />
-                </div>
+                    onChange={(value) => handleEmployeeChange(value)}
+                    value={
+                      employees.find(
+                        (employee) => employee.id === formData.employeeId
+                      )?.empName || ""
+                    }
+                    className="z-10"
+                  >
+                    {employees.map((employee) => (
+                      <Option
+                        key={employee.id} // Assign a unique key based on employee.id
+                        value={employee.empName}
+                      >
+                        {employee.empName}
+                      </Option>
+                    ))}
+                  </Select>
+
+                  {errors.empName && (
+                    <Typography className="text-red-500 text-sm">
+                      {errors.empName}
+                    </Typography>
+                  )}
+                </div> */}
+
                 <div className="flex flex-col gap-2 w-1/4">
                   <Typography className="mb-2" variant="h6">
                     Item:
@@ -222,7 +257,8 @@ function AddReturnStockForm({
                     size="lg"
                     onChange={(value) => handleItemChange(value)}
                     value={
-                      stkItems.find((item) => item.id === formData.itemId)?.itemName || ""
+                      stkItems.find((item) => item.id === formData.itemId)
+                        ?.itemName || ""
                     }
                     className="z-10"
                   >
@@ -246,19 +282,6 @@ function AddReturnStockForm({
 
               <div className="flex flex-row gap-5 items-end justify-around">
                 <div className="flex flex-col gap-2 w-1/4">
-                  <Typography>Price:</Typography>
-                  <Input
-                    label="Price"
-                    size="lg"
-                    name="price"
-                    value={formData.price}
-                    onChange={handleChange}
-                    placeholder="Price"
-                    error={!!errors.price}
-                    disabled
-                  />
-                </div>
-                <div className="flex flex-col gap-2 w-1/4">
                   <Typography>Quantity:</Typography>
                   <Input
                     label="Quantity"
@@ -270,14 +293,22 @@ function AddReturnStockForm({
                     error={!!errors.quantity}
                   />
                 </div>
+                <div className="flex flex-col gap-2 w-1/4">
+                  <Typography>Return Quantity:</Typography>
+                  <Input
+                    label="Return Quantity"
+                    size="lg"
+                    name="returnQuantity"
+                    value={formData.returnQuantity}
+                    onChange={handleChange}
+                    error={!!errors.returnQuantity}
+                  />
+                </div>
               </div>
             </form>
           </Card>
 
           <div className="flex flex-col gap-5 items-end mt-5 justify-around">
-            <div className=" justify-center mt-5 w-full">
-              <Typography variant="h6">Subtotal: {calculateSubtotal()}</Typography>
-            </div>
             <div className="h-full min-h-[100px] w-full">
               <Typography>Description:</Typography>
               <textarea
@@ -306,4 +337,4 @@ function AddReturnStockForm({
   );
 }
 
-export default AddReturnStockForm;
+export default AddStockItemUsage;

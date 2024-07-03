@@ -12,12 +12,29 @@ import {
   Select,
   Option,
 } from "@material-tailwind/react";
+
+import SmallCard from "../../../components/cards/card";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-function AddStockItemForm({ title, addStockItemToList, open, handleOpen, handleClose, setFormData, formData, mode }) {
+function AddStockItemForm({ title, id }) {
+  const [open, setOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    itemId: "",
+    itemName: "",
+    category: "",
+    cost: "",
+    description: "",
+  });
   const [errors, setErrors] = useState({});
+  const [errorMessage, setErrorMessage] = useState("");
   const [categories, setCategories] = useState([]);
+
+  const handleOpen = () => {
+    setOpen((cur) => !cur);
+  };
+
+  const handleClose = () => setOpen(false);
 
   const handleChange = (e) => {
     if (e && e.target && e.target.name) {
@@ -25,7 +42,9 @@ function AddStockItemForm({ title, addStockItemToList, open, handleOpen, handleC
       setFormData({ ...formData, [name]: value });
       setErrors({ ...errors, [name]: "" });
     } else {
-      console.error("Event or event target is missing or does not have a name attribute.");
+      console.error(
+        "Event or event target is missing or does not have a name attribute."
+      );
     }
   };
 
@@ -33,18 +52,24 @@ function AddStockItemForm({ title, addStockItemToList, open, handleOpen, handleC
     let isValid = true;
     let newErrors = {};
 
+    if (!formData.itemId.trim()) {
+      newErrors.itemId = "Item ID is required";
+      isValid = false;
+    } else {
+      const itemIdPattern = /^I-\d{4}$/;
+      if (!itemIdPattern.test(formData.itemId)) {
+        newErrors.itemId = "Item ID should be in format I-0001";
+        isValid = false;
+      }
+    }
+
     if (!formData.itemName.trim()) {
       newErrors.itemName = "Item Name is required";
       isValid = false;
     }
 
-    if (!String(formData.cost).trim()) {
+    if (!formData.cost.trim()) {
       newErrors.cost = "Cost is required";
-      isValid = false;
-    }
-
-    if (!formData.categoryId) {
-      newErrors.categoryId = "Category is required";
       isValid = false;
     }
 
@@ -54,96 +79,55 @@ function AddStockItemForm({ title, addStockItemToList, open, handleOpen, handleC
 
   const handleSubmit = async () => {
     if (validateForm()) {
-      if (mode) {
-        // edit
-        try {
-          await axios.put(
-            `http://localhost:5000/stockManager/stockItem/${formData.id}`,
-            formData
-          );
-          addStockItemToList(formData);
-          handleClose();
-          setFormData({
-            itemName: "",
-            categoryId: "",
-            cost: "",
-            description: "",
-          });
-          setErrors({});
-          toast.success("Stock item edited successfully", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
-        } catch (error) {
-          console.error("Error editing Stock item:", error);
-          handleClose();
-          toast.error("Stock item edit unsuccessful", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
-        }
-      } else {
-        // add
-        try {
-          await axios.post(
-            "http://localhost:5000/stockManager/stockItem",
-            formData
-          );
-          addStockItemToList(formData);
-          handleClose();
-          setFormData({
-            itemName: "",
-            categoryId: "",
-            cost: "",
-            description: "",
-          });
-          setErrors({});
-          toast.success("Stock item created successfully", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
-        } catch (error) {
-          console.error("Error creating Stock item:", error);
-          handleClose();
-          toast.error("Stock item creation unsuccessful", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
-        }
+      try {
+        await axios.post(
+          "http://localhost:5000/stockManager/stockItem",
+          formData
+        );
+        addStockItemToList(formData);
+        handleClose();
+        setFormData({
+          itemId: "",
+          itemName: "",
+          category: "",
+          cost: "",
+          description: "",
+        });
+        setErrors({});
+        toast.success("Stock item created successfully", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      } catch (error) {
+        console.error("Error creating Stock item:", error);
+        handleClose();
+        toast.error("Stock item creation unsuccessful", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       }
     }
   };
 
   const handleClear = () => {
     setFormData({
+      itemId: "",
       itemName: "",
-      categoryId: "",
+      category: "",
       cost: "",
-      description: "",
+      ription: "",
     });
     setErrors({});
   };
@@ -170,19 +154,14 @@ function AddStockItemForm({ title, addStockItemToList, open, handleOpen, handleC
     fetchCategories();
   }, []);
 
-  const handleCategoryChange = (value) => {
-    const selectedCategory = categories.find(
-      (category) => category.categoryName === value
-    );
-    if (selectedCategory) {
-      setFormData({ ...formData, categoryId: selectedCategory.id });
-      setErrors({ ...errors, categoryId: "" });
-    }
-  };
-  
-
   return (
     <>
+      <SmallCard
+        className="cursor-pointer"
+        title={title}
+        onClick={handleOpen}
+      />
+
       <Dialog
         open={open}
         handler={handleOpen}
@@ -191,7 +170,7 @@ function AddStockItemForm({ title, addStockItemToList, open, handleOpen, handleC
         <Card className="mx-auto w-full">
           <CardBody className="flex flex-col gap-4">
             <Typography variant="h4" color="blue-gray">
-              {mode ? "Edit Stock Item" : "Add New Stock Item"}
+              Add New Stock Item
             </Typography>
             <Typography
               className="mb-3 font-normal"
@@ -202,6 +181,25 @@ function AddStockItemForm({ title, addStockItemToList, open, handleOpen, handleC
             </Typography>
 
             <div className="flex flex-row justify-evenly">
+              <div className="flex flex-col justify-between">
+                <Typography className="mb-2" variant="h6">
+                  Item ID:
+                </Typography>
+                <Input
+                  label="Item ID"
+                  size="lg"
+                  name="itemId"
+                  value={formData.itemId}
+                  onChange={handleChange}
+                  placeholder="I-0001"
+                  error={errors.itemId}
+                />
+                {errors.itemId && (
+                  <Typography className="text-red-500 text-sm">
+                    {errors.itemId}
+                  </Typography>
+                )}
+              </div>
               <div className="flex flex-col justify-between">
                 <Typography className="mb-2" variant="h6">
                   Item Name:
@@ -221,46 +219,44 @@ function AddStockItemForm({ title, addStockItemToList, open, handleOpen, handleC
                   </Typography>
                 )}
               </div>
+            </div>
 
+            <div className="flex flex-row justify-evenly ">
               <div className="flex flex-col justify-between">
                 <Typography className="mb-2" variant="h6">
                   Category:
                 </Typography>
                 <Select
-  label="Category"
-  size="lg"
-  onChange={(value) => handleCategoryChange(value)}
-  value={
-    categories.find(
-      (category) => category.id === formData.categoryId
-    )?.categoryName || ""
-  }
-  className="z-10"
->
-  {categories.map((category) => (
-    <Option
-      key={category.id}
-      value={category.categoryName}
-    >
-      {category.categoryName}
-    </Option>
-  ))}
-</Select>
+                  size="lg"
+                  onChange={(value) =>
+                    handleChange({ target: { name: "category", value } })
+                  }
+                  value={formData.category}
+                  className="z-10"
+                >
+                  {categories.map((category) => (
+                    <Option
+                      key={category.categoryId}
+                      value={category.categoryName}
+                    >
+                      {category.categoryName}
+                    </Option>
+                  ))}
+                </Select>
 
-                {errors.categoryId && (
+                {errors.category && (
                   <Typography className="text-red-500 text-sm">
-                    {errors.categoryId}
+                    {errors.category}
                   </Typography>
                 )}
               </div>
-
               <div className="flex flex-col justify-between">
                 <Typography className="mb-2" variant="h6">
                   Cost:
                 </Typography>
                 <Input
                   label="Cost"
-                  size="xl"
+                  size="lg"
                   name="cost"
                   value={formData.cost}
                   onChange={handleChange}
@@ -291,12 +287,12 @@ function AddStockItemForm({ title, addStockItemToList, open, handleOpen, handleC
             </div>
           </CardBody>
           <CardFooter className="pt-0">
-            <div className="flex flex-row justify-between gap-4">
-              <Button className="bg-btn-warning w-full" onClick={handleClear}>
+            <div className="flex flex-row justify-between">
+              <Button className="bg-btn-warning" onClick={handleClear}>
                 Clear
               </Button>
-              <Button className=" bg-btn-success w-full" onClick={handleSubmit}>
-                {mode ? "Edit" : "Create"}
+              <Button className=" bg-btn-success" onClick={handleSubmit}>
+                Create
               </Button>
             </div>
           </CardFooter>

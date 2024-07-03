@@ -69,10 +69,11 @@ export function DefaultSidebar({sections}) {
                                 Smoe Joe
                             </Typography>
                             <div className="flex justify-center gap-2 relative">
-                                <Typography fontFamily={"16px"} color={"rgba(255, 255, 255, 0.40)"} align="center" sx={{
+                                <Typography fontFamily={"16px"} color={"white"} align="center" sx={{
                                     display: "flex",
                                     justifyContent: "space-around",
-                                    gap: "5px"
+                                    gap: "5px",
+                                    opacity: 0.40
                                 }}>
                                     {role}
                                 </Typography>

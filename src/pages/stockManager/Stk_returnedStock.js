@@ -1,234 +1,327 @@
-import React ,{useState}from 'react'
-import { MagnifyingGlassIcon, ChevronUpDownIcon, } from "@heroicons/react/24/outline";
-import { PencilIcon, UserPlusIcon } from "@heroicons/react/24/solid";
-import { Card, CardHeader, Input, Typography, Button, CardBody, Chip, CardFooter, Tabs, TabsHeader, Tab, Avatar, IconButton, Tooltip, Select, Option, } from "@material-tailwind/react";
-import Datepicker from "../../components/datePicker/Datepicker";
+import React, { useState, useEffect } from "react";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { Card, Input, CardBody, Typography } from "@material-tailwind/react";
+import AddReturnStockForm from "./Stk_forms/AddReturnStockForm";
+import Modal from "./Stk_components/Modal";
+import axios from "axios";
+import DeleteRecordButton from "../../components/buttons/DeleteRecordButton";
+import EditRecordButton from "../../components/buttons/EditRecordButton";
 import { Pagination } from "../../components/pagination/pagination";
-import SmallCard from '../../components/cards/card';
-import Table from './Stk_components/Table';
-import { returnedDetailList, returnedTHead } from './Stk_components/data';
-import AddReturnStockForm from './Stk_forms/AddReturnStockForm';
-import Modal from './Stk_components/Modal';
+import SmallCard from "../../components/cards/card";
 
 function ReturnedStock() {
-    const [isFormVisible, setFormVisible] = useState(false);
+  const [isFormVisible, setFormVisible] = useState(false);
 
-    const openForm = () => {
-      setFormVisible(true);
+  const closeForm = () => {
+    setFormVisible(false);
+  };
 
-    };
+  const [returnedStock, setReturnedStock] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [stkItems, setStkItems] = useState([]);
+  const [mode, setMode] = useState(false);
+  const [formData, setFormData] = useState({
+    itemId: "",
+    price: "",
+    quantity: "",
+    date: "",
+    description: "",
+  });
+  const [open, setOpen] = useState(false);
+  const handleClose = () => setOpen(false);
+
+  useEffect(() => {
+    fetchReturnedStocks();
+    fetchItems();
+  },[currentPage]);
+
+  const fetchReturnedStocks = async () => {
+    setLoading(true);
+    try {
+      let url = `http://localhost:5000/stockManager/returnStockItem?page=${currentPage}&limit=4`;
+      if (searchQuery) {
+        url += `&searchQuery=${searchQuery}`;
+      }
+      const response = await axios.get(url);
+      const { success, message, returnItems, totalPages } = response.data;
+
+      if (success) {
+        setReturnedStock(returnItems);
+        setTotalPages(totalPages);
+      } else {
+        setError(message);
+      }
+    } catch (error) {
+      setError("Failed to fetch return stock items");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchItems = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/stockManager/stockItem"
+      );
+      const { success, message, stockItems } = response.data;
+
+      if (success) {
+        setStkItems(stockItems); // Update the items state with fetched data
+      } else {
+        console.error("Failed to fetch stock Items:", message);
+      }
+    } catch (error) {
+      console.error("Error fetching stock Items:", error);
+    }
+  };
+
+
+  const addReturnedStockToList = (newReturnedStock) => {
+    if (returnedStock.length === 4) {
+      setCurrentPage(currentPage + 1);
+    }
+    setReturnedStock([ newReturnedStock,...returnedStock,]);
+  };
+
+  const handleDelete = async (id) => {
+    setMode(true);
+    console.log(" deleted", id);
+
+    try {
+      await axios.delete(
+        `http://localhost:5000/stockManager/returnStockItem/${id}`
+      );
+      setReturnedStock(returnedStock.filter((item) => item.id !== id));
+      console.log("Successfully deleted item");
+      alert("Successfully deleted stock item");
+    } catch (error) {
+      console.error("Error deleting item:", error);
+    }
+  };
+
+  const handleEdit = async (id) => {
+    try {
+      // fetch the stock item data to be edited
+      const response = await axios.get(
+        `http://localhost:5000/stockManager/returnStockItem/${id}`
+      );
+      const { success, message, returnItems } = response.data;
+     
+      if (success) {
+        setMode(true);
+        handleOpen();
+        setFormData(returnItems)
+       console.log(returnItems)
+        // Handle the edit functionality using the fetched stock item data
+        console.log("Editing return stock item:", returnItems);
+      } else {
+        console.error("Failed to fetch return Stock Item details:", message);
+      }
+    } catch (error) {
+      console.error("Error editing return Stock item:", error);
+    }
+  };
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+  useEffect(() => {
+    returnItemSearch();
+  }, [searchQuery]);
+
+  const returnItemSearch = async () => {
+    if (!searchQuery) {
+      setCurrentPage(1); // Reset to first page when performing a new search
+    fetchReturnedStocks();
+      return;
+    }
+    try {
+      const { data } = await axios.get(
+        `http://localhost:5000/stockManager/returnStockItem/?itemName=${searchQuery}`
+      );
+      const { success, returnItems } = data;
+      if (success) {
+        setReturnedStock(returnedStock);
+      } else {
+        setError("No stock items found");
+      }
+    } catch (error) {
+      console.log("Error searching for stock items:", error);
+      setError("Failed to search stock items");
+    }
+  };
+  const getItemName = (itemId) => {
+    const item = stkItems.find((cat) => cat.id === itemId);
+    return item ? item.itemName : "Unknown";
+  };
+
+  const handleOpenAdd = () => {
+    setMode(false);
+    handleOpen();
+    setFormVisible(true);
+    setFormData({
+      itemId: "",
+      price: "",
+      quantity: "",
+      date: "",
+      description: "",
+    });
+  };
+
+  const handleOpen = () => {
+    setOpen((cur) => !cur);
+  };
+
   
-    const closeForm = () => {
-      setFormVisible(false);
-    };
-    return (
-        <div className='flex flex-col gap-10'>
-             <div className="flex gap-10">
-          <div>
-            
-            {isFormVisible && (
-              <Modal onClose={closeForm}>
-                <AddReturnStockForm onClose={closeForm} />
-              </Modal>
-             
-            )}
-          </div>
-          <AddReturnStockForm title={'  Return Stock Item'} onClose={closeForm} />
 
-
-
-               
-                <Card className='w-full rounded'>
-                    <div className=" flex p-4 gap-6 items-center">
-                        <Select size="lg" label="Select By: Item Id" className="z-10">
-                            <Option>Item Id</Option>
-                            <Option>Date</Option>
-                            <Option>Supplier Name</Option>
-                            <Option>Item Id</Option>
-                            <Option>Item Name</Option>
-                        </Select>
-
-                        <Input size="lg"
-                            label="Search"
-                            icon={<MagnifyingGlassIcon className="h-5 w-5" />}
-                        />
-                    </div>
-                </Card>
-            </div>
-            <div>
-
-                <Table title="Returned Stock" headerList={returnedTHead} rowList={returnedDetailList}/>
-                {/* <Card className=" w-full border-2 rounded">
-                    <CardHeader floated={false} shadow={false} className="rounded-none">
-                        <div className="flex flex-col items-center justify-between gap-4  md:flex-row ">
-                            <Typography className='text-2xl'>Returned Stock Items</Typography>
-                        </div>
-                    </CardHeader>
-                    <CardBody className="overflow-scroll px-0">
-                        <table className="mt-4 w-full min-w-max table-auto text-left">
-                            <thead>
-                                <tr>
-                                    {TABLE_HEAD.map((head, index) => (
-                                        <th
-                                            key={head}
-                                            className="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50"
-                                        >
-                                            <Typography
-                                                variant="small"
-                                                color="blue-gray"
-                                                className="flex items-center justify-between gap-2 font-normal leading-none opacity-70"
-                                            >
-                                                {head}
-                                            </Typography>
-                                        </th>
-                                    ))}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {TABLE_ROWS.map(
-                                    ({ img, name, email, job, org, online, date }, index) => {
-                                        const isLast = index === TABLE_ROWS.length - 1;
-                                        const classes = isLast
-                                            ? "p-4"
-                                            : "p-4 border-b border-blue-gray-50";
-
-                                        return (
-                                            <tr key={name}>
-                                                <td className={classes}>
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="flex flex-col">
-                                                            <Typography
-                                                                variant="small"
-                                                                color="blue-gray"
-                                                                className="font-normal"
-                                                            >
-                                                                {name}
-                                                            </Typography>
-                                                            <Typography
-                                                                variant="small"
-                                                                color="blue-gray"
-                                                                className="font-normal opacity-70"
-                                                            >
-                                                                {email}
-                                                            </Typography>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td className={classes}>
-                                                    <div className="flex flex-col">
-                                                        <Typography
-                                                            variant="small"
-                                                            color="blue-gray"
-                                                            className="font-normal"
-                                                        >
-                                                            {job}
-                                                        </Typography>
-                                                        <Typography
-                                                            variant="small"
-                                                            color="blue-gray"
-                                                            className="font-normal opacity-70"
-                                                        >
-                                                            {org}
-                                                        </Typography>
-                                                    </div>
-                                                </td>
-                                                <td className={classes}>
-                                                    <div className="w-max">
-                                                        <Chip
-                                                            variant="ghost"
-                                                            size="sm"
-                                                            value={online ? "online" : "offline"}
-                                                            color={online ? "green" : "blue-gray"}
-                                                        />
-                                                    </div>
-                                                </td>
-                                                <td className={classes}>
-                                                    <Typography
-                                                        variant="small"
-                                                        color="blue-gray"
-                                                        className="font-normal"
-                                                    >
-                                                        {date}
-                                                    </Typography>
-                                                </td>
-                                                <td className={classes}>
-                                                    <Tooltip content="Edit User">
-                                                        <IconButton variant="text">
-                                                            <PencilIcon className="h-4 w-4" />
-                                                        </IconButton>
-                                                    </Tooltip>
-                                                </td>
-                                            </tr>
-                                        );
-                                    },
-                                )}
-                            </tbody>
-                        </table>
-                    </CardBody>
-                    <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
-                        <Typography>
-                            233 results
-                        </Typography>
-                        <div className="flex gap-2">
-                            <Pagination />
-                        </div>
-                    </CardFooter>
-                </Card>
-            */}
-            </div> 
+  return (
+    <div className="flex flex-col gap-10">
+      <div className="flex gap-10">
+        <div>
+          {isFormVisible && (
+            <Modal onClose={closeForm}>
+              <AddReturnStockForm onClose={closeForm} />
+            </Modal>
+          )}
         </div>
-    )
+        <AddReturnStockForm 
+                    onClose={closeForm}
+                    mode={mode}
+                    formData={formData}
+                    setFormData={setFormData}
+                    handleClose={handleClose}
+                    open={open}
+                    handleOpen={handleOpen}
+                    addReturnedStockToList={addReturnedStockToList} />
+
+       
+      </div>
+      <SmallCard
+        className="cursor-pointer"
+        title={"  Add Return Stock Item"}
+        onClick={handleOpenAdd}
+        variant="gradient"
+      />
+
+
+      <CardBody className="flex flex-col gap-1 bg-white rounded-md">
+      <div className="flex flex-row gap-1 justify-between">
+        <Typography variant="h4" color="blue-gray">
+          Returned Stock List
+        </Typography>
+        <Card className="w-400 rounded">
+          <div className="flex p-4 gap-6 items-center">
+
+            <Input
+              size="lg"
+              label="Search"
+              icon={<MagnifyingGlassIcon className="h-5 w-5" onClick={returnItemSearch}/>}
+              value={searchQuery}
+              onChange={handleSearchChange}
+            />
+          </div>
+        </Card>
+        </div>
+        {loading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p>Error: {error}</p>
+        ) : (
+          <div className="overflow-auto mt-5">
+            <Card className="relative flex flex-col w-full h-full overflow-scroll text-gray-700 bg-white 
+            shadow-md bg-clip-border rounded-xl mt-10">
+              <table className="w-full text-left table-auto min-w-max">
+                <thead>
+                  <tr>
+                    <th className="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
+                      <p className="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">
+                        Item Name
+                      </p>
+                    </th>
+                    <th className="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
+                      <p className="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">
+                        Price
+                      </p>
+                    </th>
+                    <th className="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
+                      <p className="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">
+                        Quantity
+                      </p>
+                    </th>
+                    <th className="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
+                      <p className="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">
+                        Date
+                      </p>
+                    </th>
+                    <th className="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
+                      <p className="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">
+                        Reason
+                      </p>
+                    </th>
+                    <th className="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
+                      <p className="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">
+                        Delete
+                      </p>
+                    </th>
+                    <th className="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
+                      <p className="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">
+                        Edit
+                      </p>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {returnedStock.map((item) => (
+                    <tr key={item.id} className="even:bg-blue-gray-50/50">
+                      <td className="p-4">
+                        <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
+                          {getItemName(item.itemId)}
+                        </p>
+                      </td>
+                      <td className="p-4">
+                        <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
+                          {item.price}
+                        </p>
+                      </td>
+                      <td className="p-4">
+                        <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
+                          {item.quantity}
+                        </p>
+                      </td>
+                      <td className="p-4">
+                        <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
+                          {item.date ? new Date(item.date).toLocaleDateString() : "N/A"}
+                        </p>
+                      </td>
+                      <td className="p-4">
+                        <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
+                          {item.description}
+                        </p>
+                      </td>
+                      <td>
+                        <DeleteRecordButton onClick={() => handleDelete(item.id)} />
+                      </td>
+                      <td>
+                        <EditRecordButton onClick={() => handleEdit(item.id)} />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </Card>
+            <Pagination
+                active={currentPage}
+                setActive={setCurrentPage}
+                total={totalPages}
+              />
+          </div>
+        )}
+      </CardBody>
+    </div>
+  );
 }
 
-export default ReturnedStock
-
-
-const TABLE_HEAD = ["GRN No", "SupplierID", "Date", "Amount", "Edit"];
-
-const TABLE_ROWS = [
-    {
-        img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg",
-        name: "John Michael",
-        email: "john@creative-tim.com",
-        job: "Manager",
-        org: "Organization",
-        online: true,
-        date: "23/04/18",
-    },
-    {
-        img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-2.jpg",
-        name: "Alexa Liras",
-        email: "alexa@creative-tim.com",
-        job: "Programator",
-        org: "Developer",
-        online: false,
-        date: "23/04/18",
-    },
-    {
-        img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-1.jpg",
-        name: "Laurent Perrier",
-        email: "laurent@creative-tim.com",
-        job: "Executive",
-        org: "Projects",
-        online: false,
-        date: "19/09/17",
-    },
-    {
-        img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-4.jpg",
-        name: "Michael Levi",
-        email: "michael@creative-tim.com",
-        job: "Programator",
-        org: "Developer",
-        online: true,
-        date: "24/12/08",
-    },
-    {
-        img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-5.jpg",
-        name: "Richard Gran",
-        email: "richard@creative-tim.com",
-        job: "Manager",
-        org: "Executive",
-        online: false,
-        date: "04/10/21",
-    },
-]
+export default ReturnedStock;
