@@ -31,7 +31,7 @@ import FoggotPassword from './pages/common/FoggotPassword';
 
 import EmployeeManagerDashboard from './pages/employeeManager/dashboard';
 import EmployeePayment from './pages/employeeManager/payment';
-import Attendance from './pages/employeeManager/attendance';
+import Attendance from './pages/employeeManager/attendance/attendance';
 import SuperAdminDashboard from './pages/superAdmin/Dashboard';
 import SuperAdminAdmins from './pages/superAdmin/admin';
 import SuperAdminEventCalandar from './pages/superAdmin/EventCalander';
