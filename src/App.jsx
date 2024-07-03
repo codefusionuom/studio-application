@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react';
+import React, { useEffect } from 'react';
 import PaymentDetails from './pages/customerManager/paymentDetails';
 import CustomerManager from './pages/customerManager';
 import { Route, Routes } from 'react-router-dom';
@@ -43,10 +43,9 @@ import EventManagerEventCalendar from './pages/eventManager/eventManagerEventCal
 import EventManagerEvents from './pages/eventManager/eventManagerEvents';
 import PrivateRoute from './components/routing/PrivateRoute';
 import { store } from './app/store';
-
+import Setting from './pages/common/Setting';
 
 function App() {
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -54,164 +53,146 @@ function App() {
   }, []);
 
   return (
-    // <Provider store={store}> 
-      <Routes>
-        <Route path='/' element={<Welcome />}></Route>
-        <Route path='/login' element={<Login />}></Route>
-        <Route path='/foggotPassword' element={<FoggotPassword />}></Route>
-        <Route path='/customerManager' element={<CustomerManager />}>
-          {/* event managerr */}
-          <Route
-            path='/customerManager'
-            element={
-              <PrivateRoute>
-                <CustomerManagerDashboard />
-              </PrivateRoute>
-            }
-          ></Route>
-          <Route path='/customerManager/customers' element={<Customers />} />
-          <Route
-            path='/customerManager/paymentDetails/:id'
-            element={<PaymentDetails />}
-          />
-          <Route
-            path='/customerManager/eventCalandar'
-            element={<EventCalandar />}
-          />
-          <Route
-            path='/customerManager/createCustomerRequest'
-            element={<CreateCustomerRequest />}
-          />
-          <Route
-            path='/customerManager/paymentList'
-            element={<PaymentList />}
-          />
-          <Route
-            path='/customerManager/customerRequest'
-            element={<CustomerRequests />}
-          />
-        </Route>
-
-        {/* event managerr */}
+    <Routes>
+      <Route path='/' element={<Welcome />}></Route>
+      <Route path='/login' element={<Login />}></Route>
+      <Route path='/foggotPassword' element={<FoggotPassword />}></Route>
+      <Route
+        path='/customerManager'
+        element={
+          // <PrivateRoute requiredPrivilege='customer_manager'>
+            <CustomerManager />
+          // </PrivateRoute>
+        }
+      >
+        {/* cusomer managerr */}
         <Route
-          path='/eventManager'
+          path='/customerManager'
           element={
-            <PrivateRoute>
-              <EventManager />
-            </PrivateRoute>
+            <CustomerManagerDashboard />
           }
-        >
-          <Route path='/eventManager' element={<EventManagerDashboard />} />
-          <Route
-            path='/eventManager/eventRequests'
-            element={<EventRequests />}
-          />
-          <Route
-            path='/eventManager/eventCalandar'
-            element={<EventManagerEventCalendar />}
-          />
-          <Route path='/eventManager/Events' element={<EventManagerEvents />} />
-        </Route>
-
-        {/* stock manager */}
+        ></Route>
+        <Route path='/customerManager/customers' element={<Customers />} />
         <Route
-          path='/stockManager'
-          element={
-            <PrivateRoute>
-              <StockManager />
-            </PrivateRoute>
-          }
-        >
-          <Route
-            index={true}
-            path='/stockManager/'
-            element={<DashboardSmgr />}
-          />
-          <Route
-            index={false}
-            path='/stockManager/category'
-            element={<Category />}
-          />
-          <Route
-            index={false}
-            path='/stockManager/paymentDetails'
-            element={<SMpaymentDetails />}
-          />
-          <Route
-            index={false}
-            path='/stockManager/payment'
-            element={<SMpayment />}
-          />
-          <Route
-            index={false}
-            path='/stockManager/grn'
-            element={<GrnStock />}
-          />
-          <Route
-            index={false}
-            path='/stockManager/returnedStock'
-            element={<ReturnedStock />}
-          />
-          <Route
-            index={false}
-            path='/stockManager/stockItem'
-            element={<StockItem />}
-          />
-          <Route
-            index={false}
-            path='/stockManager/supplier'
-            element={<Suppliers />}
-          />
-          <Route
-            index={false}
-            path='/stockManager/form'
-            element={<FormComp />}
-          />
-        </Route>
-
-        {/* employee manager */}
+          path='/customerManager/paymentDetails/:id'
+          element={<PaymentDetails />}
+        />
         <Route
-          path='/employeeManager'
-          element={
-            <PrivateRoute>
-              <EmployeeManager />
-            </PrivateRoute>
-          }
-        >
-          <Route
-            path='/employeeManager/'
-            element={<EmployeeManagerDashboard />}
-          />
-          <Route
-            path='/employeeManager/payment'
-            element={<EmployeePayment />}
-          />
-          <Route path='/employeeManager/attendance' element={<Attendance />} />
-        </Route>
-
-        {/* super admin */}
+          path='/customerManager/eventCalandar'
+          element={<EventCalandar />}
+        />
         <Route
-          path='/superAdmin'
-          element={
-            <PrivateRoute>
-              <SuperAdmin />
-            </PrivateRoute>
-          }
-        >
-          <Route path='/superAdmin' element={<SuperAdminDashboard />} />
-          <Route path='/superAdmin/admin' element={<SuperAdminAdmins />} />
-          <Route
-            path='/superAdmin/EventCalander'
-            element={<SuperAdminEventCalandar />}
-          />
-          <Route
-            path='/superAdmin/Department'
-            element={<SuperAdminDepartment />}
-          />
-        </Route>
-      </Routes>
-      // <Provider />
+          path='/customerManager/createCustomerRequest'
+          element={<CreateCustomerRequest />}
+        />
+        <Route path='/customerManager/paymentList' element={<PaymentList />} />
+        <Route
+          path='/customerManager/customerRequest'
+          element={<CustomerRequests />}
+        />
+      </Route>
 
+      {/* event managerr */}
+      <Route
+        path='/eventManager'
+        element={
+          // <PrivateRoute requiredPrivilege='event_manager'>
+            <EventManager />
+          // </PrivateRoute>
+        }
+      >
+        <Route path='/eventManager' element={<EventManagerDashboard />} />
+        <Route path='/eventManager/eventRequests' element={<EventRequests />} />
+        <Route
+          path='/eventManager/eventCalandar'
+          element={<EventManagerEventCalendar />}
+        />
+        <Route path='/eventManager/Events' element={<EventManagerEvents />} />
+      </Route>
+
+      {/* stock manager */}
+      <Route
+        path='/stockManager'
+        element={
+          // <PrivateRoute>
+            <StockManager />
+          // </PrivateRoute>
+        }
+      >
+        <Route index={true} path='/stockManager/' element={<DashboardSmgr />} />
+        <Route
+          index={false}
+          path='/stockManager/category'
+          element={<Category />}
+        />
+        <Route
+          index={false}
+          path='/stockManager/paymentDetails'
+          element={<SMpaymentDetails />}
+        />
+        <Route
+          index={false}
+          path='/stockManager/payment'
+          element={<SMpayment />}
+        />
+        <Route index={false} path='/stockManager/grn' element={<GrnStock />} />
+        <Route
+          index={false}
+          path='/stockManager/returnedStock'
+          element={<ReturnedStock />}
+        />
+        <Route
+          index={false}
+          path='/stockManager/stockItem'
+          element={<StockItem />}
+        />
+        <Route
+          index={false}
+          path='/stockManager/supplier'
+          element={<Suppliers />}
+        />
+        <Route index={false} path='/stockManager/form' element={<FormComp />} />
+      </Route>
+
+      {/* employee manager */}
+      <Route
+        path='/employeeManager'
+        element={
+          // <PrivateRoute requiredPrivilege='employee_manager'>
+            <EmployeeManager />
+          // </PrivateRoute>
+        }
+      >
+        <Route
+          path='/employeeManager/'
+          element={<EmployeeManagerDashboard />}
+        />
+        <Route path='/employeeManager/payment' element={<EmployeePayment />} />
+        <Route path='/employeeManager/attendance' element={<Attendance />} />
+      </Route>
+
+      {/* super admin */}
+      <Route
+        path='/superAdmin'
+        element={
+          // <PrivateRoute requiredPrivilege='super_admin'>
+            <SuperAdmin />
+          // </PrivateRoute>
+        }
+      >
+        <Route path='/superAdmin' element={<SuperAdminDashboard />} />
+        <Route path='/superAdmin/admin' element={<SuperAdminAdmins />} />
+        <Route
+          path='/superAdmin/EventCalander'
+          element={<SuperAdminEventCalandar />}
+        />
+        <Route
+          path='/superAdmin/Department'
+          element={<SuperAdminDepartment />}
+        />
+        <Route path='/superAdmin/setting' element={<Setting />} />
+      </Route>
+    </Routes>
   );
 }
 

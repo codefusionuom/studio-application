@@ -14,6 +14,7 @@ import axiosInstance from '../../config/axios.config';
 import Card2 from '../../components/cards/Card2';
 import EditButton from '../../components/cards/buttons/EditButton';
 // import {handleOpen} from './form/AddAdminForm'
+import { useNavigate } from 'react-router-dom';
 
 function Admin() {
   const [records, setRecords] = useState([]);
@@ -21,8 +22,12 @@ function Admin() {
   const [open, setOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState(null);
+  const navigate = useNavigate();
 
-  const handleOpen = () => setOpen(!open);
+  const handleOpen = () => {
+    setOpen(!open);
+  };
+
   const handleEditOpen = (record) => {
     setSelectedRecord(record);
     // console.log('edit open clicked',editOpen);
@@ -31,22 +36,52 @@ function Admin() {
     setEditOpen(!editOpen);
   };
 
-  useEffect(()=>{
-    console.log('select record',selectedRecord);
-  },[selectedRecord])
+  useEffect(() => {
+    console.log('select record', selectedRecord);
+  }, [selectedRecord]);
 
   useEffect(() => {
-    setIsLoading(true);
+    console.log('record', records);
+  }, [records]);
+
+  useEffect(() => {
     axiosInstance
       .get('superAdmin/admin')
       .then((res) => {
+        console.log('response data', res.data);
+        // for (let data of res.data) {
+        //   console.log(data);
+        //   setRecords((prevData) => [...prevData, data]);
+        //   console.log(records);
+        // }
+        // addRecordsIncrementally(res.data);
+        // res.data.forEach((item, index) => {
+        //   // Update the state incrementally
+        //   setTimeout(() => {
+        //     setRecords(prevRecords => [...prevRecords, item]);
+        //   }, index * 100); // Slight delay to simulate incremental update
+        // });
         setRecords(res.data);
+        // console.log();
         // console.log('records', records);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
+
+  const addRecordsIncrementally = (data) => {
+    data.forEach((item, index) => {
+      setTimeout(() => {
+        setRecords((prevRecords) => {
+          const newRecords = [...prevRecords, item];
+          console.log('adding record', item);
+          console.log('new records state', newRecords);
+          //  return newRecords;
+        });
+      }, index * 100); // Adding slight delay for each item
+    });
+  };
 
   return (
     <div className='flex flex-col gap-10'>
@@ -60,8 +95,9 @@ function Admin() {
         open={open}
         handler={handleOpen}
         className='bg-transparent shadow-none w-fit '
+        setOpen={setOpen}
       >
-        <AddAdminForm />
+        <AddAdminForm setOpen={setOpen} />
       </Dialog>
 
       {/* *********************************table*********************************** */}
@@ -94,7 +130,7 @@ function Admin() {
               </thead>
 
               <tbody>
-                {records.length > 0 &&
+                {records?.length > 0 &&
                   records.map((records, index) => {
                     const isLast = index === records.length - 1;
                     const classes = isLast
@@ -112,7 +148,7 @@ function Admin() {
                                 color='blue-gray'
                                 className='font-normal'
                               >
-                                {records.employee.empName}
+                                {records.empName}
                               </Typography>
 
                               <Typography
@@ -134,7 +170,7 @@ function Admin() {
                               color='blue-gray'
                               className='font-normal'
                             >
-                              {records.employee.empEmail}
+                              {records.empEmail}
                             </Typography>
                           </div>
                         </td>
@@ -146,12 +182,12 @@ function Admin() {
                             color='blue-gray'
                             className='font-normal'
                           >
-                            {records.employee.empNumber}
+                            {records.empNumber}
                           </Typography>
                         </td>
 
                         {/* department */}
-                        <td className={classes}>
+                        {/* <td className={classes}>
                           <Typography
                             variant='small'
                             color='blue-gray'
@@ -159,7 +195,7 @@ function Admin() {
                           >
                             {records.employee.empDepartment}
                           </Typography>
-                        </td>
+                        </td> */}
 
                         {/* edit button */}
                         <td className={classes}>
@@ -207,8 +243,8 @@ function Admin() {
         })
         .catch((err) => {
           console.log(err);
-        console.log(err.response.data.message);
-      });
+          console.log(err.response.data.message);
+        });
     }
   }
 }
@@ -219,7 +255,7 @@ const TABLE_HEAD = [
   'Name',
   'Employee ID',
   'Phone Number',
-  'Department',
+  // 'Department',
   '',
   '',
 ];

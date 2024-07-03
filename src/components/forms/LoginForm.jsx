@@ -12,6 +12,7 @@ export function LoginForm() {
     email: '',
     password: '',
   });
+    const [error, setError] = useState('');
 
   const { email, password } = data;
 
@@ -19,7 +20,7 @@ export function LoginForm() {
   const navigate = useNavigate();
 
   const authState = useSelector((state) => state.auth);
-  const { loading, error, admin } = authState;
+  const { loading, admin } = authState;
 
   const onChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
@@ -30,7 +31,11 @@ export function LoginForm() {
       await dispatch(login({ email, password })).unwrap();
       await dispatch(loadUser());
     } catch (err) {
-      console.error(err);
+      console.error('Error resetting password:', err);
+      setError(
+        err.response?.data?.message ||
+          'Failed to login password. Please try again.'
+      );
     }
   };
 
@@ -49,6 +54,9 @@ export function LoginForm() {
         <Typography className='mb-16 text-gray-600 font-normal text-[18px]'>
           Enter your email and password to sign in
         </Typography>
+        {error && (
+          <Typography className='text-red-500 mb-4'>{error}</Typography>
+        )}
         <form
           action='#'
           className='mx-auto max-w-[24rem] text-left'

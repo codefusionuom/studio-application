@@ -69,9 +69,9 @@ function AddAdminEdit({passId}) {
       });
   }, []);
 
-  useEffect(()=>{
-    console.log('formdata',formData);
-  },[formData])
+  // useEffect(()=>{
+  //   console.log('formdata',formData);
+  // },[formData])
 
   function handleSubmit(event) {
     event.preventDefault();

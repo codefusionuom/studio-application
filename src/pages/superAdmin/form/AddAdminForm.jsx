@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Button,
   Card,
@@ -7,11 +7,11 @@ import {
   Typography,
   Input,
   Checkbox,
-} from "@material-tailwind/react";
+} from '@material-tailwind/react';
 // import Card2 from "../../../components/cards/Card2";
-import axiosInstance from "../../../config/axios.config";
+import axiosInstance from '../../../config/axios.config';
 
-function AddAdminForm() {
+function AddAdminForm({setOpen}) {
   // const [open, setOpen] = useState(prop);
   const [formErrors, setFormError] = useState({});
   const [search, setSearch] = useState({});
@@ -21,17 +21,15 @@ function AddAdminForm() {
   const [resultVisible, setResultVisible] = useState({});
   const [formData, setFormData] = useState({
     privileges: [],
-    employee:{
-      empName: "",
-      empNumber: "",
-      empAdd: "",
-      empType: "",
-      empDepartment: "",
-      empEmail: "",
-    }
+    employee: {
+      empName: '',
+      empNumber: '',
+      empAdd: '',
+      empType: '',
+      empDepartment: '',
+      empEmail: '',
+    },
   });
-
-
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -39,18 +37,19 @@ function AddAdminForm() {
     // setFormError(error);
     // console.log(validate(formData).iserror, "is error");
     // if (!error.iserror) {
-      console.log("in post",formData);
-      axiosInstance
-        .post("superAdmin/admin", formData)
-        .then((res) => {
-          alert("data added successfully");
-          console.log(formData);  
-          window.location.replace("/superAdmin/admin");
-        })
-        .catch((err) => {
-          console.log(err.response.data.message);
-          console.log("data enter error");
-        });
+    console.log('in post', formData);
+    axiosInstance
+      .post('superAdmin/admin', formData)
+      .then((res) => {
+        alert('data added successfully');
+        console.log(formData);
+        setOpen=false;
+        // window.location.replace("/superAdmin/admin");
+      })
+      .catch((err) => {
+        console.log(err.response.data.message);
+        console.log('data enter error');
+      });
     // }
     console.log(formData);
   }
@@ -90,25 +89,25 @@ function AddAdminForm() {
   //   return errors;
   // };
 
-      const onChange = (e) => {
-        const { name, value, type, checked } = e.target;
-        if (type === 'checkbox') {
-          setFormData((prevData) => ({
-            ...prevData,
-            privileges: checked
-              ? [...prevData.privileges, value]
-              : prevData.privileges.filter((privilege) => privilege !== value),
-          }));
-        } else {
-          setFormData((prevData) => ({
-            ...prevData,
-            employee: {
-              ...prevData.employee,
-              [name]: value,
-            },
-          }));
-        }
-      };
+  const onChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    if (type === 'checkbox') {
+      setFormData((prevData) => ({
+        ...prevData,
+        privileges: checked
+          ? [...prevData.privileges, value]
+          : prevData.privileges.filter((privilege) => privilege !== value),
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        employee: {
+          ...prevData.employee,
+          [name]: value,
+        },
+      }));
+    }
+  };
 
   const handleClear = () => {
     console.log('Handling clear');
@@ -125,76 +124,77 @@ function AddAdminForm() {
     });
   };
 
-   const handleSearch = async () => {
-    setResultVisible(true)
-    console.log("searching begin");
+  const handleSearch = async () => {
+    setResultVisible(true);
+    console.log('searching begin');
     try {
-    const { data } = await axiosInstance.get(`employeeManager/getEmployeeSearch/?empName=${search}`)
-    // if (!data) {
-    //     ToastError("no employee exist")
-    // }
-    console.log("loaded data in handle search",data);
-    setUser(data);
-    // setResults(data.count)
+      const { data } = await axiosInstance.get(
+        `employeeManager/getEmployeeSearch/?empName=${search}`
+      );
+      // if (!data) {
+      //     ToastError("no employee exist")
+      // }
+      console.log('loaded data in handle search', data);
+      setUser(data);
+      // setResults(data.count)
     } catch (error) {
-    console.log(error);
-    console.log(error.response.data.message);
-    // ToastError(error)
-    }
-};
+      console.log(error);
+      console.log(error.response.data.message);
+      // ToastError(error)
+    }
+  };
 
-  const err = "text-red-500 w-60";
+  const err = 'text-red-500 w-60';
 
-    // useEffect(() => {
-    //   axiosInstance
-    //     .get('employeeManager/getEmployeeByid/' + 3)
-    //     .then((res) => {
+  // useEffect(() => {
+  //   axiosInstance
+  //     .get('employeeManager/getEmployeeByid/' + 3)
+  //     .then((res) => {
 
-          // console.log('data', res.data);
-          // const {empAdd,empType,empDepartment,empEmail,empName,empNumber} = res.data
-          // setFormData((prevData) => ({
-          //   ...prevData,
-          //   employee: {
-          //     ...prevData.employee,
-          //     empName: empName,
-          //     empNumber: empNumber,
-          //     empAdd: empAdd,
-          //     empType: empType,
-          //     empDepartment: empDepartment,
-          //     empEmail: empEmail,
-          //   },
-          // }));
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //     });
-    // }, []);
+  // console.log('data', res.data);
+  // const {empAdd,empType,empDepartment,empEmail,empName,empNumber} = res.data
+  // setFormData((prevData) => ({
+  //   ...prevData,
+  //   employee: {
+  //     ...prevData.employee,
+  //     empName: empName,
+  //     empNumber: empNumber,
+  //     empAdd: empAdd,
+  //     empType: empType,
+  //     empDepartment: empDepartment,
+  //     empEmail: empEmail,
+  //   },
+  // }));
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, []);
 
-    const handleSelectUser = (user) => {
-      setEmpId(user.id);
-      setEmpName(user.empName);
-      setFormData((prevData) => ({
-        ...prevData,
-        employee: {
-          empName: user.empName,
-          empNumber: user.empNumber,
-          empAdd: user.empAdd,
-          empType: user.empType,
-          empDepartment: user.empDepartment,
-          empEmail: user.empEmail,
-        },
-      }));
-      setResultVisible(false);
-    };
+  const handleSelectUser = (user) => {
+    setEmpId(user.id);
+    setEmpName(user.empName);
+    setFormData((prevData) => ({
+      ...prevData,
+      employee: {
+        empName: user.empName,
+        empNumber: user.empNumber,
+        empAdd: user.empAdd,
+        empType: user.empType,
+        empDepartment: user.empDepartment,
+        empEmail: user.empEmail,
+      },
+    }));
+    setResultVisible(false);
+  };
 
-    useEffect(() => {
-      if (search !== '') {
-        handleSearch();
-        // console.log(search);
-        // console.log('search when name change');
-      }
-    }, [search]);
-
+  useEffect(() => {
+    if (search !== '') {
+      handleSearch();
+      // console.log(search);
+      // console.log('search when name change');
+    }
+  }, [search]);
 
   return (
     <>
@@ -218,7 +218,7 @@ function AddAdminForm() {
                   // onChange={onChange}
                   onChange={(e) => {
                     setSearch(e.target.value);
-                    setEmpName(e.target.value)
+                    setEmpName(e.target.value);
                   }}
                 />
                 <p className={err}>{formErrors.employeeId}</p>

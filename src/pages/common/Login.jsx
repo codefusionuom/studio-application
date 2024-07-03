@@ -12,18 +12,20 @@ function Login() {
 
   const { loading, admin } = useSelector((state) => state.auth);
 
+  // console.log(loading,admin.privileges);
+
   
 if (admin) {
   // console.log(admin);
-  if (admin.privilege === 'super_admin') {
+  if (admin.privileges[0] === 'super_admin') {
     navigate('/superAdmin');
-  } else if (admin.privilege === 'customer_manager') {
+  } else if (admin.privileges[0] === 'customer_manager') {
     navigate('/customerManager');
-  } else if (admin.privilege === 'event_manager') {
+  } else if (admin.privileges[0] === 'event_manager') {
     navigate('/eventManager');
-  } else if (admin.privilege === 'stock_manager') {
+  } else if (admin.privileges[0] === 'stock_manager') {
     navigate('/stockManager');
-  } else if (admin.privilege === 'employee_manager') {
+  } else if (admin.privileges[0] === 'employee_manager') {
     navigate('/employeeManager');
   } else {
     console.log('user not have privilage');
