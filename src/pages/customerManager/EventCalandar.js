@@ -1,12 +1,16 @@
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from "@fullcalendar/daygrid";
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Timeline from 'react-calendar-timeline/lib/lib/Timeline';
 import moment from 'moment';
 import 'react-calendar-timeline/lib/Timeline.css'
 import { Card, CardHeader, Input, Typography, Button, CardBody, Chip, CardFooter, Tabs, TabsHeader, Tab, Avatar, IconButton, Tooltip, Select, Option, } from "@material-tailwind/react";
 import { MagnifyingGlassIcon, PencilIcon } from '@heroicons/react/24/outline';
 import axiosInstance from '../../config/axios.config';
+import axios from 'axios';
+import { format } from 'date-fns';
+import { ToastError } from './ToastAlert';
+import { useNavigate } from 'react-router-dom';
 
 // import "@fullcalendar/core/main.css";
 // import "@fullcalendar/daygrid/main.css";
@@ -38,7 +42,36 @@ function EventCalandar() {
     const [extraFeild, setExtraFeild] = useState({label:""});
     const [form, setForm] = useState();
     const [categories, setCategories] = useState(categoriesData);
+    let [eventList, setEventList] = useState([]);
+    const navigate = useNavigate();
 
+    const events = eventList.map(event => (
+      {
+
+        title: event.service['serviceName'],
+        id: event.id,
+        start: format(new Date(event.serviceDate), 'yyyy-MM-dd'),
+        end: format(new Date(event.serviceDate), 'yyyy-MM-dd'),
+        backgroundColor: "#2874A6",
+        borderColor: "#2874A6"
+      }
+    ));
+    useEffect(() => {
+      // getOneDayEvents();
+      getEvents();
+    }, []);
+    const getEvents = () => {
+      axios.get("http://localhost:5000/eventManager/all-events")
+        .then(res => {
+          const events = res.data.events;
+          console.log("events :" , events)
+          setEventList(events);
+        })
+        .catch(error => {
+          // setExistError(error.message);
+
+ToastError(error)        });
+    };
 
     const {label}=extraFeild
     const handleSearch = async () => {
@@ -77,22 +110,32 @@ function EventCalandar() {
     /////service
   return (
     <div className='bg-cl-4 rounded py-10 px-20 flex flex-col gap-20'>
-      <FullCalendar className=""
-        defaultView="dayGridMonth"
-        themeSystem="Simplex"
-        header={{
-          left: "prev,next",
-          center: "title",
-          right: "dayGridMonth,timeGridWeek,timeGridDay",
-        }}
-        plugins={[dayGridPlugin]}
-        events={events}
-        displayEventEnd="true"
-        contentHeight= "900px"
-        borderColor="red"
+   <FullCalendar
+          defaultView="dayGridMonth"
+          header={{
+            left: "prev,next",
+            center: "title",
+            right: "dayGridMonth,timeGridWeek,timeGridDay",
+          }}
+            eventClassNames="m-1 p-0.5"
+          eventClick={ function(info) {
+            // alert('Event: ' + info.event.id);
+          // http://localhost:3000/eventManager/createEventRequest/4
+            navigate(`/eventManager/createEventRequest/${info.event.id }`, {
+              // state: { eventId: info.event.id },
+            })
+            // change the border color just for fun
+            info.el.style.borderColor = 'red';
+          }}
+          plugins={[dayGridPlugin]}
+          events={events}
+          displayEventEnd="true"
+          // contentHeight="900px"
+          borderColor="green"
+          eventColor={"green"}
+          contentHeight={"50rem"}
 
-        eventColor={"red"}
-      />
+        />
       {/* <Timeline  className="w-[1000px]" 
        groups={groups}
       items={items}
@@ -318,42 +361,45 @@ const items = [
   }
 ]
 
-const events = [
-  { title: "All Day Event", start: getDate("YEAR-MONTH-01") },
-  {
-    title: "Long Event",
-    start: getDate("YEAR-MONTH-07"),
-    end: getDate("YEAR-MONTH-10"),
-    backgroundColor: "pink",
-    borderColor:"pink"
-  },
-  {
-    groupId: "999",
-    title: "Repeating Event",
-    start: getDate("YEAR-MONTH-09T16:00:00+00:00"),
+// const events = [
+//   // { title: "All Day Event", start: getDate("YEAR-MONTH-01") },
+//   {
+//     title: "Long Event",
+//     start: getDate("YEAR-MONTH-07"),
+//     end: getDate("YEAR-MONTH-10"),
+//     backgroundColor: "pink",
+//     borderColor:"pink"
+//   },
+//   {
+//     groupId: "999",
+//     title: "Repeating Event",
+//     start: getDate("YEAR-MONTH-09T16:00:00+00:00"),
     
-  },
-  // {
-  //   groupId: "999",
-  //   title: "Repeating Event",
-  //   start: getDate("YEAR-MONTH-16T16:00:00+00:00")
-  // },
-  {
-    title: "Conference",
-    start: getDate("YEAR-MONTH-17"),
-    end: getDate("YEAR-MONTH-19")
-  },
-  {
-    title: "Meeting",
-    start: getDate("YEAR-MONTH-18T10:30:00+00:00"),
-    end: getDate("YEAR-MONTH-18T12:30:00+00:00")
-  },
-  // { title: "Lunch", start: getDate("YEAR-MONTH-18T12:00:00+00:00") },
-  // { title: "Birthday Party", start: getDate("YEAR-MONTH-19T07:00:00+00:00") },
-  // { title: "Meeting", start: getDate("YEAR-MONTH-18T14:30:00+00:00") },
-  // { title: "Happy Hour", start: getDate("YEAR-MONTH-18T17:30:00+00:00") },
-  //{ title: "Dinner", start: getDate("YEAR-MONTH-18T20:00:00+00:00") }
-];
+//   },
+//   // {
+//   //   groupId: "999",
+//   //   title: "Repeating Event",
+//   //   start: getDate("YEAR-MONTH-16T16:00:00+00:00")
+//   // },
+//   {
+//     title: "Conference",
+//     start: getDate("YEAR-MONTH-17"),
+//     end: getDate("YEAR-MONTH-19")
+//   },
+//   {
+//     title: "Meeting",
+//     start: getDate("YEAR-MONTH-18T10:30:00+00:00"),
+//     end: getDate("YEAR-MONTH-18T12:30:00+00:00")
+//   },
+//   // { title: "Lunch", start: getDate("YEAR-MONTH-18T12:00:00+00:00") },
+//   // { title: "Birthday Party", start: getDate("YEAR-MONTH-19T07:00:00+00:00") },
+//   // { title: "Meeting", start: getDate("YEAR-MONTH-18T14:30:00+00:00") },
+//   // { title: "Happy Hour", start: getDate("YEAR-MONTH-18T17:30:00+00:00") },
+//   //{ title: "Dinner", start: getDate("YEAR-MONTH-18T20:00:00+00:00") }
+// ];
+
+
+
 
 function getDate(dayString) {
   const today = new Date();

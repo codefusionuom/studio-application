@@ -27,7 +27,7 @@ const Events = () => {
   const [eventRequestCount, setEventRequestCount] = useState("");
   const [active, setActive] = useState(1);
   const [results, setResults] = useState(0);
-  const [status, setStatus] = useState("Active");
+  const [status, setStatus] = useState("Upcoming");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -234,13 +234,55 @@ const Events = () => {
                       </Typography>
                     </td>
                     <td className={classes}>
-                      <Typography
+                      {/* <Typography
                         variant="small"
                         color="blue-gray"
                         className="font-normal"
                       >
                         {request.status}
-                      </Typography>
+                      </Typography> */}
+                       <div className="w-[80px]  flex items-center font-bold">
+                <Chip
+                  className="w-[80px]"
+                  style={{
+                    color: "black",
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                  variant="filled"
+                  size="sm"
+                  value={(function () {
+                    switch (request.status) {
+                      // 'Upcoming ','Paused', 'Done' , "Closed"
+                      case "Rejected":
+                        return "Rejected";
+                      case "Paused":
+                        return "Paused";
+                      case "Done":
+                        return "Done";
+                      case "Upcoming":
+                        return "Upcoming";
+                      default:
+                        return "nothing";
+                    }
+                  })()}
+                  color={(function () {
+                    switch (request.status) {
+                      case "Rejected":
+                        return "blue-gray";
+                      case "Upcoming":
+                        return "green";
+                        case "Paused":
+                        return "red";
+                      case "Done":
+                        return "amber";
+                      default:
+                        return "red";
+                    }
+                  })()}
+                  fontWeight="bold"
+                />
+              </div>
                     </td>
                     <td className={classes}>
                       <EditButton onClick={()=>handleOneRequest(request.id)} />

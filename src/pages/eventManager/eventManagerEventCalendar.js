@@ -15,6 +15,7 @@ import {
 import FullCalendar from "@fullcalendar/react";
 import ErrorDisplayWindow from "../../components/eventManager/errorDisplayWindow";
 import { format } from "date-fns";
+import { ToastError } from "../customerManager/ToastAlert";
 
 const EventManagerEventCalendar = () => {
   const navigate = useNavigate();
@@ -43,19 +44,20 @@ const EventManagerEventCalendar = () => {
         setEventList(events);
       })
       .catch(error => {
+        ToastError(error.message)
         setExistError(error.message);
       });
   };
 
   useEffect(() => {
-    getOneDayEvents();
+    // getOneDayEvents();
     getEvents();
   }, []);
 
   const events = eventList.map(event => (
     {
       title: event.service['serviceName'],
-      id: event.eventId,
+      id: event.id,
       start: format(new Date(event.serviceDate), 'yyyy-MM-dd'),
       end: format(new Date(event.serviceDate), 'yyyy-MM-dd'),
       backgroundColor: "#2874A6",
@@ -73,23 +75,25 @@ const EventManagerEventCalendar = () => {
     "Status",
   ];
 
-  return existError != null ? (
-    <ErrorDisplayWindow errorMsg={existError} />
-  ) : (
-    <div>
+  // return existError != null ? (
+  //   <ErrorDisplayWindow errorMsg={existError} />
+  // ) : (
+  return  <div>
       <Card className="p-8">
         <FullCalendar
+        eventClassNames="m-1 p-0.5"
           defaultView="dayGridMonth"
           header={{
             left: "prev,next",
             center: "title",
             right: "dayGridMonth,timeGridWeek,timeGridDay",
           }}
+          
           eventClick={ function(info) {
             // alert('Event: ' + info.event.id);
-          
-            navigate("/eventManager/eventDetails", {
-              state: { eventId: info.event.id },
+          // http://localhost:3000/eventManager/createEventRequest/4
+            navigate(`/eventManager/createEventRequest/${info.event.id }`, {
+              // state: { eventId: info.event.id },
             })
             // change the border color just for fun
             info.el.style.borderColor = 'red';
@@ -97,12 +101,13 @@ const EventManagerEventCalendar = () => {
           plugins={[dayGridPlugin]}
           events={events}
           displayEventEnd="true"
-          contentHeight="900px"
+          // contentHeight="900px"
           borderColor="green"
           eventColor={"green"}
+          contentHeight={"50rem"}
         />
       </Card>
-      <Card className="h-full w-full p-4 pt-2">
+      {/* <Card className="h-full w-full p-4 pt-2">
         <CardHeader
           floated={false}
           shadow={false}
@@ -227,9 +232,9 @@ const EventManagerEventCalendar = () => {
             </tbody>
           </table>
         </CardBody>
-      </Card>
+      </Card> */}
     </div>
-  );
+  // );
 };
 
 export default EventManagerEventCalendar;

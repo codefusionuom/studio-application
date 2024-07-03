@@ -18,7 +18,6 @@ import {
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
-  MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 import { DayPicker } from "react-day-picker";
 import CardEvent from "../../components/eventManager/cardEvent";
@@ -27,6 +26,7 @@ import SearchForm from "../../components/eventManager/searchForm";
 import ErrorDisplayWindow from "../../components/eventManager/errorDisplayWindow";
 import EmployeeSearchForm from "../../components/eventManager/employeeSearchForm";
 import DisplayListWithAvatar from "../../components/eventManager/listDisplayWithAvatar";
+import { ToastError, ToastSuccess } from "../customerManager/ToastAlert";
 
 const CreateTask = () => {
   //for modal handling
@@ -48,11 +48,26 @@ const CreateTask = () => {
   const [date, setDate] = React.useState();
   const [selectedEvent, setSelectedEvent] = React.useState([]);
   const [eventTypes, setEventTypes] = React.useState([]);
-  const [description, setDescription] = React.useState([]);
+  const [description, setDescription] = React.useState('');
   const [taskName, setTaskName] = React.useState([]);
+  const [isStatusError, setIsStatusError] = useState(false);
   const [existError, setExistError] = React.useState(null);
   const handleOpen = () => setOpen(!open);
   const handleOpenEmpModal = () => setOpenEmpModal(!openEmpModal);
+  const [status, setStatus] = useState("");
+  const [reload, setReload] = useState(false);
+  const today = new Date();
+
+  useEffect(() => {
+    setTaskName("");
+    setDescription("");
+    setStatus("")
+    setDate()
+    setSelectedEvent("")
+    // console.log("reload",reload)
+    setAsignedEmployeesList([])
+  }, [reload])
+  
   // useEffect(() => {}, []);
 
   // const getEvents = () => {
@@ -119,7 +134,7 @@ const CreateTask = () => {
         taskName: taskName,
         serviceType: "photography",
         department: "photography",
-        status: "Upcoming",
+        status: status,
         description: description,
         employeeIdList: empIdList,
         date: date,
@@ -130,35 +145,19 @@ const CreateTask = () => {
         console.log("task: ", res);
 
         if (res.status === 200) {
-          toast.success(" Task Created Successfully!", {
-            position: "top-center",
-            autoClose: 7000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-            // transition: Bounce,
-          });
+         setReload((prev)=>!prev)
+          ToastSuccess(" Task Created Successfully!")
         } else {
-          toast.error("🦄 Task creation was not Successfull! Try again", {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-            // transition: Bounce,
-          });
+         
+        ToastError(" Task creation was not Successfull! Try again");
+          
         }
       })
       .catch((error) => {
         console.log("got error: ", error.message);
         setExistError(error.message);
         console.log(error);
+        ToastError(error.message)
       });
   };
 
@@ -172,6 +171,8 @@ const CreateTask = () => {
       .catch((error) => {
         setExistError(error.message);
         console.log(error);
+        ToastError(error.message)
+
       });
   };
   const getEmployees = () => {
@@ -182,17 +183,19 @@ const CreateTask = () => {
         setEmployeeList(res.data);
       })
       .catch((error) => {
-        setExistError(error.message);
+        ToastError(error.message)
+        // setExistError(error.message);
         console.log(error);
       });
   };
 
   console.log("Exist error :" + existError);
   console.log("Date :" + date);
-  return existError != null ? (
-    <ErrorDisplayWindow errorMsg={existError} />
-  ) : (
-    <div className="bg-cl-4 mt-8 p-4 px-10">
+  // return existError != null ? (
+  //   <ErrorDisplayWindow errorMsg={existError} />
+  // ) :
+  //  (
+ return  <div className="bg-cl-4 mt-8 p-4 px-10">
       <Card className="mt-6 w-full bg-gray-400 bold">
         <CardBody>
           <Typography
@@ -208,6 +211,7 @@ const CreateTask = () => {
         <tr className="flex   mt-8">
           <div className="  w-full flex justify-center">
             <div className="flex flex-col gap-8 mb-1 p-4 w-8/12 justify-center">
+            
               <Typography
                 variant="h6"
                 color="blue-gray"
@@ -353,17 +357,36 @@ const CreateTask = () => {
                 Status
               </h6>
               <div className="  w-full min-w-[200px]">
-                <Select
-                  label="Select Version"
-                  className=" h-11"
-                  onChange={() => {}}
-                >
-                  <Option>Material Tailwind HTML</Option>
-                  <Option>Material Tailwind React</Option>
-                  <Option>Material Tailwind Vue</Option>
-                  <Option>Material Tailwind Angular</Option>
-                  <Option>Material Tailwind Svelte</Option>
-                </Select>
+              <Select
+                      error={isStatusError ? "true" : null}
+                      label="Select Status"
+                      className=" h-11 "
+                      selected={(element) => {
+                        if (element) {
+                          setStatus(element.props.value);
+                          const selectedValue = element.props.value;
+                          console.log("status :", status);
+                          //  console.log('selected val :', selectedValue);
+                          return element.props.name;
+                        }
+                      }}
+                      onChange={(value) => {
+                        // setStatus(value);
+                        setStatus(value);
+                        console.log("Selected status:", value);
+                        console.log("Status: ", status);
+                      }}
+                      // value={status ? "Select Status" :  status}
+                      value={`${status ?? "Select an event"}`}
+                      // placeholder={"selected"}
+                      // defaultValue={"Select Status"}
+                    >
+                      {/* 'Upcoming ','Paused', 'Done' , "Closed" */}
+                      <Option value="Upcoming">Upcoming</Option>
+                      <Option value="Paused">Paused</Option>
+                      <Option value="Done">Done</Option>
+                      <Option value="Rejected">Rejected</Option>
+                    </Select>
               </div>
               <h6 className="block -mb-3 font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-blue-gray-900">
                 Employee
@@ -403,7 +426,7 @@ const CreateTask = () => {
                       eventList={employeeList}
                       eventTypes={eventTypes}
                       resultDisplayfield1={"empName"}
-                      resultDisplayfield2={"empDepartment"}
+                      resultDisplayfield2={"department"}
                       asignedEmployeesList={asignedEmployeesList}
                       setAsignedEmployeesList={setAsignedEmployeesList}
                     />
@@ -501,6 +524,7 @@ const CreateTask = () => {
                 </h6>
                 <div className="flex justify-center ">
                   <DayPicker
+                  disabled={{ before: today }}
                     mode="single"
                     selected={date}
                     onSelect={setDate}
@@ -580,7 +604,7 @@ const CreateTask = () => {
                 >
                   Create Task
                 </Button>
-                <Button
+                {/* <Button
                   fullWidth
                   onClick={() =>  console.log("select event^^^^^^^^^^^^^^^ " + selectedEvent.id)}
                   variant="filled"
@@ -588,7 +612,7 @@ const CreateTask = () => {
                   color="green"
                 >
                   Test
-                </Button>
+                </Button> */}
               </div>
             </div>
           </div>
@@ -597,7 +621,7 @@ const CreateTask = () => {
        
       </form>
     </div>
-  );
+  // );
 };
 
 export default CreateTask;

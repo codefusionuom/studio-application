@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import DisplayListWithAvatar from "./listDisplayWithAvatar";
+import axios from "axios";
 const EmployeeSearchForm = ({
   // title,
   eventList,
@@ -14,20 +15,21 @@ const EmployeeSearchForm = ({
   const [searchQuery, setSearchQuery] = useState("");
   const [resultDisplayfield1Val, setResultDisplayfield1Val] = useState("");
   const [resultDisplayfield2Val, setResultDisplayfield2Val] = useState("");
+  const [searchName, setSearchName] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   // const [asignedEmployees, setAsignedEmployees] = useState();
   const [isClickedSearchBar, setIsClickedSearchBar] = useState(false);
   const dropdownRef = useRef(null);
   const searchBarRef = useRef(null);
-
+  
   console.log("clicked");
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
-
+  
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
     setDropdownOpen(false);
   };
-
+  
   const handleSearchChange = (e) => setSearchQuery(e.target.value);
 
   const handleSubmit = (e) => {
@@ -38,7 +40,7 @@ const EmployeeSearchForm = ({
     setSearchResults(results);
     console.log(`Category: ${selectedCategory}, Search Query: ${searchQuery}`);
   };
-
+  
   
   useEffect(() => {
     console.log("-----------------------asignedEmployeesList:" , asignedEmployeesList);
@@ -49,6 +51,23 @@ const EmployeeSearchForm = ({
     setResultDisplayfield2Val(resultDisplayfield2);
   }, [eventList, resultDisplayfield1, resultDisplayfield2]);
 
+
+  const searchEmployees = async(searchName) => {
+      await axios.get("http://localhost:5000/eventManager/employee/EmployeesandSearch", { params: { empName: searchName} })
+      .then(res => {
+        // const events = res.data.events;
+        // console.log("events :", events);
+        console.log("employees :", res.data);
+        setSearchResults(res.data.rows)
+        // setEventList(events);
+      })
+      .catch(error => {
+        // ToastError(error.message);
+      })
+    //   .finally {
+    //   // setLoading(false);
+    // }
+  };
   // Close the dropdown if clicked outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -150,8 +169,20 @@ const EmployeeSearchForm = ({
                 id="search-dropdown"
                 className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-r-lg border-l-gray-50 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-l-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
                 placeholder={`Search ${eventTypes.join(",")}...`}
-                value={searchQuery}
-                onChange={handleSearchChange}
+                // value={searchQuery}
+                onChange={(e) => {
+                  console.log(e.target.value);
+                  const epmList = searchEmployees(e.target.value);
+                  // setAsignedEmployeesList((prevEmpList) => [
+                  //   ...prevEmpList,
+                  //   // {
+                  //   //   id: result["id"],
+                  //   //   empName: result["empName"],
+                  //   //   empDepartment : result["empDepartment"],
+                  //   // },
+                  //   empL
+                  // ])
+                }}
                 required
               />
               <button
@@ -206,7 +237,8 @@ const EmployeeSearchForm = ({
                         {/* {result.customerId} */}
                         {resultDisplayfield2 == "date"
                           ? result[resultDisplayfield2Val].slice(0, 10)
-                          : result[resultDisplayfield2Val]}
+                          // : result[resultDisplayfield2Val]['departmentName']}
+                          : result['department']?.departmentName}
                         {/* {resultDisplayfield2 == "date" ? result["ggggggggg"] : result["yyyyyyyyyyyyyfgg"]} */}
                       </p>
                     </div>

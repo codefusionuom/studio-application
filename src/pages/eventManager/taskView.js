@@ -34,6 +34,7 @@ import SearchForm from "../../components/eventManager/searchForm";
 import EmployeeSearchForm from "../../components/eventManager/employeeSearchForm";
 import DisplayListWithAvatar from "../../components/eventManager/listDisplayWithAvatar";
 import { PencilIcon } from "@heroicons/react/24/outline";
+import EventCalender from "../../components/eventManager/eventCalender";
 
 const TaskView = () => {
   const location = useLocation();
@@ -63,7 +64,8 @@ const TaskView = () => {
   let [employeeList, setEmployeeList] = React.useState([]);
   const [asignedEmployeesList, setAsignedEmployeesList] =
     useState([]); //here
-
+    const today = new Date();
+    
   const TABS = [
     {
       label: "All",
@@ -308,7 +310,30 @@ const formatDateToISO = (dateString) => {
               />
             </svg>
           </Button>
-
+          {/* <Button
+            className="flex items-center gap-3 "
+            color="blue"
+            onClick={() => {
+              handleOpen();
+            }}
+          >
+            Test
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+              />
+            </svg>
+          </Button> */}
+         
           <Dialog
           open={open} 
           handler={handleOpen}
@@ -497,7 +522,7 @@ const formatDateToISO = (dateString) => {
                       <Option value="Upcoming">Upcoming</Option>
                       <Option value="Paused">Paused</Option>
                       <Option value="Done">Done</Option>
-                      <Option value="Closed">Offline</Option>
+                      <Option value="Rejected">Rejected</Option>
                     </Select>
                   </div>
                   <h6 className="block -mb-3 font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-blue-gray-900">
@@ -506,6 +531,7 @@ const formatDateToISO = (dateString) => {
 
                   <Input
                   // defaultValue={format(new Date(taskDetails?.date), "yyyy-MM-dd")}
+                  disabled={{ before: today }}
                     label="Date"
                     size="lg"
                     type="date"
@@ -880,6 +906,9 @@ const formatDateToISO = (dateString) => {
                           variant="outlined"
                           className="flex justify-center rounded-full"
                           color="green"
+                          onClick={() => {
+                            handleOpen();
+                          }}
                         >
                           Assign Now !{" "}
                         </Button>{" "}
@@ -1014,6 +1043,7 @@ const formatDateToISO = (dateString) => {
                       </tbody>
                     </table>
                   </CardBody>
+                  
                 )}
                 {/* <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
               <Typography variant="small" color="blue-gray" className="font-normal">

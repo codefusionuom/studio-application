@@ -29,7 +29,7 @@ function CreateEventRequest() {
       const { data } = await axiosInstance.put(
         "/eventManager/updateEventConfirmed/" + id,
         {
-          status: "Active",
+          status: "Done",
         }
       );
       console.log(data);
