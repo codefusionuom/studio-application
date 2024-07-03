@@ -8,6 +8,7 @@ import {Loading} from '../Loading';
 
 export function LoginForm() {
   const [passwordShown, setPasswordShown] = useState(false);
+  const [log, setLog] = useState(false);
   const [data, setData] = useState({
     email: '',
     password: '',
@@ -30,6 +31,8 @@ export function LoginForm() {
     try {
       await dispatch(login({ email, password })).unwrap();
       await dispatch(loadUser());
+      setLog(true);
+
     } catch (err) {
       console.error('Error resetting password:', err);
       setError(
@@ -38,6 +41,24 @@ export function LoginForm() {
       );
     }
   };
+
+    // useEffect(() => {
+    //   if (admin) {
+    //     if (admin.privileges[0] === 'super_admin') {
+    //       navigate('/superAdmin');
+    //     } else if (admin.privileges[0] === 'customer_manager') {
+    //       navigate('/customerManager');
+    //     } else if (admin.privileges[0] === 'event_manager') {
+    //       navigate('/eventManager');
+    //     } else if (admin.privileges[0] === 'stock_manager') {
+    //       navigate('/stockManager');
+    //     } else if (admin.privileges[0] === 'employee_manager') {
+    //       navigate('/employeeManager');
+    //     } else {
+    //       console.log('user not have privilage');
+    //     }
+    //   }
+    // }, [log]);
 
   const togglePasswordVisiblity = () => setPasswordShown((cur) => !cur);
 
@@ -121,6 +142,7 @@ export function LoginForm() {
             className='mt-6 text-base font-semibold border-primary uppercase lowercase-mixed text-primary bg-white hover:bg-primary hover:border-white hover:text-white'
             fullWidth
             type='submit'
+            // onClick={submit}
           >
             sign in
           </Button>

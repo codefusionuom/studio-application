@@ -11,7 +11,7 @@ import {
 // import Card2 from "../../../components/cards/Card2";
 import axiosInstance from '../../../config/axios.config';
 
-function AddAdminForm({setOpen}) {
+function AddAdminForm({setOpen,setRefresh,refresh}) {
   // const [open, setOpen] = useState(prop);
   const [formErrors, setFormError] = useState({});
   const [search, setSearch] = useState({});
@@ -43,7 +43,8 @@ function AddAdminForm({setOpen}) {
       .then((res) => {
         alert('data added successfully');
         console.log(formData);
-        setOpen=false;
+        setOpen(false);
+        setRefresh(!refresh);
         // window.location.replace("/superAdmin/admin");
       })
       .catch((err) => {
@@ -215,7 +216,6 @@ function AddAdminForm({setOpen}) {
                   size='lg'
                   name='empName'
                   value={empName}
-                  // onChange={onChange}
                   onChange={(e) => {
                     setSearch(e.target.value);
                     setEmpName(e.target.value);
@@ -251,6 +251,7 @@ function AddAdminForm({setOpen}) {
                 label='employee email'
                 size='lg'
                 name='empEmail'
+                readOnly
                 value={formData.employee.empEmail}
                 onChange={onChange}
               />
@@ -306,6 +307,7 @@ function AddAdminForm({setOpen}) {
                 label='phone number'
                 size='lg'
                 name='empNumber'
+                readOnly
                 value={formData.employee.empNumber}
                 onChange={onChange}
               />
@@ -319,6 +321,7 @@ function AddAdminForm({setOpen}) {
                 label='address'
                 size='lg'
                 name='empAdd'
+                readOnly
                 value={formData.employee.empAdd}
                 onChange={onChange}
               />

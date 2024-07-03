@@ -24,12 +24,14 @@ const PrivateRoute = ({ children, requiredPrivilege }) => {
   const authState = useSelector((state) => state.auth);
   const { admin } = authState;
   const navigate = useNavigate();
-  
+
   useEffect(() => {
+    // console.log(admin.privileges);
+    // console.log(requiredPrivilege);
     if (!admin) {
       navigate('/login');
     } else if (!admin.privileges.includes(requiredPrivilege)) {
-      navigate(-1); // Go back to the previous route
+      navigate(-1);
     }
   }, [admin, requiredPrivilege, navigate]);
 

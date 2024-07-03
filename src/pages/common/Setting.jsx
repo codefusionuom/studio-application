@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import { Card } from '@material-tailwind/react';
 import {
   Accordion,
@@ -15,7 +15,11 @@ function Setting() {
   const [profile,setProfile] = useState(false)
 
     const navigate = useNavigate();
-    const reset = () => {navigate('/foggotPassword');};
+    const reset = () => {navigate('/superAdmin/reset');};
+
+    useEffect(()=>{
+      console.log(profile);
+    })
     
   return profile ? (
     <div>

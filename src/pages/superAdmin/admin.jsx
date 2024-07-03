@@ -18,7 +18,7 @@ import { useNavigate } from 'react-router-dom';
 
 function Admin() {
   const [records, setRecords] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [refresh, setRefresh] = useState(false);
   const [open, setOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState(null);
@@ -36,52 +36,44 @@ function Admin() {
     setEditOpen(!editOpen);
   };
 
-  useEffect(() => {
-    console.log('select record', selectedRecord);
-  }, [selectedRecord]);
+  // useEffect(() => {
+  //   console.log('select record', selectedRecord);
+  // }, [selectedRecord]);
 
-  useEffect(() => {
-    console.log('record', records);
-  }, [records]);
+  // useEffect(() => {
+  //   console.log('record', records);
+  // }, [records]);
 
   useEffect(() => {
     axiosInstance
       .get('superAdmin/admin')
       .then((res) => {
-        console.log('response data', res.data);
-        // for (let data of res.data) {
-        //   console.log(data);
-        //   setRecords((prevData) => [...prevData, data]);
-        //   console.log(records);
-        // }
-        // addRecordsIncrementally(res.data);
-        // res.data.forEach((item, index) => {
-        //   // Update the state incrementally
-        //   setTimeout(() => {
-        //     setRecords(prevRecords => [...prevRecords, item]);
-        //   }, index * 100); // Slight delay to simulate incremental update
-        // });
+        // console.log('response data', res.data);
         setRecords(res.data);
-        // console.log();
-        // console.log('records', records);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [refresh]);
 
-  const addRecordsIncrementally = (data) => {
-    data.forEach((item, index) => {
-      setTimeout(() => {
-        setRecords((prevRecords) => {
-          const newRecords = [...prevRecords, item];
-          console.log('adding record', item);
-          console.log('new records state', newRecords);
-          //  return newRecords;
-        });
-      }, index * 100); // Adding slight delay for each item
-    });
-  };
+
+  // useEffect(() => {
+  //   axiosInstance
+  //     .get('superAdmin/admin')
+  //     .then((res) => {
+  //       setRecords(res.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, [records]);
+
+  // useEffect(()=>{
+  //   console.log('refresh',refresh);
+  //   console.log('open',open);
+  //   console.log('open',open);
+  //   console.log('editopen',editOpen);
+  // },[refresh,open,editOpen])
 
   return (
     <div className='flex flex-col gap-10'>
@@ -97,7 +89,7 @@ function Admin() {
         className='bg-transparent shadow-none w-fit '
         setOpen={setOpen}
       >
-        <AddAdminForm setOpen={setOpen} />
+        <AddAdminForm setOpen={setOpen} setRefresh={setRefresh} props={refresh}/>
       </Dialog>
 
       {/* *********************************table*********************************** */}
@@ -156,7 +148,9 @@ function Admin() {
                                 color='blue-gray'
                                 className='font-normal opacity-70'
                               >
-                                {records.privilege}
+                                {records.privileges.map((privilege) => (
+                                  <p key={privilege}>{privilege}, </p>
+                                ))}
                               </Typography>
                             </div>
                           </div>
@@ -207,7 +201,7 @@ function Admin() {
                         {/* delete button  */}
                         <td className={classes}>
                           <DeleteButton
-                            onClick={() => handleSubmit(records.empId)}
+                            onClick={() => handleSubmit(records.id)}
                           />
                         </td>
                       </tr>
@@ -225,7 +219,7 @@ function Admin() {
         handler={handleEditOpen}
         className='bg-transparent shadow-none w-fit '
       >
-        {selectedRecord && <AddAdminEdit passId={selectedRecord.empId} />}
+        {selectedRecord && <AddAdminEdit passId={selectedRecord.id} refresh={refresh} setRefresh={setRefresh} setEditOpen={setEditOpen}/>}
       </Dialog>
     </div>
   );
@@ -239,7 +233,8 @@ function Admin() {
         .delete('superAdmin/admin/' + id)
         .then((res) => {
           alert('record deleted');
-          window.location.replace('/superAdmin/admin');
+          setRefresh(!refresh)
+          // window.location.replace('/superAdmin/admin');
         })
         .catch((err) => {
           console.log(err);

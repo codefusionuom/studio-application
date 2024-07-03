@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import login from '../../assests/login.png'
 import LoginForm from '../../components/forms/LoginForm'
 // import Basic, { LoginForm } from '../../components/forms/Loginform'
@@ -14,23 +14,24 @@ function Login() {
 
   // console.log(loading,admin.privileges);
 
-  
-if (admin) {
-  // console.log(admin);
-  if (admin.privileges[0] === 'super_admin') {
-    navigate('/superAdmin');
-  } else if (admin.privileges[0] === 'customer_manager') {
-    navigate('/customerManager');
-  } else if (admin.privileges[0] === 'event_manager') {
-    navigate('/eventManager');
-  } else if (admin.privileges[0] === 'stock_manager') {
-    navigate('/stockManager');
-  } else if (admin.privileges[0] === 'employee_manager') {
-    navigate('/employeeManager');
-  } else {
-    console.log('user not have privilage');
-  }
-}
+      // useEffect(() => {
+        if (admin) {
+          if (admin.privileges[0] === 'super_admin') {
+            navigate('/superAdmin');
+          } else if (admin.privileges[0] === 'customer_manager') {
+            navigate('/customerManager');
+          } else if (admin.privileges[0] === 'event_manager') {
+            navigate('/eventManager');
+          } else if (admin.privileges[0] === 'stock_manager') {
+            navigate('/stockManager');
+          } else if (admin.privileges[0] === 'employee_manager') {
+            navigate('/employeeManager');
+          } else {
+            console.log('user not have privilage');
+          }
+        }
+      // }, []);
+
 
 const css = 'm-10 p-50 grid justify-center ';
 

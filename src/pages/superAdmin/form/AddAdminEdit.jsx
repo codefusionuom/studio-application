@@ -13,7 +13,7 @@ import axios from 'axios';
 import EditButton from '../../../components/cards/buttons/EditButton';
 import axiosInstance from '../../../config/axios.config';
 
-function AddAdminEdit({passId}) {
+function AddAdminEdit({passId,setRefresh,setEditOpen, refresh}) {
 
   const [formData, setFormData] = useState({
     privileges: '',
@@ -34,33 +34,20 @@ function AddAdminEdit({passId}) {
     axiosInstance
       .get("superAdmin/admin/" + passId)
       .then((res) => {
-        console.log('response data', res.data);
-        console.log('passId to put',passId);
+        // console.log('response data', res.data);
+        // console.log('passId to put',passId);
         const {
-          privilege,employee: {
+          privilege,
             empAdd,
             empType,
             empDepartment,
             empEmail,
             empName,
             empNumber,
-          },
         } = res.data;
+        // console.log(passId);
         
-        setFormData((prevData) => ({
-          ...prevData,
-          privileges:privilege,
-          employee: {
-            ...prevData.employee,
-            empName: empName,
-            empNumber: empNumber,
-            empAdd: empAdd,
-            empType: empType,
-            empDepartment: empDepartment,
-            empEmail: empEmail,
-          },
-          
-        }))
+        setFormData(res.data);
         // console.log('form data', formData);
       })
       .catch((err) => {
@@ -85,7 +72,10 @@ function AddAdminEdit({passId}) {
           console.log('res in put',res);
           console.log('form in put',formData);
           alert("data update successfully");
-          window.location.replace("/superAdmin/admin");
+          setEditOpen(false)
+          setRefresh(!refresh)
+          
+          // window.location.replace("/superAdmin/admin");
         })
         .catch((err) => {
           console.log(err);
@@ -134,7 +124,7 @@ function AddAdminEdit({passId}) {
       setFormData((prevData) => ({
         ...prevData,
         privileges: checked
-          ? [value]
+          ? [...prevData.privileges, value]
           : prevData.privileges.filter((privilege) => privilege !== value),
       }));
     } else {
@@ -191,7 +181,8 @@ function AddAdminEdit({passId}) {
                 label='employee name'
                 size='lg'
                 name='empName'
-                value={formData.employee.empName}
+                readOnly
+                value={formData.empName}
                 onChange={onChange}
               />
               <p className={err}>{formErrors.employeeId}</p>
@@ -205,7 +196,8 @@ function AddAdminEdit({passId}) {
                 label='employee email'
                 size='lg'
                 name='empEmail'
-                value={formData.employee.empEmail}
+                readOnly
+                value={formData.empEmail}
                 onChange={onChange}
               />
               <p className={err}>{formErrors.employeeName}</p>
@@ -260,7 +252,8 @@ function AddAdminEdit({passId}) {
                 label='phone number'
                 size='lg'
                 name='empNumber'
-                value={formData.employee.empNumber}
+                readOnly
+                value={formData.empNumber}
                 onChange={onChange}
               />
               <p className={err}>{formErrors.telephone}</p>
@@ -273,7 +266,8 @@ function AddAdminEdit({passId}) {
                 label='address'
                 size='lg'
                 name='empAdd'
-                value={formData.employee.empAdd}
+                readOnly
+                value={formData.empAdd}
                 onChange={onChange}
               />
               <p className={err}>{formErrors.address}</p>

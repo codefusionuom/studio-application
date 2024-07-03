@@ -44,6 +44,7 @@ import EventManagerEvents from './pages/eventManager/eventManagerEvents';
 import PrivateRoute from './components/routing/PrivateRoute';
 import { store } from './app/store';
 import Setting from './pages/common/Setting';
+import Reset from './pages/common/Reset';
 
 function App() {
   const dispatch = useDispatch();
@@ -57,20 +58,19 @@ function App() {
       <Route path='/' element={<Welcome />}></Route>
       <Route path='/login' element={<Login />}></Route>
       <Route path='/foggotPassword' element={<FoggotPassword />}></Route>
+
+      {/* cusomer managerr */}
       <Route
         path='/customerManager'
         element={
-          // <PrivateRoute requiredPrivilege='customer_manager'>
+          <PrivateRoute requiredPrivilege='customer_manager'>
             <CustomerManager />
-          // </PrivateRoute>
+          </PrivateRoute>
         }
       >
-        {/* cusomer managerr */}
         <Route
           path='/customerManager'
-          element={
-            <CustomerManagerDashboard />
-          }
+          element={<CustomerManagerDashboard />}
         ></Route>
         <Route path='/customerManager/customers' element={<Customers />} />
         <Route
@@ -96,9 +96,9 @@ function App() {
       <Route
         path='/eventManager'
         element={
-          // <PrivateRoute requiredPrivilege='event_manager'>
+          <PrivateRoute requiredPrivilege='event_manager'>
             <EventManager />
-          // </PrivateRoute>
+          </PrivateRoute>
         }
       >
         <Route path='/eventManager' element={<EventManagerDashboard />} />
@@ -108,15 +108,16 @@ function App() {
           element={<EventManagerEventCalendar />}
         />
         <Route path='/eventManager/Events' element={<EventManagerEvents />} />
+        <Route path='/eventManager/setting' element={<Setting />} />
       </Route>
 
       {/* stock manager */}
       <Route
         path='/stockManager'
         element={
-          // <PrivateRoute>
+          <PrivateRoute requiredPrivilege='stock_manager'>
             <StockManager />
-          // </PrivateRoute>
+          </PrivateRoute>
         }
       >
         <Route index={true} path='/stockManager/' element={<DashboardSmgr />} />
@@ -152,15 +153,16 @@ function App() {
           element={<Suppliers />}
         />
         <Route index={false} path='/stockManager/form' element={<FormComp />} />
+        <Route path='/stockManager/setting' element={<Setting />} />
       </Route>
 
       {/* employee manager */}
       <Route
         path='/employeeManager'
         element={
-          // <PrivateRoute requiredPrivilege='employee_manager'>
+          <PrivateRoute requiredPrivilege='employee_manager'>
             <EmployeeManager />
-          // </PrivateRoute>
+          </PrivateRoute>
         }
       >
         <Route
@@ -169,15 +171,16 @@ function App() {
         />
         <Route path='/employeeManager/payment' element={<EmployeePayment />} />
         <Route path='/employeeManager/attendance' element={<Attendance />} />
+        <Route path='/employeeManager/setting' element={<Setting />} />
       </Route>
 
       {/* super admin */}
       <Route
         path='/superAdmin'
         element={
-          // <PrivateRoute requiredPrivilege='super_admin'>
+          <PrivateRoute requiredPrivilege='super_admin'>
             <SuperAdmin />
-          // </PrivateRoute>
+          </PrivateRoute>
         }
       >
         <Route path='/superAdmin' element={<SuperAdminDashboard />} />
@@ -191,6 +194,7 @@ function App() {
           element={<SuperAdminDepartment />}
         />
         <Route path='/superAdmin/setting' element={<Setting />} />
+        <Route path='/superAdmin/reset' element={<Reset />} />
       </Route>
     </Routes>
   );

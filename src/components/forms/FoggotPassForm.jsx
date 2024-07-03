@@ -58,7 +58,7 @@ export function LoginForm() {
       setPassword('');
       setError('');
       setSuccess(false);
-      navigate('/login');
+      navigate(-1);
     } catch (err) {
       // Handle error response
       console.error('Error resetting password:', err);
