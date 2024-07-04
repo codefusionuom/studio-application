@@ -16,6 +16,7 @@ function Profile({ setProfile }) {
   const { loading, admin } = authState;
 
     useEffect(() => {
+
       setData({
         id: admin.id,
         empName: admin.empName,
@@ -33,12 +34,13 @@ function Profile({ setProfile }) {
      }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit =async (e) => {
     e.preventDefault();
     // console.log(data);
     axiosInstance
       .put('employeeManager/updateEmployee/' + data.id, data)
       .then((res) => {
+      dispatch(loadUser());
         alert('data update successfully');
       })
       .catch((err) => {
