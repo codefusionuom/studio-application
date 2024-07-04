@@ -15,6 +15,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import DashCard2 from "../dashButtonCard copy";
 import SelectOption from "@material-tailwind/react/components/Select/SelectOption";
+import axiosInstance from "../../../config/axios.config";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { Textarea } from "@material-tailwind/react";
 
 
 
@@ -38,13 +41,46 @@ function CreateAdvance() {
   const [advanceAmount, setAdvanceAmount] = useState()
   const [errorType, setErrorType] = useState()
   const [allowanceorDeduction,setAllowanceorDeduction] = useState("Select Allowance/Deduction")
+  const [search, setSearch] = useState("")
+  const [resultVisible, setResultVisible] = useState()
+  const [ToastError, setToastError] = useState()
+  const [searchvalue, setSearchValue] = useState()
+  const [description,setDescription] = useState()
+  
 
-  useEffect(()=>{
-    axios.get('http://localhost:5000/employeeManager/getEmployees')
-    .then(result => setUser(result.data))
-    .catch(err => console.log(err))
-    console.log(users)
-},[])
+//   useEffect(()=>{
+//     axios.get('http://localhost:5000/employeeManager/getEmployees')
+//     .then(result => setUser(result.data.rows))
+//     .catch(err => console.log(err))
+//     console.log(users)
+// },[])
+
+
+  useEffect(() => {
+    if (search !== "") {
+    handleSearch();
+    console.log(search);
+    console.log("search when name change");
+    }
+  }, [search]);
+
+  // Search Employee
+  const handleSearch = async () => {
+    setResultVisible(true)
+    console.log("searching begin");
+    try {
+    const { data } = await axiosInstance.get(`/employeeManager/getEmployeeSearch/?empName=${search}`)
+    if (!data) {
+        ToastError("no employee exist")
+    }
+    console.log(data);
+    setUser(data);
+    // setResults(data.count)
+    } catch (error) {
+    console.log(error);
+    ToastError(error)
+    }
+};
 
 
 
@@ -70,7 +106,7 @@ function CreateAdvance() {
         return;
      }
 
-    axios.post("http://localhost:5000/employeeManager/createAdvance", { empId, advanceAmount })
+    axios.post("http://localhost:5000/employeeManager/createAdvance", { empId, advanceAmount, description })
       .then(result => {
         console.log(result)
         window.location.reload()
@@ -83,12 +119,7 @@ function CreateAdvance() {
 
   return (
     <>
-      <DashCard2  title2={"Create Advance"} title3={""} onClick={handleOpen}/>
-      <Dialog
-        open={open}
-        handler={handleOpen}
-        className="bg-transparent shadow-none w-fit"
-      >
+      
         <Card className="mx-auto w-full ">
           <CardBody className="flex flex-col gap-4">
             <form onSubmit={Submit}>
@@ -100,13 +131,48 @@ function CreateAdvance() {
                   <Typography className="mb-2" variant="h6">
                     Select Employee
                   </Typography>
-                  <Select label='Select Name' onChange={(val) => setEmpId(val)}>
-                            {users.map((user) => {
-                            return (
-                                <SelectOption   key={user.id} value={user.id}>{user.empName} </SelectOption>
-                                );},
-                                )}
-                          </Select>
+                  <div className="relative ">
+                    <div className="relative flex w-full max-w-[24rem] ">
+                      <Input
+                        error={errorName ? "true" : null}
+                        label="Enter Name"
+                        value={empName}
+                        onChange={(e) => {setSearch(e.target.value)}}
+                        className="pr-20"
+                        containerProps={{
+                          className: "min-w-0",
+                        }}
+                      />
+                      <Button
+                        size="sm"
+                        color={search ? "gray" : "blue-gray"}
+                        disabled={!search}
+                        className="!absolute right-0 bottom-0 rounded "
+                        onClick={handleSearch}
+                      >
+                        <MagnifyingGlassIcon className="h-6 w-5" />
+                      </Button>
+                    </div>
+
+                    {resultVisible ? (
+                    <div>
+        
+      
+                    {users && users.map((user)=>{
+                      return (
+                        <Card className="p-2 rounded-md absolute top-10 w-full max-h-36 overflow-scroll z-[999]">
+                        <div className="" onClick={()=>{setEmpId(user.id); setEmpName(user.empName); setSearchValue(""); setResultVisible(false)}}>
+                          <div className="text-"> 
+                          {user.empName}
+                          </div>
+                        </div>
+                        </Card>
+                      )
+                    })}
+                    </div>
+                    ) : null}
+         
+                  </div>
                 </div>
                 <div className="flex flex-col justify-between">
                 </div>
@@ -119,6 +185,9 @@ function CreateAdvance() {
                   <Input label="Advance Amount" size="lg" onChange={(e) => setAdvanceAmount(e.target.value)} error={errorAdd ? "true" : null} />
                 </div>
                 <div className=" flex flex-col justify-between">
+                  <div className="w-96">
+                  <Textarea label="Description" onChange={(e) => setDescription(e.target.value)}/>
+                </div>
                 </div>
               </div>
             </form>
@@ -134,7 +203,6 @@ function CreateAdvance() {
             </div>
           </CardFooter>
         </Card>
-      </Dialog>
     </>
   );
 }

@@ -1,12 +1,15 @@
 import { MagnifyingGlassIcon, ChevronUpDownIcon, } from "@heroicons/react/24/outline";
 import { Card, CardHeader, Input, Typography, Button, CardBody, Chip, CardFooter, Tabs, TabsHeader, Tab, Avatar, IconButton, Tooltip, Select, Option, } from "@material-tailwind/react";
-import { Pagination } from "../../components/pagination/pagination";
+import { Pagination } from "../../../components/pagination/pagination";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import UpdateAdvance from "./payment/editadvance";
-import UpdateEmployee from "./empForms/updateEmployee";
+import UpdateAdvance from "../payment/editadvance";
+import UpdateEmployee from "../empForms/updateEmployee";
+import React from "react";
+import { Dialog } from "@material-tailwind/react";
+import EditRecordButton from "../../../components/buttons/EditRecordButton";
 
-function AdvanceRequestList() {
+function RejectAdvanceList() {
 
     const [id,setid] = useState()
     const [empId,setEmpId] = useState()
@@ -15,16 +18,19 @@ function AdvanceRequestList() {
     const [advancePaidAmount,setAdvencePaidAmount] = useState()
     const [advanceremaining,setAdvanceRemaining] = useState()
     const [users,setUser] = useState([])
-
-    
-
+    const [open, setOpen] = React.useState(false);
+    const [result, setResult] = useState()
+    const [active, setActive] = useState(1)
 
     useEffect(() => {
-        axios.get('http://localhost:5000/employeeManager/getAdvance')
-          .then(result => setUser(result.data))
+        axios.get(`http://localhost:5000/employeeManager/getRejectAdvance/?page=${active}`)
+          .then(result => {
+            setUser(result.data.rows)
+            setResult(result.data.count)
+        })
           .catch(err => console.log(err))
         console.log(users)
-      }, [])
+      }, [active])
 
 
 
@@ -116,34 +122,9 @@ function AdvanceRequestList() {
                                                     color="blue-gray"
                                                     className="font-normal"
                                                 >
-                                                    {user.advancePaidAmount}
+                                                    {user.description}
                                                 </Typography>
-                                                
                                             </div>
-                                        </td>
-                                        <td className={"p-4 border-b border-blue-gray-50"}>
-                                            <div className="flex flex-col">
-                                                <Typography
-                                                    variant="small"
-                                                    color="blue-gray"
-                                                    className="font-normal"
-                                                >
-                                                    {user.advanceAmount-user.advancePaidAmount}
-                                                </Typography>
-                                                
-                                            </div>
-                                        </td>
-                                        
-                                        
-                                        
-                                        <td className={"p-4 border-b border-blue-gray-50"}>
-                                            <Tooltip content="Edit User">
-                                                <UpdateAdvance idx={user.id}/>
-                                                {/* <UpdateEmployee idx={user.id}/> */}
-                                                {/* <IconButton variant="text">
-                                                    <PencilIcon className="h-4 w-4" />
-                                                </IconButton> */}
-                                            </Tooltip>
                                         </td>
                                     </tr>
                                 );
@@ -154,18 +135,18 @@ function AdvanceRequestList() {
             </CardBody>
             <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
                 <Typography>
-233 results
+                    {result}
                 </Typography>
                 <div className="flex gap-2">
-                   <Pagination />
+                <Pagination  active={active} setActive={setActive} />
                 </div>
             </CardFooter>
         </Card>
     );
 }
-export default AdvanceRequestList
+export default RejectAdvanceList
 
 
 
-const TABLE_HEAD = ["Employee Name", "Advance", "Paid", "Remaining", "Make Payment"];
+const TABLE_HEAD = ["Employee Name", "Advance", "Description"];
 

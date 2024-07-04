@@ -53,22 +53,17 @@ function CreateAllowancesDeductions() {
       .catch(err => console.log(err))
   }
 
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen((cur) => !cur);
+  // const [open, setOpen] = React.useState(false);
+  // const handleOpen = () => setOpen((cur) => !cur);
 
   return (
     <>
-      <DashCard2  title2={"Create Allowences/Deductions"} title3={""} onClick={handleOpen}/>
-      <Dialog
-        open={open}
-        handler={handleOpen}
-        className="bg-transparent shadow-none w-fit"
-      >
+      
         <Card className="mx-auto w-full ">
           <CardBody className="flex flex-col gap-4">
             <form onSubmit={Submit}>
               <Typography variant="h4" color="blue-gray">
-                Register new employee
+                Create Allowance
               </Typography>
               <div className=" flex flex-row justify-between ">
                 <div className="flex flex-col justify-between">
@@ -97,16 +92,16 @@ function CreateAllowancesDeductions() {
           </CardBody>
           <CardFooter className="pt-0">
             <div className=" flex flex-row justify-between">
-              <Button className=" bg-yellow-800" onClick={handleOpen}>
+              {/* <Button className=" bg-yellow-800" onClick={handleOpen}>
                 Clear
-              </Button>
+              </Button> */}
               <Button className=" bg-green-600" onClick={Submit}>
                 Create
               </Button>
             </div>
           </CardFooter>
         </Card>
-      </Dialog>
+      
     </>
   );
 }

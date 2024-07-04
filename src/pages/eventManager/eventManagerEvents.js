@@ -159,7 +159,7 @@ const EventManagerEvents = () => {
                   className=" "
                   label="Sort by : Date"
                   onChange={(e) => {
-                    setDate(Date);
+                    setDate(date);
                     // console.log(date);
                   }}
                   value={
@@ -412,7 +412,8 @@ const EventManagerEvents = () => {
                               color="blue-gray"
                               className="font-bold"
                             >
-                              {oneEvent.serviceType}
+                            {oneEvent.service['serviceName']}
+
                             </Typography>
                           </div>
                         </div>
@@ -424,7 +425,7 @@ const EventManagerEvents = () => {
                             color="blue-gray"
                             className="font-bold"
                           >
-                            {oneEvent.date.slice(0, 10)}
+                            {oneEvent.serviceDate?.slice(0, 10)}
                           </Typography>
                         </div>
                       </td>

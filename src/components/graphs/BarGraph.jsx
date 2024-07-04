@@ -167,7 +167,7 @@ export default function BarGraph() {
           </Typography>
         </div>
       </CardHeader>
-      <CardBody className="px-2 pb-0 h-20">
+      <CardBody className="px-2 pb-0">
         <Chart {...chartConfig} />
       </CardBody>
     </Card>

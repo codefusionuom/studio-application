@@ -1,3 +1,4 @@
+import { Card, CardBody } from "@material-tailwind/react";
 import { QuickAvatar } from "./quickviewAvatar";
 
 export function QuickView1() {
@@ -9,10 +10,10 @@ export function QuickView1() {
                 </div>
                 <div>
                     <div>
-                        <p className="font-sans text-gray-600">Events</p>
+                        <p className="font-sans text-gray-600">Attendance</p>
                     </div>
                     <div>
-                        <p className="text-3xl">18</p>
+                        <p className="text-3xl">5</p>
                     </div>
                 </div>
             </div>
@@ -25,7 +26,7 @@ export function QuickView1() {
                         <p className="font-sans text-gray-600">Photographers</p>
                     </div>
                     <div>
-                        <p className="text-3xl">21</p>
+                        <p className="text-3xl">3</p>
                     </div>
                 </div>
             </div>
@@ -38,7 +39,7 @@ export function QuickView1() {
                         <p className="font-sans text-gray-600">Total Employees</p>
                     </div>
                     <div>
-                        <p className="text-3xl">53</p>
+                        <p className="text-3xl">9</p>
                     </div>
                 </div>
             </div>

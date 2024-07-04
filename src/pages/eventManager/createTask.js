@@ -55,6 +55,31 @@ const CreateTask = () => {
   const handleOpenEmpModal = () => setOpenEmpModal(!openEmpModal);
   // useEffect(() => {}, []);
 
+  // const getEvents = () => {
+  //   // try {
+  //   console.log("kkkkkkkkkkkkkkkkkkkk");
+  //   const response = axios
+  //     .get("http://localhost:5000/eventManager/all-events")
+  //     .then((res) => {
+  //       // setExistError("error.message");
+  //       const events = res.data.events;
+  //       console.log("events: ", events);
+  //       console.log("custormer name :" + events[0].customer.firstname);
+  //       setEventList(events);
+  //     })
+  //     .catch((error) => {
+  //       console.log("got error: ", error.message);
+  //       setExistError(error.message);
+  //       console.log(error);
+  //     });
+    // } catch (error) {
+    //   console.log("got error: ", error.message);
+    //   // setExistErrorError(error.message);
+    //   console.log(error);
+    // }
+    // console.log("response: ", response);
+    // console.log(response.events);
+  // };
   const getEvents = () => {
     // try {
     console.log("kkkkkkkkkkkkkkkkkkkk");
@@ -64,7 +89,7 @@ const CreateTask = () => {
         // setExistError("error.message");
         const events = res.data.events;
         console.log("events: ", events);
-        console.log("custormer name :" + events[0].customer.firstname);
+        console.log("eventsssssssssssssssssssssss :" + events[0]);
         setEventList(events);
       })
       .catch((error) => {
@@ -72,22 +97,16 @@ const CreateTask = () => {
         setExistError(error.message);
         console.log(error);
       });
-    // } catch (error) {
-    //   console.log("got error: ", error.message);
-    //   // setExistErrorError(error.message);
-    //   console.log(error);
-    // }
-    // console.log("response: ", response);
-    // console.log(response.events);
   };
 
   const createTask = () => {
     console.log("description" + description);
-    console.log("select event " + selectedEvent.id);
+    console.log("select event^^^^^^^^^^^^^^^ " + selectedEvent.id);
+    asignedEmployeesList.map((e) =>console.log("asignedEmployeesList^^^^^^^^^^^^^^^ " + e.id) )
     // asignedEmployeesList.map((asignedEmployee) => setAsignedEmployeesIdList((preEmpIdList) =>[ ...preEmpIdList , asignedEmployee.id])  )
     let empIdList = asignedEmployeesList
-      .filter((employee) => employee.empId)
-      .map((asignedEmployee) => asignedEmployee.empId);
+      .filter((employee) => employee.id)
+      .map((asignedEmployee) => asignedEmployee.id);
     console.log("empIdList");
     console.log(empIdList)
     // console.log("asignedEmployeesIdList: ", asignedEmployeesIdList)
@@ -147,7 +166,8 @@ const CreateTask = () => {
     axios
       .get("http://localhost:5000/eventManager/event-categories")
       .then((res) => {
-        setEventTypes(res.data.serviceTypes); // setEventList(events);
+        // setEventTypes(res.data.serviceTypes); // setEventList(events);
+        setEventTypes(res.data); // setEventList(events);
       })
       .catch((error) => {
         setExistError(error.message);
@@ -193,12 +213,14 @@ const CreateTask = () => {
                 color="blue-gray"
                 className="-mb-3"
                 placeholder="Task Name"
+
               >
                 Task Name
               </Typography>
               <Input
                 size="lg"
-                placeholder="name@mail.com"
+                
+                placeholder="Task Name"
                 className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
                 labelProps={{
                   className: "before:content-none after:content-none",
@@ -209,26 +231,27 @@ const CreateTask = () => {
                 Select Event
               </h6>
               <div className="relative h-11 w-full min-w-[200px]">
-                <Select
-                  label="Select Version"
-                  value={`${selectedEvent.serviceType ?? "Select an event"} ${
-                    selectedEvent.serviceType ? " -  Mr." : ""
-                  }${selectedEvent.customer?.firstname ?? ""}`}
-                  className="relative h-11 w-full min-w-[200px] overflow-hidden ..."
-                  onClick={() => {
-                    console.log("sele:" + selectedEvent);
-                    console.log("Heyyyyyyyyyyy clicked");
-                    getEventCategories();
-                    getEvents();
-                    handleOpen();
-                  }}
-                >
-                  {eventList.map((event) => (
-                    <Option value={event.serviceType}>
-                      {event.serviceType}
-                    </Option>
-                  ))}
-                </Select>
+              <Select
+                    // label="Select Version"
+                    
+                    value={`${selectedEvent?.service?.serviceName ?? "Select an event"} ${
+                      selectedEvent?.service?.serviceName ? " -  Mr." : ""
+                    }${selectedEvent.customer?.firstname ?? ""}`}
+                    className="relative h-11 w-full min-w-[200px] overflow-hidden ..."
+                    onClick={() => {
+                      console.log("sele:" + selectedEvent);
+                      console.log("Heyyyyyyyyyyy clicked");
+                      // getEventCategories();
+                      getEvents();
+                      handleOpen();
+                    }}
+                  >
+                    {eventList.map((event) => (
+                      <Option value={event.service['serviceName']}>
+                        {event.service['serviceName']}
+                      </Option>
+                    ))}
+                  </Select>
                 <Dialog
                   open={open}
                   handler={handleOpen}
@@ -242,8 +265,10 @@ const CreateTask = () => {
                     <SearchForm
                       eventList={eventList}
                       eventTypes={eventTypes}
-                      resultDisplayfield1={"serviceType"}
-                      resultDisplayfield2={"date"}
+                      // resultDisplayfield1={"serviceName"}
+                      // resultDisplayfield2={"date"}
+                      resultDisplayfield1={'serviceName'}
+                      resultDisplayfield2={"serviceDate"}
                       selectedItem={setSelectedEvent}
                       setOpen={setOpen}
                     />
@@ -358,7 +383,7 @@ const CreateTask = () => {
                   <span></span>
                   {/* {employeeList.map((employee) => (
                             <Option value={employee.empName}>
-                              {employee.serviceType}
+                              {employee.serviceName}
                             </Option>
                           ))} */}
                 </Select>
@@ -555,253 +580,21 @@ const CreateTask = () => {
                 >
                   Create Task
                 </Button>
+                <Button
+                  fullWidth
+                  onClick={() =>  console.log("select event^^^^^^^^^^^^^^^ " + selectedEvent.id)}
+                  variant="filled"
+                  className="rounded-full "
+                  color="green"
+                >
+                  Test
+                </Button>
               </div>
             </div>
           </div>
         </tr>
 
-        {/* <Card className="mt-6 w-full bg-gray-400 bold">
-                <CardBody>
-                  <Typography
-                    variant="h5"
-                    color="blue-gray"
-                    className="mb-2 text-2xl font-normal "
-                  >
-                    Task - Photography
-                  </Typography>
-                </CardBody>
-              </Card> */}
-
-        {/* <Card color="transparent" shadow={false} className="w-full">
-          <div className="flex     space-x-2 w-11/12"> */}
-        {/* <form className="mt-8 mb-2  w-full  flex space-x-2 justify-between"> */}
-
-        {/* <div className="mt-8 mb-2  w-full  flex space-x-2 justify-between">
-              <div className="flex flex-col gap-6 mb-1 p-4 w-2/6"> */}
-        {/* <h6 className="block -mb-3 font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-blue-gray-900">
-                        Event ID
-                      </h6> */}
-        {/* <div className="relative h-11 w-full min-w-[200px]"> */}
-        {/* <Select
-                          label="Select Version"
-                          className="relative h-11 w-full min-w-[200px]"
-                          onClick={console.log("Workingg")}
-                          // selected={(element) =>
-                          //   {
-                          //     // console.log("Workingg")
-                          //    if (element) {
-                          //   //    const selectedValue = element.props.value;
-                          //   //    console.log('Selected Value:', selectedValue);
-                          //   //  return element.props.name;
-                          //   // console.log("Workingg")
-                          //    }
-
-                          //  }}
-                        >
-                          <Option>Material Tailwind HTML</Option>
-                          <Option>Material Tailwind React</Option>
-                          <Option>Material Tailwind Vue</Option>
-                          <Option>Material Tailwind Angular</Option>
-                          <Option>Material Tailwind Svelte</Option>
-                        </Select> */}
-        {/* </div> */}
-        {/* </div> */}
-
-        {/* <div className="mb-1 flex flex-col gap-6 p-4 w-2/6  ">
-                <Typography variant="h6" color="blue-gray" className="-mb-3">
-                  Contact No
-                </Typography>
-                <Input
-                  size="lg"
-                  placeholder="name@mail.com"
-                  className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                  labelProps={{
-                    className: "before:content-none after:content-none",
-                  }}
-                />
-              </div>
-            </div> */}
-
-        {/* </form> */}
-        {/* </div>
-        </Card> */}
-        {/* <Card className="mt-6 w-full bg-gray-400 bold">
-          <CardBody>
-            <Typography
-              variant="h5"
-              color="blue-gray"
-              className="mb-2 text-2xl font-normal "
-            >
-              Service Information
-            </Typography>
-          </CardBody>
-        </Card> */}
-
-        {/* <Card color="transparent" shadow={false} className="w-full">
-          <div className="flex     space-x-2 w-11/12"> */}
-        {/* <form className="mt-8 mb-2  w-full  flex space-x-2 justify-between"> */}
-
-        {/* <div className="mt-8 mb-2  w-full  flex space-x-2 justify-between">
-              <div className="mb-1 flex flex-col gap-6 p-4 w-2/6">
-                <Typography variant="h6" color="blue-gray" className="-mb-3">
-                  Name
-                </Typography>
-                <Input
-                  size="lg"
-                  placeholder="name@mail.com"
-                  className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                  labelProps={{
-                    className: "before:content-none after:content-none",
-                  }}
-                />
-                <Typography variant="h6" color="blue-gray" className="-mb-3">
-                  Address
-                </Typography>
-                <Input
-                  size="lg"
-                  placeholder="name@mail.com"
-                  className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                  labelProps={{
-                    className: "before:content-none after:content-none",
-                  }}
-                />
-              </div> */}
-
-        {/* <div className="mb-1 flex flex-col gap-6 p-4 w-2/6  ">
-                <Typography variant="h6" color="blue-gray" className="-mb-3">
-                  Email
-                </Typography>
-                <Input
-                  size="lg"
-                  placeholder="name@mail.com"
-                  className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                  labelProps={{
-                    className: "before:content-none after:content-none",
-                  }}
-                />
-                <Typography variant="h6" color="blue-gray" className="-mb-3">
-                  Contact No
-                </Typography>
-                <Input
-                  size="lg"
-                  placeholder="name@mail.com"
-                  className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                  labelProps={{
-                    className: "before:content-none after:content-none",
-                  }}
-                />
-              </div>
-            </div> */}
-
-        {/* </form> */}
-        {/* </div> */}
-        {/* </Card> */}
-        {/* <Card className="mt-6 w-full bg-gray-400 bold">
-          <CardBody>
-            <Typography
-              variant="h5"
-              color="blue-gray"
-              className="mb-2 text-2xl font-normal "
-            >
-              Service Information
-            </Typography>
-          </CardBody>
-        </Card> */}
-
-        {/* <Card color="green" shadow={false} className="w-full">
-                <div className="flex     space-x-2 w-11/12">
-                  <form className="mt-8 mb-2  w-full  flex space-x-2 justify-between">//comment
-
-                  <div className="mt-8 mb-2  w-full  flex space-x-2 justify-between">
-                    <div className="mb-1 flex flex-col gap-6 p-4 w-2/6">
-                      <Typography
-                        variant="h6"
-                        color="blue-gray"
-                        className="-mb-3"
-                      >
-                        Time
-                      </Typography>
-                      <Input
-                        size="lg"
-                        placeholder="name@mail.com"
-                        className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                        labelProps={{
-                          className: "before:content-none after:content-none",
-                        }}
-                      />
-                      <Typography
-                        variant="h6"
-                        color="blue-gray"
-                        className="-mb-3"
-                      >
-                        Album
-                      </Typography>
-                      <Input
-                        size="lg"
-                        placeholder="name@mail.com"
-                        className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                        labelProps={{
-                          className: "before:content-none after:content-none",
-                        }}
-                      />
-                      <Typography
-                        variant="h6"
-                        color="blue-gray"
-                        className="-mb-3"
-                      >
-                        Cost
-                      </Typography>
-                      <Input
-                        size="lg"
-                        placeholder="name@mail.com"
-                        className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                        labelProps={{
-                          className: "before:content-none after:content-none",
-                        }}
-                      />
-                    </div>
-
-                    <div className="mb-1 flex flex-col gap-6 p-4 w-2/6  ">
-                      <Typography
-                        variant="h6"
-                        color="blue-gray"
-                        className="-mb-3"
-                      >
-                        Crowd
-                      </Typography>
-                      <Input
-                        size="lg"
-                        placeholder="200+"
-                        className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                        labelProps={{
-                          className: "before:content-none after:content-none",
-                        }}
-                      />
-                      <Typography
-                        variant="h6"
-                        color="blue-gray"
-                        className="-mb-3"
-                      >
-                        Morning-shoot
-                      </Typography>
-                      <Input
-                        size="lg"
-                        placeholder="name@mail.com"
-                        className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                        labelProps={{
-                          className: "before:content-none after:content-none",
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  </form>//comment
-                </div>
-              </Card> */}
-
-        {/* <Button color="blue" className="mt-auto">
-          Next
-        </Button> */}
+       
       </form>
     </div>
   );

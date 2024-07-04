@@ -53,13 +53,13 @@ function PaymentList() {
   const handleSearch = async (query) => {
     
 
-    console.log("date", query);
+    // console.log("date", query);
     try {
-      console.log("try");
+      // console.log("try");
       const { data } = await axiosInstance.get(
         `/customerManager/payment/?search=${search}&date=${date}&page=${active}&limit=8`
       );
-      console.log(data);
+      // console.log(data);
       setNumberofresults(data.count);
       setPayments(data.rows);
     } catch (error) {
