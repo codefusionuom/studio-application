@@ -18,7 +18,7 @@ import { ToastError, ToastSuccess } from "./ToastAlert";
 import RequestCustomer from "./Components/RequestCustomer";
 import RequestService from "./Components/RequestService";
 import { useNavigate } from "react-router-dom";
-
+import BackButton from "../../components/buttons/BackButton"
 function CreateCustomerRequest() {
   const navigate = useNavigate();
   const isMounted = useRef(false);
@@ -135,8 +135,10 @@ function CreateCustomerRequest() {
   };
 
   return (
-    <div className="bg-cl-4 p-20 rounded flex flex-col gap-12 overflow-scroll  h-screen">
+    <div className="bg-cl-4 p-16 rounded flex flex-col gap-12 overflow-scroll  h-screen">
+      <BackButton />
       <div className="">
+        
         <div className="bg-bg py-10 px-8 flex justify-between rounded">
           <Typography className="font-Lato text-4xl font-normal font-500">
             Customer Request Information

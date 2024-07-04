@@ -40,10 +40,12 @@ function RequestService({
   const onChangeTree = (currentNode, selectedNodes) => {
     fetchCustomerServices(currentNode);
   };
+  const today = new Date();
 
   const handleRemove = () => {
     setAdded(-1);
   };
+  
   const handleRequestService = async () => {
     if(!customer?.customerId ){
       setError("registered customer required")
@@ -239,8 +241,8 @@ function RequestService({
                           >
                             <div className="flex justify-between w-full">
                               <div>{option.fieldValueName}</div>
-                              <div>{" "+ " - "+" "}</div>
-                              <div>{option.price && option.price}</div>
+                              {/* <div>{" "+ " - "+" "}</div> */}
+                              {/* <div>{option.price && option.price}</div> */}
                             </div>
                           </Option>
                         ))}
@@ -261,6 +263,7 @@ function RequestService({
               mode="single"
               selected={date}
               onSelect={setDate}
+              disabled={{ before: today }} 
               showOutsideDays
               className="border-0 flex justify-start "
               classNames={{
@@ -329,7 +332,7 @@ function RequestService({
                 name="amount"
                 value={form.amount}
                 onChange={(e) => {
-                  setForm({ ...form, ["amount"]: e.target.value });
+                  setForm({ ...form, ["amount"]:parseFloat( e.target.value) });
                 }}
                 label="LKR"
                 className=""

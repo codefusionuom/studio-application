@@ -10,7 +10,7 @@ export default function TableOfCustomers({customerList,handleEdit,setSelectedCus
       <div>  
         <Card className=" w-full border-2 rounded p-4">
           <CardBody className="overflow-scroll px-0 z-10">
-            <table className="mt-4 w-full min-w-max table-auto text-left">
+            <table className="mt-4 w-full min-w-max table-auto text-left ">
               <thead>
                 <tr>
                   {TABLE_HEAD.map((head, index) => (
@@ -93,11 +93,11 @@ export default function TableOfCustomers({customerList,handleEdit,setSelectedCus
                                 color="blue-gray"
                                 className="font-normal"
                               >
-                                {address}
+                                {address ? address.slice(0, 30) + (address.length > 20 ? "..." : "") : ""}
                               </Typography>
                             </div>
                           </td>
-                          <td className={classes}>
+                          {/* <td className={classes}>
                             <div className="flex flex-col">
                               <Typography
                                 variant="small"
@@ -107,7 +107,7 @@ export default function TableOfCustomers({customerList,handleEdit,setSelectedCus
                                 {status}
                               </Typography>
                             </div>
-                          </td>
+                          </td> */}
                           <td className={classes}>
                             <div className="flex flex-col">
                               <Typography

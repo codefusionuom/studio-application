@@ -11,7 +11,7 @@ export const initialvalues = {
     "Email",
     "Mobile Phone",
     "Adress",
-    "Event count",
+    // "Event count",
     "Edit",
     "Delete" 
 ];

@@ -506,7 +506,7 @@ function CustomerServiceform({
                 </div>
               </div>
             </div>
-            <div className="flex flex-col gap-4">
+            {/* <div className="flex flex-col gap-4">
               <Typography className="-mb-2" variant="h6">
                 Price
               </Typography>
@@ -524,7 +524,7 @@ function CustomerServiceform({
                 }
                 size="lg"
               />
-            </div>
+            </div> */}
           </div>
         </CardBody>
         <CardFooter className="pt-0">

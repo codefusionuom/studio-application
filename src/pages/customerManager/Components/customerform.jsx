@@ -85,7 +85,7 @@ function Customerform({
       } 
      }
       
-  
+     setError({})
     try {
       if (mode) {
         console.log(initialvalues.id, "initial value");

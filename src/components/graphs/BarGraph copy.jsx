@@ -11,13 +11,13 @@ import axiosInstance from "../../config/axios.config";
 
 
 
-export default function BarGraph() {
+export default function BarGraphPayment() {
   const initialChartConfig = {
     type: "bar",
     height: 400,
     series: [
       {
-        name: "Event Count",
+        name: "Payments",
         data: [], // Initialize with empty data
       },
     ],
@@ -96,7 +96,7 @@ export default function BarGraph() {
     try {
       const date = new Date(dateString);
       if (!isNaN(date)) {
-        return date.toISOString().split("T")[0];
+        return date.toISOString().split('T')[0];
       } else {
         throw new Error("Invalid date");
       }
@@ -108,14 +108,14 @@ export default function BarGraph() {
 
   const aggregateData = (data) => {
     const aggregated = {};
-
-    data.data.forEach((event) => {
-      const date = formatDate(event.serviceDate);
+console.log(data);
+    data.data.forEach(event => {
+      const date = formatDate(event.createdAt);
       if (date) {
         if (!aggregated[date]) {
           aggregated[date] = 0;
         }
-        aggregated[date] += 1; // Increment the count for the date
+        aggregated[date] += event.payment || 0;
       }
     });
 
@@ -124,15 +124,15 @@ export default function BarGraph() {
 
   const handleSearch = async () => {
     try {
-      const { data } = await axiosInstance.get(`/eventManager/Filter/Between/`);
+      const { data } = await axiosInstance.get(`/superAdmin/Filter/payments`);
       if (data) {
         const aggregatedData = aggregateData(data);
         const dates = Object.keys(aggregatedData);
-        const counts = Object.values(aggregatedData);
+        const payments = Object.values(aggregatedData);
 
         setChartConfig((prevConfig) => ({
           ...prevConfig,
-          series: [{ ...prevConfig.series[0], data: counts }],
+          series: [{ ...prevConfig.series[0], data: payments }],
           options: {
             ...prevConfig.options,
             xaxis: { ...prevConfig.options.xaxis, categories: dates },
@@ -163,7 +163,7 @@ export default function BarGraph() {
             color="black"
             className="text-2xl font-semibold"
           >
-            Weekly Comparison Events 
+            Weekly Comparison  payments
           </Typography>
         </div>
       </CardHeader>
