@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { Select, SelectOption } from "@material-tailwind/react";
 import axiosInstance from "../../../config/axios.config";
+import { ToastSuccess } from "../../customerManager/ToastAlert";
 
 
 function RegisterEmployee({setReload,setOpen}) {
@@ -118,6 +119,7 @@ function RegisterEmployee({setReload,setOpen}) {
         console.log(result)
         setReload((prev)=>!prev)
         setOpen((prev)=>!prev)
+        ToastSuccess("Employee created successfully")
         // window.location.reload()
         // navigate('/employeeManager')
       })

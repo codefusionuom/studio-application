@@ -20,7 +20,7 @@ import { ToastError, ToastSuccess } from "../../customerManager/ToastAlert";
 
 
 
-function EditEmpAllowance({idx}) {
+function EditEmpAllowance({idx, setRefresh, setOpen}) {
 
   const [empName, setEmpName] = useState()
   const [empId, setEmpId] = useState(idx)
@@ -141,8 +141,28 @@ function EditEmpAllowance({idx}) {
     axios.put(`http://localhost:5000/employeeManager/updateEmpAllowance/?empId=${empId}&id=${id}&amount=${amount}`)
       .then(result => {
         console.log(result)
-        window.location.reload()
+        // window.location.reload()
         ToastSuccess("Updated successfully")
+        setRefresh((prev)=>!prev)
+        setOpen((prev)=>!prev)
+      })
+      .catch(err => {console.log(err);ToastError(err.message)})
+  }
+
+
+
+  const Delete = (e) => {
+    e.preventDefault()
+
+    
+
+    axios.delete(`http://localhost:5000/employeeManager/deleteEmpAllowance/?id=${id}`)
+      .then(result => {
+        console.log(result)
+        // window.location.reload()
+        ToastSuccess("Updated successfully")
+        setRefresh((prev)=>!prev)
+        setOpen((prev)=>!prev)
       })
       .catch(err => {console.log(err);ToastError(err.message)})
   }
@@ -206,9 +226,9 @@ function EditEmpAllowance({idx}) {
           </CardBody>
           <CardFooter className="pt-0">
             <div className=" flex flex-row justify-between">
-              {/* <Button className=" bg-yellow-800" onClick={handleTest}>
-                Clear
-              </Button> */}
+              <Button className=" bg-red-800" onClick={Delete}>
+                Delete
+              </Button>
               <Button className=" bg-green-600" onClick={Submit}>
                 Create
               </Button>

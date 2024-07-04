@@ -7,6 +7,7 @@ import UpdateAdvance from "../payment/editadvance";
 import UpdateEmployee from "../empForms/updateEmployee";
 import EditRecordButton from "../../../components/buttons/EditRecordButton";
 import { ToastSuccess, ToastError } from "../../customerManager/ToastAlert";
+import DeleteRecordButton from "../../../components/buttons/DeleteRecordButton";
 
 function ViewAllowance() {
 
@@ -54,13 +55,13 @@ function ViewAllowance() {
                     </div>
 
                     <div className=" flex p-4 gap-6">
-                        <Select size="lg" label="Sort By: Newest" className="z-10">
+                        {/* <Select size="lg" label="Sort By: Newest" className="z-10">
                             <Option>Material Tailwind HTML</Option>
                             <Option>Material Tailwind React</Option>
                             <Option>Material Tailwind Vue</Option>
                             <Option>Material Tailwind Angular</Option>
                             <Option>Material Tailwind Svelte</Option>
-                        </Select>
+                        </Select> */}
 
                         <Input size="lg"
                             label="Search"
@@ -131,7 +132,8 @@ function ViewAllowance() {
                                         
                                         <td className={"p-4 border-b border-blue-gray-50"}>
                                             <Tooltip content="Edit User">
-                                                <EditRecordButton onClick={() => handleDelete(user.id)}></EditRecordButton>
+                                                <DeleteRecordButton  onClick={() => handleDelete(user.id)}/>
+                                                {/* <EditRecordButton onClick={() => handleDelete(user.id)}></EditRecordButton> */}
                                             </Tooltip>
                                         </td>
                                     </tr>
@@ -142,8 +144,8 @@ function ViewAllowance() {
                 </table>
             </CardBody>
             <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
-                <Typography>
-                    {result}
+                <Typography className="pl-5">
+                    {result} Results
                 </Typography>
                 <div className="flex gap-2">
                 <Pagination  active={active} setActive={setActive} />

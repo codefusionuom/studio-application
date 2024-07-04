@@ -22,16 +22,17 @@ function AdvanceRequestList(reload) {
     const [advancePaidAmount,setAdvencePaidAmount] = useState()
     const [advanceremaining,setAdvanceRemaining] = useState()
     const [users,setUser] = useState([])
-    const [open, setOpen] = React.useState(false);
+    const [openEdit, setOpenEdit] = React.useState(false);
     const [result, setResult] = useState()
     const [active, setActive] = useState(1)
     const [advancerequest, setAdvanceRequest] = useState()
     const [reject, setReject] = useState()
+    const [refresh, setRefresh] = useState(false)
 
 
 
     const handleEdit = (id) => {
-        setOpen((cur) => !cur) 
+        setOpenEdit((cur) => !cur) 
         setid(id)
         console.log(id);
     };
@@ -45,6 +46,7 @@ function AdvanceRequestList(reload) {
       .then(result => {
         console.log(result)
         ToastSuccess("Advance Accepted")
+        setRefresh((prev)=>!prev)
         // window.location.reload()
         // navigate('/')
       })
@@ -68,6 +70,7 @@ function AdvanceRequestList(reload) {
       .then(result => {
         console.log(result)
         ToastSuccess("Advance Rejected")
+        setRefresh((prev)=>!prev)
         // window.location.reload()
         // navigate('/')
       })
@@ -85,7 +88,7 @@ function AdvanceRequestList(reload) {
         })
           .catch(err => {console.log(err);ToastError(err.message)})
         console.log(users)
-      }, [active,reload])
+      }, [active,reload,refresh])
 
 
 
@@ -241,16 +244,16 @@ function AdvanceRequestList(reload) {
                 </table>
                 
                     <Dialog
-                        open={open}
+                        open={openEdit}
                         handler={handleEdit}
                         className="bg-transparent shadow-none w-fit"
                     >
-                        <UpdateAdvance idx={id}/>
+                        <UpdateAdvance idx={id} setRefresh={setRefresh} setOpenEdit={setOpenEdit}/>
                     </Dialog>
             </CardBody>
             <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
-                <Typography>
-                    {result}
+                <Typography className="pl-5">
+                    {result} Results
                 </Typography>
                 <div className="flex gap-2">
                 <Pagination  active={active} setActive={setActive} />

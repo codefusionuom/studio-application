@@ -33,37 +33,37 @@ function AdvancePage() {
     return (
         <div>
 
-                <div className='flex justify-evenly pb-5'>
-                <div>
-                {/* <DashCard2  title2={"Create Advance"} title3={""} onClick={handleOpenCreate}/> */}
-                <SmallCard
-                        className=" w-full cursor-pointer"
-                        title="+ Create Advance"
-                        onClick={handleOpenCreate}
-                        />
-                <Dialog
-                    open={openCreate}
-                    handler={handleOpenCreate}
-                    className="bg-transparent shadow-none w-fit"
-                >
-                    <CreateAdvance setReload={setReload} setOpenCreate={setOpenCreate}/>
-                </Dialog>
-                </div>
-                <div>
-                {/* <DashCard2  title2={"View Rejected Advance"} title3={""} onClick={handleOpenReject}/> */}
-                <SmallCard
-                        className=" w-full cursor-pointer"
-                        title="View Rejected Advance"
-                        onClick={handleOpenReject}
-                        />
-                <Dialog
-                    open={openReject}
-                    handler={handleOpenReject}
-                    className="bg-transparent shadow-none w-fit"
-                >
-                    <RejectAdvanceList/>
-                </Dialog>
-                </div>
+                <div className='flex  pb-5'>
+                    <div>
+                    {/* <DashCard2  title2={"Create Advance"} title3={""} onClick={handleOpenCreate}/> */}
+                    <SmallCard
+                            className=" w-full cursor-pointer"
+                            title="+ Create Advance"
+                            onClick={handleOpenCreate}
+                            />
+                    <Dialog
+                        open={openCreate}
+                        handler={handleOpenCreate}
+                        className="bg-transparent shadow-none w-fit"
+                    >
+                        <CreateAdvance setReload={setReload} setOpenCreate={setOpenCreate}/>
+                    </Dialog>
+                    </div>
+                    <div className='pl-10'>
+                    {/* <DashCard2  title2={"View Rejected Advance"} title3={""} onClick={handleOpenReject}/> */}
+                    <SmallCard
+                            className=" w-full cursor-pointer"
+                            title="View Rejected Advance"
+                            onClick={handleOpenReject}
+                            />
+                    <Dialog
+                        open={openReject}
+                        handler={handleOpenReject}
+                        className="bg-transparent shadow-none w-fit"
+                    >
+                        <RejectAdvanceList/>
+                    </Dialog>
+                    </div>
                 
                 
             </div>

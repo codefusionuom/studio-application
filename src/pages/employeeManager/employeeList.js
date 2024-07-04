@@ -220,8 +220,8 @@ function EmployeeList(reload) {
                         </Dialog>
             </CardBody>
             <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
-                <Typography>
-                    {results}
+                <Typography className="pl-5">
+                    {results} Results
                 </Typography>
                 <div className="flex gap-2">
                     <Pagination  active={active} setActive={setActive} />

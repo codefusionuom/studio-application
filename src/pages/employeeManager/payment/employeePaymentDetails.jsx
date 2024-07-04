@@ -16,7 +16,7 @@ import SelectOption from '@material-tailwind/react/components/Select/SelectOptio
 import axiosInstance from "../../../config/axios.config";
 import { ToastError,ToastSuccess } from "../../customerManager/ToastAlert";
 
-function EmployeePaymentDetails() {
+function EmployeePaymentDetails({setOpenCreate}) {
 
   const [users, setUser] = useState([])
   const [bank, setBank] = useState()
@@ -123,7 +123,10 @@ const handleEmpSearch = async () => {
     axios.post("http://localhost:5000/employeeManager/registerEmployeePaymentDetails", { id, bank, epfNumber, accoutNumber, overtimeRate, empSalary })
       .then(result => {
         console.log(result)
-        window.location.reload()
+        ToastSuccess("Employee details created successfully")
+        // window.location.reload()
+        // setReload((prev)=>!prev)
+        setOpenCreate((prev)=>!prev)
 
       })
       .catch(err => {console.log(err);ToastError(err.response.data.message)})

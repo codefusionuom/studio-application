@@ -40,10 +40,7 @@ function EmployeePayment() {
     const [errorName, setErrorName] = useState()
     const [empName, setEmpName] = useState()
     const [searchValue, setSearchValue] = useState()
-    const [openCreate, setOpenCreate] = React.useState(false);
-    const handleOpenCreate = () => setOpenCreate((cur) => !cur);
-    const [openView, setOpenView] = React.useState(false);
-    const handleOpenView = () => setOpenView((cur) => !cur);
+    
     const navigate = useNavigate();
     const [selectedDate, setSelectedDate] = useState(new Date());
     
@@ -110,10 +107,18 @@ function EmployeePayment() {
     }
 
 
+    const [openCreate, setOpenCreate] = React.useState(false);
+    const handleOpenCreate = () => setOpenCreate((cur) => !cur);
+    const [openView, setOpenView] = React.useState(false);
+    const handleOpenView = () => setOpenView((cur) => !cur);
+
+    const [reload,setReload] = useState()
+
+
     return (
         <div>
             <div>
-                <div className='flex justify-evenly pb-5'>
+                <div className='flex  pb-5'>
                     <div>
                         {/* <DashCard2 title2={"Create Employee Payment Details"} title3={""} onClick={handleOpenCreate} /> */}
                         <SmallCard
@@ -126,10 +131,10 @@ function EmployeePayment() {
                             handler={handleOpenCreate}
                             className="bg-transparent shadow-none w-fit"
                         >
-                            <EmployeePaymentDetails></EmployeePaymentDetails>
+                            <EmployeePaymentDetails setOpenCreate={setOpenCreate}></EmployeePaymentDetails>
                         </Dialog>
                     </div>
-                    <div>
+                    <div className='pl-10'>
                         {/* <DashCard2 title2={"View Employee Payment Details"} title3={""} onClick={handleOpenView} /> */}
                         <SmallCard
                         className=" w-full cursor-pointer"
@@ -141,7 +146,7 @@ function EmployeePayment() {
                             handler={handleOpenView}
                             className="bg-transparent shadow-none w-fit"
                         >
-                            <ViewEmployeePaymentDetails/>
+                            <ViewEmployeePaymentDetails setOpenView={setOpenView}/>
                         </Dialog>
                     </div>
                 </div>

@@ -25,6 +25,7 @@ function AllowanceList(reload) {
         setOpen((cur) => !cur)
         setId(id)
     };
+    const [refresh, setRefresh] = useState(false)
 
 
 
@@ -51,7 +52,7 @@ function AllowanceList(reload) {
         console.log("search when page change");
         handleSearch();
         
-    }, [active,reload]);
+    }, [active,reload,refresh]);
 
     useEffect(() => {
         if (search !== "") {
@@ -71,7 +72,7 @@ function AllowanceList(reload) {
             <CardHeader floated={false} shadow={false} className="rounded-none">
                 <div className="flex flex-col items-center justify-between gap-4  md:flex-row ">
                     <div className="text-2xl pt-6 pl-10 font-semibold">
-                        <p>Employee-Allowance/Deduciton List</p>
+                        <p>Employee - Allowance/Deduciton List</p>
                     </div>
                     <div className=" flex p-4 gap-6">
                         <Input
@@ -201,12 +202,12 @@ function AllowanceList(reload) {
                         className="bg-transparent shadow-none w-fit"
                     >
                         {/* <UpdateEmployee idx={id}/> */}
-                        <EditEmpAllowance idx={id}/>
+                        <EditEmpAllowance idx={id} setRefresh={setRefresh} setOpen={setOpen}/>
                         </Dialog>
             </CardBody>
             <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
-                <Typography>
-                    {results}
+                <Typography className="pl-5">
+                    {results} Results
                 </Typography>
                 <div className="flex gap-2">
                     <Pagination  active={active} setActive={setActive} />
@@ -218,4 +219,4 @@ function AllowanceList(reload) {
 }
 export default AllowanceList
 
-const TABLE_HEAD = ["Employee Name", "Type", "Allowance/Deduction Name", "Month", "Amount", "Edit"];
+const TABLE_HEAD = ["Employee Name", "Type", "Allowance/Deduction Name", "Date", "Amount", "Edit"];

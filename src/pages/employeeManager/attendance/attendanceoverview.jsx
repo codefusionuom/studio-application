@@ -396,7 +396,7 @@ function AttendanceOverviewList(reload) {
                                                 { user.checkInSeconds>30600 ? <Typography
                                                     variant="small"
                                                     color="btn-danger"
-                                                    className="font-normal"
+                                                    className="font-normal text-red-600"
                                                 >
                                                     Late Arrival
                                                 </Typography>
@@ -407,7 +407,7 @@ function AttendanceOverviewList(reload) {
                                                 { user.checkOutSeconds<59400 ? <Typography
                                                     variant="small"
                                                     color="btn-danger"
-                                                    className="font-normal"
+                                                    className="font-normal text-red-600"
                                                 >
                                                     Short Leave
                                                 </Typography>
@@ -424,8 +424,8 @@ function AttendanceOverviewList(reload) {
                 </table>
             </CardBody>
             <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
-                <Typography>
-                    {results}
+                <Typography className="pl-5">
+                    {results} Results
                 </Typography>
                 <div className="flex gap-2">
                     <Pagination  active={active} setActive={setActive} />

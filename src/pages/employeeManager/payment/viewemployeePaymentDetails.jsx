@@ -17,7 +17,7 @@ import axiosInstance from "../../../config/axios.config";
 import { ToastError, ToastSuccess } from "../../customerManager/ToastAlert";
 
 
-function ViewEmployeePaymentDetails() {
+function ViewEmployeePaymentDetails({setOpenView}) {
 
   const [users, setUser] = useState([])
   const [bank, setBank] = useState()
@@ -102,7 +102,23 @@ function ViewEmployeePaymentDetails() {
       .then(result => {
         console.log(result)
         ToastSuccess("Updated successfully")
-        window.location.reload()
+        // window.location.reload()
+        setOpenView((prev)=>!prev)
+      })
+      .catch(err => {console.log(err);ToastError(err.message)})
+  }
+
+  const Delete = (e) => {
+    e.preventDefault()
+
+
+    ////// Delete record
+    axios.delete(`http://localhost:5000/employeeManager/deleteEmplloyeePaymentDetails/?id=${id}`)
+      .then(result => {
+        console.log(result)
+        ToastSuccess("Record deleted successfully")
+        // window.location.reload()
+        setOpenView((prev)=>!prev)
       })
       .catch(err => {console.log(err);ToastError(err.message)})
   }
@@ -297,8 +313,8 @@ const handleEmpSearch = async () => {
           </CardBody>
           <CardFooter className="pt-0">
             <div className=" flex flex-row justify-between">
-              <Button className=" bg-yellow-800" onClick={handleOpen}>
-                Cancel
+              <Button className=" bg-red-800" onClick={Delete}>
+                Delete
               </Button>
               <Button className=" bg-green-600" onClick={Submit}>
                 Update

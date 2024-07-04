@@ -33,7 +33,7 @@ function AllowancePage() {
     return (
         <div>
             <div>
-                <div className='flex justify-evenly pb-5'>
+                <div className='flex  pb-5'>
                     <div>
                         {/* <DashCard2  title2={"Create Allowences/Deductions"} title3={""} onClick={handleOpenCreate}/> */}
                         <SmallCard
@@ -49,7 +49,7 @@ function AllowancePage() {
                             <CreateAllowancesDeductions setOpenCreate={setOpenCreate}/>
                         </Dialog>
                     </div>
-                    <div className='flex justify-evenly pb-5'>
+                    <div className='pl-10'>
                     {/* <DashCard2 title2={"View Allowance/Deduction"} title3={""} onClick={handleOpenView} /> */}
                     <SmallCard
                         className=" w-full cursor-pointer"
@@ -64,9 +64,7 @@ function AllowancePage() {
                             <ViewAllowance/>
                     </Dialog>
                     </div>
-                {/* </div> */}
-                {/* <div className='flex justify-evenly pb-5'> */}
-                    <div>
+                    <div className='pl-10'>
                         {/* <DashCard2  title2={"Add Allowences/Deductions"} title3={""} onClick={handleOpenAdd}/> */}
                         <SmallCard
                         className=" w-full cursor-pointer"
@@ -80,8 +78,6 @@ function AllowancePage() {
                         >
                             <AddAllowance setOpenAdd={setOpenAdd} setReload={setReload}/>
                         </Dialog>
-                    </div>
-                    <div className='flex justify-evenly pb-5'>
                     </div>
                 </div>
             </div>

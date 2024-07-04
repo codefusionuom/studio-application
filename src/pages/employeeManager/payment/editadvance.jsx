@@ -14,7 +14,7 @@ import EditRecordButton from "../../../components/buttons/EditRecordButton";
 import { Textarea } from "@material-tailwind/react";
 import { ToastError, ToastSuccess } from "../../customerManager/ToastAlert";
 
-function UpdateAdvance({ idx }) {
+function UpdateAdvance({ idx,setRefresh,setOpenEdit }) {
 
   const [empName, setEmpName] = useState()
   // const [empId = idx, setEmpId] = useState(idx)
@@ -83,6 +83,8 @@ function UpdateAdvance({ idx }) {
       .then(result => {
         console.log(result)
         ToastSuccess("Advance updated successfully")
+        setRefresh((prev)=>!prev)
+        setOpenEdit((prev)=>!prev)
         // window.location.reload()
         // navigate('/')
       })
@@ -91,7 +93,18 @@ function UpdateAdvance({ idx }) {
 
 
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen((cur) => !cur);
+  const Delete = () => {
+    axios.delete(`http://localhost:5000/employeeManager/deleteAdvance/?id=${id}`)
+      .then(result => {
+        console.log(result)
+        ToastSuccess("Advance deleted successfully")
+        setRefresh((prev)=>!prev)
+        setOpenEdit((prev)=>!prev)
+        // window.location.reload()
+        // navigate('/')
+      })
+      .catch(err => {console.log(err);ToastError(err.message)})
+  };
 
   return (
     <>
@@ -128,7 +141,7 @@ function UpdateAdvance({ idx }) {
           </CardBody>
           <CardFooter className="pt-0">
             <div className=" flex flex-row justify-between">
-              <Button className=" bg-yellow-800" onClick={handleOpen}>
+              <Button className=" bg-red-800" onClick={Delete}>
                 Clear
               </Button>
               <Button className=" bg-green-600" onClick={Update}>
