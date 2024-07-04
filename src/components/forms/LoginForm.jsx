@@ -42,24 +42,6 @@ export function LoginForm() {
     }
   };
 
-    // useEffect(() => {
-    //   if (admin) {
-    //     if (admin.privileges[0] === 'super_admin') {
-    //       navigate('/superAdmin');
-    //     } else if (admin.privileges[0] === 'customer_manager') {
-    //       navigate('/customerManager');
-    //     } else if (admin.privileges[0] === 'event_manager') {
-    //       navigate('/eventManager');
-    //     } else if (admin.privileges[0] === 'stock_manager') {
-    //       navigate('/stockManager');
-    //     } else if (admin.privileges[0] === 'employee_manager') {
-    //       navigate('/employeeManager');
-    //     } else {
-    //       console.log('user not have privilage');
-    //     }
-    //   }
-    // }, [log]);
-
   const togglePasswordVisiblity = () => setPasswordShown((cur) => !cur);
 
   const FoggotPasswordPage = () => {
