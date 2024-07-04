@@ -18,6 +18,7 @@ import { Button } from "@material-tailwind/react";
 import axiosInstance from "../../config/axios.config";
 import { Pagination } from "../../components/pagination/pagination";
 import EditButton from "../../components/cards/buttons/EditButton";
+import DropdownTreeSelect from "react-dropdown-tree-select";
 
 
 
@@ -27,9 +28,25 @@ const Events = () => {
   const [eventRequestCount, setEventRequestCount] = useState("");
   const [active, setActive] = useState(1);
   const [results, setResults] = useState(0);
-  const [status, setStatus] = useState("Active");
+  const [status, setStatus] = useState("Pending");
+  const [search, setSearch] = useState("");
+  const [services, setServices] = useState({});
+  const [service, setService] = useState("all");
   const navigate = useNavigate();
 
+  const onChangeTree = (currentNode, selectedNodes) => {
+    console.log("onChange::", currentNode, selectedNodes);
+    setService(currentNode.label);
+  };
+  const fetchServiceCategories = async () => {
+    try {
+      const { data } = await axiosInstance.get(`/customerManager/service`);
+      console.log(data);
+      setServices(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     getEventRequests();
   }, []);
@@ -41,9 +58,9 @@ const Events = () => {
 
   const getEventRequests = async () => {
   
-    
+    console.log(service,"hhhhh");
     await  axiosInstance.get(
-      `/customerManager/eventRequest/?status=${status}&page=${active}&limit=8`
+      `/customerManager/event/?status=${status}&page=${active}&limit=8&search=${search}&service=${service}`
     )
       .then((response) => {
         console.log(response.data);
@@ -59,13 +76,31 @@ const Events = () => {
     console.log("search when page change");
     getEventRequests();
     
-  }, [active,status]);
+  }, [active,status,search,service]);
+
+  useEffect(() => {
+    fetchServiceCategories()
+  }, []);
 
   return (
     <>
       <div className="flex space-x-4 justify-between"  color="red">
-        
-        <CardEvent width="[324px]" height="[180px]"
+        <Card>
+        <DropdownTreeSelect
+              data={services}
+              mode="radioSelect"
+              onChange={onChangeTree}
+              // onAction={onAction}
+              // onNodeToggle={onNodeToggle}
+              className="mdl-demo"
+            />
+            <div className="px-4 flex  justify-between items-center">
+            <div className="justify-center items-center font-semibold text-md" >{service != "all" ? service: ""}</div>
+            <div className="bg-black rounded cursor-pointer p-2 text-white" onClick={()=>setService("all")}>rest</div>
+            </div>
+            
+        </Card>
+        {/* <CardEvent width="[324px]" height="[180px]"
           onTap={() => {
             navigate("/eventManager/createEvent");
           }}  
@@ -93,7 +128,7 @@ const Events = () => {
           <span className="font-black"> Create Event</span>
           </div>
               </Button>
-        </CardEvent>
+        </CardEvent> */}
 
         <div className="flex justify-center items-center w-[628px] h-[140px] bg-cl-4 rounded font-lato text-xl text-cl-1 ml-8 p-4">
           <div className="w-[261px] h-[46px]">
@@ -115,6 +150,10 @@ const Events = () => {
                 </svg>
               }
               label="Search"
+              value={search}
+              onChange={(e) => {
+                  setSearch(e.target.value);
+                }}
             />
           </div>
           {/* <div className="relativew-[207.42px] h-[46px] ml-5">
@@ -138,8 +177,11 @@ const Events = () => {
                 <option value="" disabled selected>
                   Select Status
                 </option>
-                <option value="pending">pending</option>
-                <option value="Active">active</option>
+                <option value="Pending">Pending</option>
+                <option value="Upcoming">Upcoming</option>
+                <option value="Paused">Paused</option>
+                <option value="Done">Done</option>
+                <option value="Rejected">Rejected</option>
               </select>
             </div>
         </div>

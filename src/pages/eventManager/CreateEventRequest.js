@@ -1,10 +1,17 @@
-import { Button, Card, CardBody, Input, Typography } from "@material-tailwind/react";
+import {
+  Button,
+  Card,
+  CardBody,
+  Input,
+  Typography,
+} from "@material-tailwind/react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axiosInstance from "../../config/axios.config";
 import RequestService from "./RequestService";
 import { ToastError, ToastSuccess } from "../customerManager/ToastAlert";
+import BackButton from "../../components/buttons/BackButton";
 // import axiosInstance from "../../config/axios.config";
 // import { useSelector } from "react-redux";
 // import {
@@ -23,20 +30,41 @@ function CreateEventRequest() {
   const [error, setError] = useState();
   const [event, setEvent] = useState();
   const [paymentList, setPaymentList] = useState();
+  const [dueto, setDueto] = useState(0);
+
+  const handleEventStatus = async (status) => {
+    try {
+      const { data } = await axiosInstance.put(
+        "/eventManager/updateEventConfirmed/" + id,
+        {
+          status: status,
+        }
+      );
+      console.log(data);
+
+      if (data) {
+        ToastSuccess("successfully rejected event");
+        navigate("/eventManager/events");
+      }
+    } catch (error) {
+      ToastError("error created on event");
+    }
+  };
 
   const handleEventConfirm = async () => {
     try {
       const { data } = await axiosInstance.put(
         "/eventManager/updateEventConfirmed/" + id,
         {
-          status: "Active",
+          status: "Upcoming",
         }
       );
       console.log(data);
 
       if (data) {
-        ToastSuccess("successfully created event");
-        navigate("/eventManager/eventRequests");
+        handleEdit();
+        // ToastSuccess("successfully confirmed event");
+        navigate("/eventManager/events");
       }
     } catch (error) {
       ToastError("error created on event");
@@ -50,6 +78,13 @@ function CreateEventRequest() {
       );
       console.log(data);
       setPaymentList(data.rows);
+      let totalAmount = 0;
+      data.rows.forEach((payment) => {
+        console.log(payment.amount);
+        totalAmount += payment.amount;
+      });
+
+      setDueto(totalAmount);
     } catch (error) {
       ToastError("error on fetching payments");
     }
@@ -118,6 +153,7 @@ function CreateEventRequest() {
 
   return (
     <div className="bg-cl-4 p-20 rounded flex flex-col gap-12 overflow-scroll  h-screen">
+      <BackButton />
       <div className="">
         <div className="bg-bg py-10 px-8 flex justify-between rounded">
           <Typography className="font-Lato text-4xl font-normal font-500">
@@ -156,165 +192,226 @@ function CreateEventRequest() {
         {error ? error : ""}
       </div>
       <div className="w-full flex justify-between mt-4 px-0 gap-10 ">
-        <Button className="bg-btn-warning text-lg " onClick={handleCancel}>
+        <Button className="bg-black text-lg " onClick={handleCancel}>
           Cancel
         </Button>
-        <Button className="bg-btn-danger text-lg" onClick={handleReset}>
+        <Button className="bg-black text-lg" onClick={handleReset}>
           Reset
         </Button>
-        <Button className="bg-btn-info text-lg" onClick={handleEdit}>
-          Edit
+      </div>
+      <div className="w-full flex justify-between mt-4 px-0 gap-10 ">
+        {event?.status !== "Pending" && event?.status !== "pending" && event?.status !== "Done" &&  event?.status !== "Rejected" ? (
+          <Button className="bg-btn-info text-lg" onClick={handleEdit}>
+            Edit
+          </Button>
+        ) : null}
+        {event?.status !== "Done" &&  event?.status !== "Rejected" ? (
+          <Button
+          onClick={() => handleEventStatus("Rejected")}
+          className="bg-btn-danger text-lg"
+        >
+          Rejected
         </Button>
-        <Button onClick={handleEventConfirm} className="bg-btn-success text-lg">
-          Confirm
-        </Button>
+        ) : null}
+        
+        {event?.status == "Pending" || event?.status == "pending" ? (
+          <Button
+            onClick={handleEventConfirm}
+            className="bg-btn-success text-lg"
+          >
+            Confirm
+          </Button>
+        ) : null}
+        {event?.status == "Upcoming" ? (
+          <>
+            <Button
+              onClick={() => handleEventStatus("Done")}
+              className="bg-btn-success text-lg"
+            >
+              Done
+            </Button>
+            <Button
+              onClick={() => handleEventStatus("Paused")}
+              className="bg-btn-warning text-lg"
+            >
+              Paused
+            </Button>
+          </>
+        ) : null}
+        {event?.status == "Paused" ? (
+          <Button
+            onClick={()=>handleEventStatus("Upcoming")}
+            className="bg-btn-success text-lg"
+          >
+            Active
+          </Button>
+        ) : null}
       </div>
       <div>
-      <div className="bg-bg py-10 px-8 flex justify-between rounded">
+        <div className="bg-bg py-10 px-8 flex justify-between rounded">
           <Typography className="font-Lato text-4xl font-normal font-500">
             Payment Information
           </Typography>
         </div>
-<Card>
-<CardBody className="overflow-scroll px-0">
-        <table className="mt-4 w-full min-w-max table-auto text-left">
-          <thead>
-            <tr>
-              {TABLE_HEAD.map((head, index) => (
-                <th
-                  key={head}
-                  className="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50"
-                >
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="flex items-center justify-between gap-2 font-normal leading-none opacity-70"
-                  >
-                    {head}
-                  </Typography>
-                </th>
-              ))}
-            </tr>
-          </thead>
-         
-            {paymentList?.length > 0 ? (
-              paymentList.map(
-                (
-                  { id, amount, status, payment, customerName,event,customerMobilePhone, createdAt },
-                  index
-                ) => {
-                  const isLast = index === paymentList.length - 1;
-                  const classes = isLast
-                    ? "p-4"
-                    : "p-4 border-b border-blue-gray-50";
+        <Card>
+          <CardBody className="overflow-scroll px-0">
+            <table className="mt-4 w-full min-w-max table-auto text-left">
+              <thead>
+                <tr>
+                  {TABLE_HEAD.map((head, index) => (
+                    <th
+                      key={head}
+                      className="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50"
+                    >
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="flex items-center justify-between gap-2 font-normal leading-none opacity-70"
+                      >
+                        {head}
+                      </Typography>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
 
-                  return ( <tbody>
-                    <tr key={id} >
-                      <td className={classes}>
-                        <div className="flex items-center gap-3">
-                          <div className="flex flex-col">
-                            <Typography
-                              variant="small"
-                              color="blue-gray"
-                              className="font-normal"
-                            >
-                              {customerName}
-                            </Typography>
-                            {/* <Typography
+              {paymentList?.length > 0 ? (
+                paymentList.map(
+                  (
+                    {
+                      id,
+                      amount,
+                      status,
+                      payment,
+                      customerName,
+                      event,
+                      customerMobilePhone,
+                      createdAt,
+                    },
+                    index
+                  ) => {
+                    const isLast = index === paymentList.length - 1;
+                    const classes = isLast
+                      ? "p-4"
+                      : "p-4 border-b border-blue-gray-50";
+
+                    return (
+                      <tbody>
+                        <tr key={id}>
+                          <td className={classes}>
+                            <div className="flex items-center gap-3">
+                              <div className="flex flex-col">
+                                <Typography
+                                  variant="small"
+                                  color="blue-gray"
+                                  className="font-normal"
+                                >
+                                  {customerName}
+                                </Typography>
+                                {/* <Typography
                               variant="small"
                               color="blue-gray"
                               className="font-normal opacity-70"
                             >
                               {customer.email && customer.email}
                             </Typography> */}
-                          </div>
-                        </div>
-                      </td>
-                      <td className={classes}>
-                        <div className="flex flex-col">
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal"
-                          >
-                            {event?.serviceType}
-                          </Typography>
-                        </div>
-                      </td>
-                      <td className={classes}>
-                        <div className="flex flex-col">
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal"
-                          >
-                            {customerMobilePhone}
-                          </Typography>
-                        </div>
-                      </td>
-                      <td className={classes}>
-                        <div className="flex flex-col">
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal"
-                          >
-                            {status}
-                          </Typography>
-                        </div>
-                      </td>
-                      <td className={classes}>
-                        <div className="flex flex-col">
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal"
-                          >
-                            {amount}
-                          </Typography>
-                        </div>
-                      </td>
-                      <td className={classes}>
-                        <div className="flex flex-col">
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal"
-                          >
-                            {payment}
-                          </Typography>
-                        </div>
-                      </td>
-                      <td className={classes}>
-                        <div className="flex flex-col">
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal"
-                          >
-                            {new Date(createdAt).getFullYear() +
-                              "-" +
-                              (new Date(createdAt).getMonth() + 1) +
-                              "-" +
-                              new Date(createdAt).getDate()}
-                          </Typography>
-                        </div>
-                      </td>
-                      
-                    </tr>
-                    </tbody>
-                  );
-                }
-              )
-            ) : (
-              <tr className=" flex flex-col w-full h-32 animate-pulse justify-center items-center ">
-               
-              </tr>
-            )}
-       
-        </table>
-      </CardBody>
-</Card>
+                              </div>
+                            </div>
+                          </td>
+                          <td className={classes}>
+                            <div className="flex flex-col">
+                              <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="font-normal"
+                              >
+                                {event?.serviceType}
+                              </Typography>
+                            </div>
+                          </td>
+                          <td className={classes}>
+                            <div className="flex flex-col">
+                              <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="font-normal"
+                              >
+                                {customerMobilePhone}
+                              </Typography>
+                            </div>
+                          </td>
+                          <td className={classes}>
+                            <div className="flex flex-col">
+                              <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="font-normal"
+                              >
+                                {status}
+                              </Typography>
+                            </div>
+                          </td>
+                          <td className={classes}>
+                            <div className="flex flex-col">
+                              <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="font-normal"
+                              >
+                                {amount}
+                              </Typography>
+                            </div>
+                          </td>
+                          <td className={classes}>
+                            <div className="flex flex-col">
+                              <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="font-normal"
+                              >
+                                {new Date(createdAt).getFullYear() +
+                                  "-" +
+                                  (new Date(createdAt).getMonth() + 1) +
+                                  "-" +
+                                  new Date(createdAt).getDate()}
+                              </Typography>
+                            </div>
+                          </td>
+                          <td className={classes}>
+                            <div className="flex flex-col">
+                              <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="font-normal"
+                              >
+                                {payment}
+                              </Typography>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    );
+                  }
+                )
+              ) : (
+                <tr className=" flex flex-col w-full h-32 animate-pulse justify-center items-center "></tr>
+              )}
+            </table>
+            <div className="bg-bg rounded py-2 my-8 flex justify-between pl-4 pr-10">
+              <div>Paid Amount</div>
+              <div>{paymentList?.length > 0 ? dueto + ".00" : ""}</div>
+            </div>
+            <div className="bg-bg rounded py-2 my-8 flex justify-between pl-4 pr-10">
+              <div>Due to Pay</div>
+              <div>
+                {paymentList?.length > 0 && event?.amount - dueto > 0
+                  ? event?.amount - dueto + ".00"
+                  : ""}
+              </div>
+              <div>{event?.amount - dueto < 0 ? "Full payment Done" : ""}</div>
+            </div>
+          </CardBody>
+        </Card>
       </div>
     </div>
   );
@@ -322,13 +419,12 @@ function CreateEventRequest() {
 
 export default CreateEventRequest;
 
-
 const TABLE_HEAD = [
   "Customer Name",
   "Service Type",
   "Mobile Phone",
   "Status",
   "Amount",
-  "Payment",
   "Date",
+  "Payment",
 ];

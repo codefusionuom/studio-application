@@ -46,7 +46,7 @@ function Customers() {
 
 // search customer
   const handleSearch = async () => {
-    console.log("searching begin");
+    console.log("searching begin",search);
     try {
       const { data } = await axiosInstance.get(
         `/customerManager/customer/?mobilePhone=${search}&page=${active}&limit=8`
@@ -73,6 +73,7 @@ function Customers() {
   useEffect(() => {
     if (search !== "") {
       handleSearch();
+      setActive(1)
       console.log("search when number change");
     }
   }, [search]);
@@ -90,7 +91,7 @@ function Customers() {
             <Typography className="text-2xl">Customer</Typography>
             <div className="relative flex w-full max-w-[24rem] ">
               <Input
-                type="number"
+                type="text"
                 label=" Mobile"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}

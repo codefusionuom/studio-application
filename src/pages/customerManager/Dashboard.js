@@ -1,5 +1,5 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import NotificationCard from "../../components/cards/notificationCard.js";
 import Pos from "./Components/pos.js";
 import { useState } from "react";
@@ -33,6 +33,8 @@ function CustomerManagerDashboard() {
   const [event, setEvent] = useState(initalvalues);
   const [eventInformation, setEventInformation] = useState();
   const [refresh, setRefresh] = useState(true);
+  const [isDivVisible, setIsDivVisible] = useState(false);
+  const divRef = useRef(null);
   // console.log(count,"count requests");
 
   const customerSearch = async (query) => {
@@ -87,6 +89,18 @@ function CustomerManagerDashboard() {
   //     ToastError(error.message)
   //   }
   // }
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (divRef.current && !divRef.current.contains(event.target)) {
+        setIsDivVisible(false);
+      }
+    };
+  
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [divRef]);
 
   useEffect(() => {
     console.log("search when page change");
@@ -113,6 +127,7 @@ function CustomerManagerDashboard() {
                 onChange={(e) => {
                   setSearch(e.target.value);
                 }}
+                onFocus={() => setIsDivVisible(true)}
                 className="pr-20"
                 containerProps={{
                   className: "min-w-0",
@@ -129,8 +144,8 @@ function CustomerManagerDashboard() {
               </Button>
             </div>
             {search && (
-              <Card className="p-2 rounded-md absolute top-10 w-full max-h-36 overflow-y-scroll ">
-                {customerList &&
+              <Card ref={divRef}  className="p-2 rounded-md absolute top-10 w-full max-h-36 overflow-y-scroll ">
+                {customerList.length > 0 ?
                   customerList.map((customer) => {
                     return (
                       <div
@@ -148,7 +163,7 @@ function CustomerManagerDashboard() {
                         </div>
                       </div>
                     );
-                  })}
+                  }) : <div className="text-md">not found customer</div>}
               </Card>
             )}
           </div>

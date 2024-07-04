@@ -8,11 +8,12 @@ import { ToastError, ToastSuccess } from "../ToastAlert";
 import RequestService from "../../eventManager/RequestService";
 
 function EventDetails({id,refresh}) {
-    console.log(id,"in event details");
+    // console.log(id,"in event details");
   const navigate = useNavigate();
   const [error, setError] = useState();
   const [event, setEvent] = useState();
   const [paymentList, setPaymentList] = useState();
+  const [dueto, setDueto] = useState(0);
 
   const handleEventConfirm = async () => {
     try {
@@ -40,6 +41,13 @@ function EventDetails({id,refresh}) {
       );
       console.log(data);
       setPaymentList(data.rows);
+      let totalAmount = 0;
+      data.rows.forEach((payment) => {
+        console.log(payment.amount);
+        totalAmount += payment.amount;
+      });
+  
+      setDueto(totalAmount);
     } catch (error) {
       ToastError("error on fetching payments");
     }
@@ -99,9 +107,9 @@ function EventDetails({id,refresh}) {
   };
   useEffect(() => {
     // Replace this URL with your actual API endpoint
-    console.log(id,"in on event details");
+    // console.log(id,"in on event details");
     if (id) {
-        console.log(id,"inside event details");
+        // console.log(id,"inside event details");
       fetchEventData();
       fetchPaymentList();
     }
@@ -265,17 +273,7 @@ function EventDetails({id,refresh}) {
                           </Typography>
                         </div>
                       </td>
-                      <td className={classes}>
-                        <div className="flex flex-col">
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal"
-                          >
-                            {payment}
-                          </Typography>
-                        </div>
-                      </td>
+                      
                       <td className={classes}>
                         <div className="flex flex-col">
                           <Typography
@@ -291,7 +289,17 @@ function EventDetails({id,refresh}) {
                           </Typography>
                         </div>
                       </td>
-                      
+                      <td className={classes}>
+                        <div className="flex flex-col">
+                          <Typography
+                            variant="small"
+                            color="blue-gray"
+                            className="font-normal"
+                          >
+                            {payment}
+                          </Typography>
+                        </div>
+                      </td>
                     </tr>
                     </tbody>
                   );
@@ -304,6 +312,19 @@ function EventDetails({id,refresh}) {
             )}
        
         </table>
+        <div className="bg-bg rounded py-2 my-8 flex justify-between pl-4 pr-10" >
+          <div>Paid Amount</div>
+          <div>{paymentList?.length > 0 ? dueto +".00" : ""}</div>
+        
+        </div>
+        <div className="bg-bg rounded py-2 my-8 flex justify-between pl-4 pr-10" >
+          <div>Due to Pay</div>
+          <div>{paymentList?.length > 0 && (event?.amount - dueto) > 0  ? (event?.amount - dueto)+".00" : ""}</div>
+          <div>{ (event?.amount - dueto) < 0  ? "Full payment Done" : ""}</div>
+        
+        </div>
+                        
+                    
       </CardBody>
 </Card>
       </div>
@@ -320,6 +341,7 @@ const TABLE_HEAD = [
   "Mobile Phone",
   "Status",
   "Amount",
-  "Payment",
   "Date",
+  "Payment",
+
 ];

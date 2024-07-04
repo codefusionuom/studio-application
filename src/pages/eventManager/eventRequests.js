@@ -41,7 +41,7 @@ const EventRequests = () => {
   
     
     await  axiosInstance.get(
-      `/customerManager/eventRequest/?status=pending&page=${active}&limit=8`
+      `/customerManager/eventRequest/?status=Pending&service=all&page=${active}&limit=8`
     )
       .then((response) => {
         console.log(response.data);

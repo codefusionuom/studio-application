@@ -65,7 +65,7 @@ function CustomerServiceEditform({
         );
         console.log(data);
         setRefreash((cur) => !cur);
-        handleOpen();
+        // handleOpen();
 
     } catch (error) {
       console.log(error);
@@ -82,7 +82,7 @@ function CustomerServiceEditform({
         );
         console.log(data);
         setRefreash((cur) => !cur);
-        handleOpen();
+        // handleOpen();
 
     } catch (error) {
       console.log(error);
@@ -100,7 +100,7 @@ function CustomerServiceEditform({
         );
         console.log(data);
         setRefreash((cur) => !cur);
-        handleOpen();
+        // handleOpen();
 
     } catch (error) {
       console.log(error);

@@ -11,7 +11,7 @@ function TableOfRequests({handleOneRequest,requests,active,setActive,results}) {
   return (
     <div> <Card>
         <CardBody className="overflow-scroll px-0">
-    <table className="mt-4 w-full min-w-max table-auto text-left">
+    <table className="mt-4 w-full min-w-max table-auto text-left ">
       <thead>
         <tr>
           {TABLE_HEAD.map((head, index) => (
@@ -44,7 +44,7 @@ function TableOfRequests({handleOneRequest,requests,active,setActive,results}) {
 
             return (
               <tbody>
-                <tr key={id} onClick={()=>handleOneRequest({ id,firstname,lastname,email,address, status,note, createdAt,mobilePhone,serviceType,serviceDate })}>
+                <tr key={id} className='cursor-pointer' onClick={()=>handleOneRequest({ id,firstname,lastname,email,address, status,note, createdAt,mobilePhone,serviceType,serviceDate })}>
                   <td className={classes}>
                     <div className="flex items-center gap-3">
                       <div className="flex flex-col">
@@ -135,7 +135,9 @@ function TableOfRequests({handleOneRequest,requests,active,setActive,results}) {
           }
         )
       ) : (
-        <tr className=" flex flex-col w-full h-32 animate-pulse justify-center items-center "></tr>
+        <div className=" flex flex-col w-full h-32 animate-pulse justify-center items-center ">
+          {/* no any customer requests */}
+        </div>
       )}
     </table>
   </CardBody>

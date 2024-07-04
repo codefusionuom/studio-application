@@ -1,4 +1,4 @@
-export const TABLE_HEAD = ["Full name", "Mobile phone", "Service Type","Service Date", "Created At", "Status"];
+export const TABLE_HEAD = ["Full name", "Mobile phone", "Service Type","Service Date", "Created Date", "Status"];
 
 export const initialCustomerRequest = {
     id: "",
