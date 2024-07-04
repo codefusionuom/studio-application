@@ -64,8 +64,8 @@ const TaskView = () => {
   let [employeeList, setEmployeeList] = React.useState([]);
   const [asignedEmployeesList, setAsignedEmployeesList] =
     useState([]); //here
-    const today = new Date();
-    
+    // const today = new Date();
+
   const TABS = [
     {
       label: "All",
@@ -531,7 +531,7 @@ const formatDateToISO = (dateString) => {
 
                   <Input
                   // defaultValue={format(new Date(taskDetails?.date), "yyyy-MM-dd")}
-                  disabled={{ before: today }}
+                  // disabled={{ before: today }}
                     label="Date"
                     size="lg"
                     type="date"

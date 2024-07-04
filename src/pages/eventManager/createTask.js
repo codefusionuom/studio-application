@@ -56,6 +56,11 @@ const CreateTask = () => {
   const handleOpenEmpModal = () => setOpenEmpModal(!openEmpModal);
   const [status, setStatus] = useState("");
   const [reload, setReload] = useState(false);
+  const [isSelectedEvent, setIsSelectedEventError] = useState(false);
+  const [isServiceTypeError, setIsServiceTypeErro] = useState(false);
+  const [isDateError, setIsDateError] = useState(false);
+  const [isCustormerIdError, setIsCustormerIdError] = useState(false);
+  // const [isStatusError, setIsStatusError] = useState(false);
   const today = new Date();
 
   useEffect(() => {
@@ -114,7 +119,40 @@ const CreateTask = () => {
       });
   };
 
-  const createTask = () => {
+  const createTask = (e) => {
+
+    e.preventDefault();
+    // Validation to check if all required fields are filled
+    // setIsError(true)
+    if (!taskName) {
+      setTaskName(true);
+      // alert("Please fill in all fields");
+
+      return;
+    }
+    // setIsServiceTypeError(false);
+    if (!date) {
+      setIsDateError(true);
+      return;
+    }
+    // setIsDateError(false);
+    if (!status) {
+      // setIsError(true)
+      // alert("Please fill in all fields");
+      setIsStatusError(true);
+      return;
+    }
+      setIsStatusError(false);
+    if (!selectedEvent.id) {
+      setIsSelectedEventError(true);
+      // alert("Please fill in all fields");
+      return;
+    }
+    setIsCustormerIdError(false);
+
+
+
+
     console.log("description" + description);
     console.log("select event^^^^^^^^^^^^^^^ " + selectedEvent.id);
     asignedEmployeesList.map((e) =>console.log("asignedEmployeesList^^^^^^^^^^^^^^^ " + e.id) )

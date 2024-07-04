@@ -26,6 +26,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { ToastError, ToastSuccess } from "../customerManager/ToastAlert";
 import { Pagination } from "../../components/pagination/pagination";
+import EditButton from "../../components/cards/buttons/EditButton";
+import DeleteRecordButton from "../../components/buttons/DeleteRecordButton";
 
 const TaskPage = () => {
   const [date, setDate] = React.useState('');
@@ -916,6 +918,34 @@ theme="colored"
                 />
               </div>
             </td>
+            <td>
+            {/* <IconButton
+              variant="text"
+              color="blue-gray"
+              className="ml-2"
+              onClick={() => {
+                navigate("/eventManager/Tasks/view-Task", {
+                  state: { taskId: oneTask.id },
+                });
+              }}
+            >
+              <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                <path fillRule="evenodd" d="M4.998 7.78C6.729 6.345 9.198 5 12 5c2.802 0 5.27 1.345 7.002 2.78a12.713 12.713 0 0 1 2.096 2.183c.253.344.465.682.618.997.14.286.284.658.284 1.04s-.145.754-.284 1.04a6.6 6.6 0 0 1-.618.997 12.712 12.712 0 0 1-2.096 2.183C17.271 17.655 14.802 19 12 19c-2.802 0-5.27-1.345-7.002-2.78a12.712 12.712 0 0 1-2.096-2.183 6.6 6.6 0 0 1-.618-.997C2.144 12.754 2 12.382 2 12s.145-.754.284-1.04c.153-.315.365-.653.618-.997A12.714 12.714 0 0 1 4.998 7.78ZM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clipRule="evenodd"/>
+              </svg>
+            </IconButton> */}
+              <Button
+                variant="outlined"
+                className="rounded-full"
+                size="sm"
+                onClick={() => {
+                  navigate("/eventManager/Tasks/view-Task", {
+                    state: { taskId: oneTask.id },
+                  });
+                }}
+              >
+                View
+              </Button>
+            </td>
             <td className={classes}>
               <Typography
                 variant="paragraph"
@@ -923,7 +953,12 @@ theme="colored"
                 className="font-bold"
               >
                 <Tooltip content="Edit User">
-                  <IconButton
+                  <EditButton  onClick={() => {
+                      navigate("/eventManager/Tasks/view-Task", {
+                        state: { taskId: oneTask.id },
+                      });
+                    }}/>
+                  {/* <IconButton
                     variant="text"
                     onClick={() => {
                       navigate("/eventManager/Tasks/view-Task", {
@@ -946,31 +981,20 @@ theme="colored"
                         d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
                       />
                     </svg>
-                  </IconButton>
+                  </IconButton> */}
                 </Tooltip>
               </Typography>
             </td>
+           
             <td>
-              <Button
-                variant="outlined"
-                className="rounded-full"
-                size="sm"
-                onClick={() => {
-                  navigate("/eventManager/Tasks/view-Task", {
-                    state: { taskId: oneTask.id },
-                  });
-                }}
-              >
-                View
-              </Button>
-            </td>
-            <td>
-              <IconButton
-                variant="text"
-                color="blue-gray"
-                onClick={() => {
+            <DeleteRecordButton  onClick={() => {
                   taskDelete(oneTask.id);
                 }}
+                    />
+              {/* <IconButton
+                variant="text"
+                color="blue-gray"
+                
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -984,7 +1008,7 @@ theme="colored"
                     clipRule="evenodd"
                   />
                 </svg>
-              </IconButton>
+              </IconButton> */}
             </td>
           </tr>
         );
